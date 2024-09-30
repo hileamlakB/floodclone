@@ -1,0 +1,5 @@
+host src
+host d1
+switch s1
+link src s1 100 10ms 100 0
+link s1 d1 16 30ms 100 0

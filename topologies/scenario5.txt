@@ -1,0 +1,13 @@
+host src
+host d1
+host d2
+switch s1
+switch s2
+link src s1 30 12ms 100 0
+link s1 d1 20 10ms 100 0
+link s1 d2 20 15ms 100 0
+link d1 s2 20 15ms 100 0
+link d2 s2 20 10ms 100 0
+path src s1 d1
+path src s1 d2
+path d1 s2 d2

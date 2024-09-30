@@ -1,0 +1,1 @@
+0 link node1=s1 node2=src bw=8
