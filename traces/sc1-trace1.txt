@@ -1,0 +1,5 @@
+1250 link node1=s1 node2=src max_queue_size=150
+2000 link node1=s1 node2=d1 bw=100
+2500 link node1=s1 node2=d1 loss=1
+3000 link node1=s1 node2=d1 loss=0.1
+3505 link node1=s1 node2=src bw=8

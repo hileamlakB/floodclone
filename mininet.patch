@@ -1,0 +1,34 @@
+diff --git a/util/install.sh b/util/install.sh
+index 0a67871..09e7e27 100755
+--- a/util/install.sh
++++ b/util/install.sh
+@@ -231,7 +231,8 @@ function of {
+     fi
+     # was: git clone git://openflowswitch.org/openflow.git
+     # Use our own fork on github for now:
+-    git clone git://github.com/mininet/openflow
++    # git clone git://github.com/mininet/openflow
++    git clone https://github.com/mininet/openflow.git
+     cd $BUILD_DIR/openflow
+ 
+     # Patch controller to handle more than 16 switches
+@@ -629,7 +630,8 @@ function oftest {
+ 
+     # Install oftest:
+     cd $BUILD_DIR/
+-    git clone git://github.com/floodlight/oftest
++    # git clone git://github.com/floodlight/oftest
++    git clone https://github.com/floodlight/oftest.git
+ }
+ 
+ # Install cbench
+@@ -646,7 +648,8 @@ function cbench {
+     cd $BUILD_DIR/
+     # was:  git clone git://gitosis.stanford.edu/oflops.git
+     # Use our own fork on github for now:
+-    git clone git://github.com/mininet/oflops
++    # git clone git://github.com/mininet/oflops
++    git clone https://github.com/mininet/oflops.git
+     cd oflops
+     sh boot.sh || true # possible error in autoreconf, so run twice
+     sh boot.sh
