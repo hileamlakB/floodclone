@@ -103,7 +103,7 @@ class Controller:
     def start_agents(self):
         self.network_conditions_thread.start()
         for i, dest in enumerate(self.dests):
-            self.agents.append(self.agent_class(i, dest, self.src))
+            self.agents.append(self.agent_class(i, dest, self.src, self))
             self.agents[-1].start_time = datetime.now()
             self.agents[-1].start_download()
         self.logger.info("Started all downloads")
