@@ -7,10 +7,11 @@ from datetime import datetime, timedelta
 
 class Agent(ABC):
 
-    def __init__(self, uid: int, node: Node, src: Node, *args, **kwargs) -> None:
+    def __init__(self, uid: int, node: Node, src: Node, controller: "controller.Controller", *args, **kwargs) -> None:
         self.uid = uid
         self.node = node
         self.src = src
+        self.controller = controller
         self.start_time: Union[datetime, None] = None
         self.end_time: Union[datetime, None] = None
 
