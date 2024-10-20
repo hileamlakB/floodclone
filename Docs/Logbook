@@ -1,0 +1,12 @@
+October 17-18: Improved philosphy
+    - CheckBrainstroming.md
+        - definined a utility function
+        - created redistirbution factor instead of high bandwidth (for priortization)
+        - redistribution factor function still needs to be decided
+        - grounded the system design philosphies on the utility function calcuation  
+
+Ocotober 19: Implemented fileManager in python
+    - While implementing the FileManager class in python I and measing performance
+    I realized it taks a long time to split files and shoul only be don in parallel, which 
+    isn't well suported in python and thus have made the decision to transfer implementing this program in 
+    c++
