@@ -34,7 +34,7 @@ FileManager::FileManager(const std::string& filePath, int pieceSize, const std::
     numPieces = static_cast<int>(std::ceil(static_cast<double>(fileSize) / pieceSize));
 }
 
-FileManager::void updateMetaData(Metadata& new_metadata){
+void FileManager::updateMetaData(Metadata& new_metadata){
     metadata = new_metadata;
 }
 
