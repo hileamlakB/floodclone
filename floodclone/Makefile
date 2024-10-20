@@ -1,9 +1,10 @@
 # Compiler
 CXX = g++
-CXXFLAGS = -std=c++17 -Iinclude -I/usr/local/opt/openssl/include -Wall -Wextra
+# -fsanitize=thread 
+CXXFLAGS = -std=c++17 -Iinclude -Wall -Wextra -pthread
 
 # Source and binary files
-SRC = src/main.cpp src/FileManager.cpp
+SRC = src/*.cpp
 TARGET = floodclone
 
 # Build target
