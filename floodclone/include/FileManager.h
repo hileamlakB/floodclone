@@ -9,7 +9,6 @@
 #include <fstream>
 #include <filesystem>
 #include <cassert>
-#include <openssl/sha.h>
 #include <arpa/inet.h>
 #include <cmath>
 #include <iostream>
