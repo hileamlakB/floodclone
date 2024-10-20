@@ -10,3 +10,11 @@ Ocotober 19: Implemented fileManager in python
     I realized it taks a long time to split files and shoul only be don in parallel, which 
     isn't well suported in python and thus have made the decision to transfer implementing this program in 
     c++
+
+October 20: Implemented thread pool
+    - I decided I will neeed a thread pool that will be used by among all classes
+    - Moreover all classes might have their functions called within a thread
+    so it is impotant to make classes thread safe and also use the thread pool 
+    insdie the classes to get optimum result.
+    - Had to install g++-multilib for fsanitizer support make sure to include that
+    in the installation guide (sudo apt-get install g++-multilib)
