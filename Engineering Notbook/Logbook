@@ -1,6 +1,0 @@
-October 17-18: Improved philosphy
-    - CheckBrainstroming.md
-        - definined a utility function
-        - created redistirbution factor instead of high bandwidth (for priortization)
-        - redistribution factor function still needs to be decided
-        - grounded the system design philosphies on the utility function calcuation  
