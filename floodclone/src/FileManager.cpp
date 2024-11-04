@@ -11,16 +11,41 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <cassert>
 
 
 using namespace std;
 namespace fs = std::filesystem;
 
 
-FileManager::FileManager(const string& file_path, const size_t ipiece_size, const string& node_ip, const string& pieces_folder, ThreadPool* thread_pool)
-    : file_path(file_path), piece_size(ipiece_size == 0 ? 16384 : ipiece_size), node_ip(node_ip), num_pieces(0), pieces_folder(pieces_folder), thread_pool(thread_pool) {
 
-    
+FileManager::FileManager(const std::string& file_path, size_t ipiece_size, const std::string& node_ip,
+                         const std::string& pieces_folder, ThreadPool* thread_pool, bool is_source,
+                         const std::string& metadata_file_path)
+    : file_path(file_path), piece_size(ipiece_size == 0 ? 16384 : ipiece_size), node_ip(node_ip),
+      num_pieces(0), pieces_folder(pieces_folder), thread_pool(thread_pool), is_source(is_source) 
+{
+
+    verify_ip(node_ip);
+
+    // Handle piece folder creation
+    if (!fs::exists(pieces_folder)) {
+        fs::create_directories(pieces_folder);
+    } else if (!fs::is_directory(pieces_folder)) {
+        throw runtime_error("Provided piece folder path is not a directory: " + pieces_folder);
+    }
+
+    // Initialize as source or receiver based on is_source flag
+    if (is_source) {
+        initialize_source();  // Source mode, calculate and populate metadata from file
+    } else {
+        initialize_receiver(metadata_file_path);  // Receiver mode, initialize from metadata file
+    }
+}
+
+// Function to initialize source-specific logic
+void FileManager::initialize_source() {
+    // Open the file and calculate file size
     ifstream fileStream(file_path, ios::binary);
     if (!fileStream) {
         throw runtime_error("Cannot open file: " + file_path);
@@ -30,24 +55,26 @@ FileManager::FileManager(const string& file_path, const size_t ipiece_size, cons
     size_t file_size = fileStream.tellg();
     fileStream.seekg(0, ios::beg);
 
-    
-    num_pieces = static_cast<size_t>(ceil(static_cast<double>(file_size) / piece_size));
-    
-    verify_ip(node_ip);
+    // Calculate number of pieces
+    num_pieces = (file_size + piece_size - 1) / piece_size;
 
-    // Handle piece folder creation (mandatory check and creation if not exists)
-    if (!fs::exists(pieces_folder)) {
-        fs::create_directories(pieces_folder);
-    } else if (!fs::is_directory(pieces_folder)) {
-        throw runtime_error("Provided piece folder path is not a directory: " + pieces_folder);
-    }
-
-    // Initialize file metadata
-    // md5 hash
-    file_metadata.fileId = "example_file_id"; 
+    // Initialize metadata with actual data for source
+    file_metadata.fileId = "example_file_id";  // Replace with actual hash function
     file_metadata.filename = fs::path(file_path).filename().string();
     file_metadata.numPieces = num_pieces;
     file_metadata.pieces.resize(num_pieces);
+
+    // Populate metadata and split in parallel using thread pool
+    for (size_t i = 0; i < num_pieces; ++i) {
+        thread_pool->enqueue([this, i] {
+            split(i);  // Split each piece within the thread pool
+        });
+    }
+}
+
+ void  FileManager::deconstruct(){
+
+    assert(is_source);
 
     // Populate metadata for each piece
     // do this in a separate thread to not take away time
@@ -57,7 +84,24 @@ FileManager::FileManager(const string& file_path, const size_t ipiece_size, cons
             split(i); // Each piece processing is handled by split(i) within the thread pool
         });
     }
-        
+
+ }
+
+void FileManager::initialize_receiver(const std::string& metadata_file_path) {
+    std::ifstream metaFile(metadata_file_path, std::ios::binary);
+    if (!metaFile) {
+        throw std::runtime_error("Cannot open metadata file: " + metadata_file_path);
+    }
+
+    // Read the entire file content into a string
+    std::string binary((std::istreambuf_iterator<char>(metaFile)), std::istreambuf_iterator<char>());
+    metaFile.close();
+
+    // Deserialize the binary string to populate file_metadata
+    file_metadata = FileMetaData::deserialize(binary);
+
+    // Set num_pieces based on deserialized metadata
+    num_pieces = file_metadata.numPieces;
 }
 
 void FileManager::split(size_t i) {
@@ -127,7 +171,7 @@ void FileManager::verify_ip(const string& ip) {
 }
 
 
-void FileManager::save_metadata() {
+std::string FileManager::save_metadata() {
     // Serialize metadata
     std::string serialized_metadata = file_metadata.serialize();
 
@@ -143,6 +187,13 @@ void FileManager::save_metadata() {
     // Write the metadata and close the file
     metadata_file.write(serialized_metadata.data(), serialized_metadata.size());
     metadata_file.close();
+
+    // Return the path of the metadata file
+    return metadata_path.string();
+}
+
+const FileMetaData& FileManager::get_metadata() const {
+    return file_metadata;
 }
 
 

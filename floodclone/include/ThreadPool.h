@@ -1,5 +1,5 @@
 #ifndef TRHEADPOOL_H
-#define TRHEADPOOL_H_H
+#define TRHEADPOOL_H
 
 #include <thread>
 #include <queue>
