@@ -65,7 +65,7 @@ struct PieceMetaData{
 struct FileMetaData {
     string fileId;         // unique hash of a specific file
     string filename;       // string name of the file
-    int numPieces;         // number of pieces that make up the file
+    size_t numPieces;         // number of pieces that make up the file
     vector<PieceMetaData> pieces; // information about each of the pieces that make up a file 
 
     // serialize: converts the file metadata to a binary string
@@ -108,7 +108,7 @@ struct FileMetaData {
         ss.read(reinterpret_cast<char*>(&fileMeta.numPieces), sizeof(fileMeta.numPieces));
 
         fileMeta.pieces.resize(fileMeta.numPieces);
-        for(int i = 0; i < fileMeta.numPieces; ++i) {
+        for(size_t i = 0; i < fileMeta.numPieces; ++i) {
             size_t piece_len;
             ss.read(reinterpret_cast<char*>(&piece_len), sizeof(piece_len));
             string piece_binary(piece_len, '\0');
@@ -121,10 +121,12 @@ struct FileMetaData {
 
 class FileManager {
 public:
-    FileManager(const string& file, const int piece_size, const string& node_ip, const string& piece_folder, ThreadPool* thread_pool);
+    FileManager(const string& file, const size_t ipiece_size, const string& node_ip, const string& piece_folder, ThreadPool* thread_pool);
 
     void save_metadata();
     void reconstruct();  // reconutructs a file based on pieces 
+    void receive(const std::string& binary_data, size_t i);
+    std::string send(size_t i);
 
 private:
     string file_path;                       // path to original path
