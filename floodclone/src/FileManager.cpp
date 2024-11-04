@@ -142,6 +142,9 @@ void FileManager::save_metadata() {
 
 
 void FileManager::merge(size_t i) {
+
+    // this code is thread unsfae if it is called  for the same i 
+    // and will endup overiwting the same portion of the merged file. 
     
     // Define paths
     std::filesystem::path piece_path = std::filesystem::path(pieces_folder) / ("piece_" + std::to_string(i));
@@ -159,7 +162,7 @@ void FileManager::merge(size_t i) {
         close(piece_fd); // Clean up on error
         throw std::runtime_error("Cannot open merged file: " + merged_file_path.string());
     }
-    
+
     // Calculate the offset for the i-th piece
     off_t offset = i * piece_size;
 
@@ -176,5 +179,15 @@ void FileManager::merge(size_t i) {
     // Close file descriptors
     close(piece_fd);
     close(merged_fd);
+}
+
+void FileManager::reconstruct() {
+    // Loop through all pieces and enqueue merge tasks in the thread pool
+    for (size_t i = 0; i < file_metadata.numPieces; ++i) {
+        // Enqueue a task to merge each piece; each task will call merge(i) for a unique i
+        thread_pool->enqueue([this, i] {
+            merge(i);
+        });
+    }
 }
 
