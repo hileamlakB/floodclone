@@ -12,6 +12,7 @@ public:
     ThreadPool(size_t threads);
     ~ThreadPool();
     void enqueue(std::function<void()> task);
+    void join();
 
 private:
     std::vector<std::thread> workers;

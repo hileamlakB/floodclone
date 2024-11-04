@@ -1,0 +1,97 @@
+time Directory /run/user/123.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1]: Removed slice User Slice of UID 123.
+Nov  4 15:28:34 instance-20241003-032101 systemd[1]: systemd-hostnamed.service: Succeeded.
+Nov  4 15:28:34 instance-20241003-032101 systemd[1]: systemd-timedated.service: Succeeded.
+Nov  4 15:38:04 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 15:38:04 instance-20241003-032101 gce_workload_cert_refresh[1094]: 2024/11/04 15:38:04: Done
+Nov  4 15:38:04 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 15:38:04 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 15:43:04 instance-20241003-032101 systemd[1]: Starting Cleanup of Temporary Directories...
+Nov  4 15:43:04 instance-20241003-032101 systemd[1]: systemd-tmpfiles-clean.service: Succeeded.
+Nov  4 15:43:04 instance-20241003-032101 systemd[1]: Finished Cleanup of Temporary Directories.
+Nov  4 15:48:06 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 15:48:06 instance-20241003-032101 gce_workload_cert_refresh[1107]: 2024/11/04 15:48:06: Done
+Nov  4 15:48:06 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 15:48:06 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 15:58:14 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 15:58:14 instance-20241003-032101 gce_workload_cert_refresh[1115]: 2024/11/04 15:58:14: Done
+Nov  4 15:58:14 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 15:58:14 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 15:59:15 instance-20241003-032101 systemd[1]: Starting Daily apt upgrade and clean activities...
+Nov  4 15:59:45 instance-20241003-032101 apt-helper[1121]: E: Sub-process nm-online returned an error code (1)
+Nov  4 15:59:50 instance-20241003-032101 systemd[1]: apt-daily-upgrade.service: Succeeded.
+Nov  4 15:59:50 instance-20241003-032101 systemd[1]: Finished Daily apt upgrade and clean activities.
+Nov  4 16:01:21 instance-20241003-032101 systemd[1]: Starting Daily apt download activities...
+Nov  4 16:01:51 instance-20241003-032101 apt-helper[1208]: E: Sub-process nm-online returned an error code (1)
+Nov  4 16:01:52 instance-20241003-032101 systemd[1]: Starting Update APT News...
+Nov  4 16:01:52 instance-20241003-032101 systemd[1]: Starting Update the local ESM caches...
+Nov  4 16:01:53 instance-20241003-032101 systemd[1]: esm-cache.service: Succeeded.
+Nov  4 16:01:53 instance-20241003-032101 systemd[1]: Finished Update the local ESM caches.
+Nov  4 16:02:02 instance-20241003-032101 dbus-daemon[607]: [system] Activating via systemd: service name='org.freedesktop.PackageKit' unit='packagekit.service' requested by ':1.40' (uid=0 pid=1569 comm="/usr/bin/gdbus call --system --dest org.freedeskto" label="unconfined")
+Nov  4 16:02:02 instance-20241003-032101 systemd[1]: Starting PackageKit Daemon...
+Nov  4 16:02:02 instance-20241003-032101 PackageKit: daemon start
+Nov  4 16:02:02 instance-20241003-032101 dbus-daemon[607]: [system] Successfully activated service 'org.freedesktop.PackageKit'
+Nov  4 16:02:02 instance-20241003-032101 systemd[1]: Started PackageKit Daemon.
+Nov  4 16:02:19 instance-20241003-032101 systemd[1]: apt-daily.service: Succeeded.
+Nov  4 16:02:19 instance-20241003-032101 systemd[1]: Finished Daily apt download activities.
+Nov  4 16:02:23 instance-20241003-032101 systemd[1]: apt-news.service: Succeeded.
+Nov  4 16:02:23 instance-20241003-032101 systemd[1]: Finished Update APT News.
+Nov  4 16:07:07 instance-20241003-032101 PackageKit: daemon quit
+Nov  4 16:07:07 instance-20241003-032101 systemd[1]: packagekit.service: Succeeded.
+Nov  4 16:08:23 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 16:08:23 instance-20241003-032101 gce_workload_cert_refresh[1685]: 2024/11/04 16:08:23: Done
+Nov  4 16:08:23 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 16:08:23 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 16:17:01 instance-20241003-032101 CRON[1693]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 16:18:44 instance-20241003-032101 gce_workload_cert_refresh[1697]: 2024/11/04 16:18:44: Done
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: Created slice User Slice of UID 1002.
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: Starting User Runtime Directory /run/user/1002...
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: Finished User Runtime Directory /run/user/1002.
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: Starting User Manager for UID 1002...
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Reached target Paths.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Reached target Timers.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Starting D-Bus User Message Bus Socket.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on GnuPG network certificate management daemon.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on GnuPG cryptographic agent and passphrase cache (access for web browsers).
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on GnuPG cryptographic agent and passphrase cache (restricted).
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on GnuPG cryptographic agent (ssh-agent emulation).
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on GnuPG cryptographic agent and passphrase cache.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on debconf communication socket.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on Sound System.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on REST API socket for snapd user session agent.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on D-Bus User Message Bus Socket.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Reached target Sockets.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Reached target Basic System.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1]: Started User Manager for UID 1002.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Starting Sound Service...
+Nov  4 16:18:45 instance-20241003-032101 systemd[1]: Started Session 3 of user ehmyitayew.
+Nov  4 16:18:45 instance-20241003-032101 dbus-daemon[607]: [system] Activating via systemd: service name='org.bluez' unit='dbus-org.bluez.service' requested by ':1.57' (uid=1002 pid=1711 comm="/usr/bin/pulseaudio --daemonize=no --log-target=jo" label="unconfined")
+Nov  4 16:18:45 instance-20241003-032101 systemd[1]: Condition check resulted in Bluetooth service being skipped.
+Nov  4 16:18:45 instance-20241003-032101 rtkit-daemon[1040]: Supervising 0 threads of 0 processes of 1 users.
+Nov  4 16:18:45 instance-20241003-032101 rtkit-daemon[1040]: message repeated 4 times: [ Supervising 0 threads of 0 processes of 1 users.]
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Started D-Bus User Message Bus.
+Nov  4 16:18:45 instance-20241003-032101 dbus-daemon[1731]: [session uid=1002 pid=1731] AppArmor D-Bus mediation is enabled
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Started Sound Service.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Reached target Main User Target.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Startup finished in 297ms.
+Nov  4 16:19:07 instance-20241003-032101 systemd[1704]: pulseaudio.service: Succeeded.
+Nov  4 16:21:10 instance-20241003-032101 systemd[1]: Started Session 5 of user ehmyitayew.
+Nov  4 16:29:06 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 16:29:06 instance-20241003-032101 gce_workload_cert_refresh[2328]: 2024/11/04 16:29:06: Done
+Nov  4 16:29:06 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 16:29:06 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 16:39:37 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 16:39:37 instance-20241003-032101 gce_workload_cert_refresh[2403]: 2024/11/04 16:39:37: Done
+Nov  4 16:39:37 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 16:39:37 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 16:50:02 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 16:50:02 instance-20241003-032101 gce_workload_cert_refresh[2809]: 2024/11/04 16:50:02: Done
+Nov  4 16:50:02 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 16:50:02 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 17:00:06 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 17:00:06 instance-20241003-032101 gce_workload_cert_refresh[3281]: 2024/11/04 17:00:06: Done
+Nov  4 17:00:06 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 17:00:06 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.

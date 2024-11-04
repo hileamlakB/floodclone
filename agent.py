@@ -46,3 +46,5 @@ class NaiveAgent(Agent):
         self.end_time = datetime.now()
 
 #TODO: Add your custom agent class
+class TorrentAgent(Agent):
+    pass

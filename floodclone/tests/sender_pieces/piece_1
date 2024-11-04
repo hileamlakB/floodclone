@@ -1,0 +1,127 @@
+]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     726b3eb654046a30f3f83d9b96ce03f670e9a806d1708a0371e62dc49d2c23c1
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     71f2906fd222497e54a34662ab2497fcc81020770ff51368e9e3d9bfcbfd6375
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     6f1428ff71c9db0ed5af1f2e7bbfcbab647cc265ddf5b293cdb626f50a3a785e
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     6c8854478dd559e29351b826c06cb8bfef2b94ad3538358772d193f82ed1ca11
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     6b1d138078e4418aa68deb7bb35e066092cf479eeb8ce4cd12e7d072ccb42f66
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     5ae949ea8855eb93e439dbc65bda2e42852c2fdf6789fa146736e3c3410f2b5c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     518831fe7382b514d03e15c621228b8ab65479bd0cbfa3c5c1d0f48d9c306135
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     47cc086127e2069a86e03a6bef2cd410f8c55a6d6bdb362168c31b2ce32a5adf
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     4397daca839e7f63077cb50c92df43bc2d2fb2a8f59f26fc7a0e4bd4d9751692
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     3fce9b9fdf3ef09d5452b0f95ee481c2b7f06d743a737971558e70136ace3e73
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     3841d221368d1583d75c0a02e62160394d6c4e0a6760b6f607b90362bc855b02
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     3608edbaf5ad0f41a414a1777abf2faf5e670334675ec3995e6935829e0caad2
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     306628fa5477305728ba4a467de7d0387a54f569d3769fce5e75ec89d28d1593
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     2e70916786a6f773511fa7181fab0f1d70b557c6322ea923b2a8d3b92b51af7d
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     2c73d93325ba6dcbe589d4a4c63c5b935559ef92fbf050ed50c4e2085206f17d
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     2bbf2ca7b8f1d91f27ee52b6fb2a5dd049b85a2b9b529c5d6662068104b055f8
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     2b99cf26422e92fe365fbf4bc30d27086c9ee14b7a6fff44fb2f6b9001699939
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     18333429ff0562ed9f97033e1148dceee52dbe2e496d5410b5cfd6c864d2d10f
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     174e3a0b5b43c6a607bbd3404f05341e3dcf396267ce94f8b50e2e23a9da920c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     106faceacfecfd4e303b74f480a08098e2d0802b936f8ec774ce21f31686689c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     0dc9f3fb99962148c3ca833632758d3ed4fc8d0b0007b95b31e6528f2acd5bfc
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     0d0dbeca6f29eca06f331a7d72e4884b12097fb348983a2a14a0d73f4f10140f
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     0c189339762df336ab3dd006a463df715a39cfb0f492465c600e6c6bd7bd898c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     0bbb4392daac7ab89b30a4ac657531b97bfaab04f90b0dafe5f9b6eb90a06374
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     09df5f4e511208ec78b96d12d08125fdb603868de39f6f72927852599b659c26
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     07e6c6a858646fb1efc67903fe28b116011f2367fe92e6be2b36999eff39d09e
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     075eea060589548ba060b2feed10da3c20c7fe9b17cd026b94e8a683b8115238
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     90fbe70e69d633408d3e170c6832dbb2d209e0272527dfb63d49d29572a6f44c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     29c6eb52b43c3aa18b2cd8ed6ea8607cef3cfae1bafe1165755cf2e614844a44
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     d063ec28f67eba53f1642dbf7dff33c6a32add869f6013fe162e2c32f1cbe56d
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     d626157e1d6a718bc124ab8da27cbb65072ca03a7b6b257dbdcbbd60f65ef3d1
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     5391c3a2fb112102a6aa1edc25ae77e19f5d6f09cd09eeb2509922bfcd5992ea
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     58fb941aef95a25943b3fb5f2510a0df3fe44c58c95e0ab80487297568ab9771
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     c3a99a460da464a057c3586d83cef5f4ae08b7103979ed8932742df0ed530c66
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     e6ca68e94146629af03f69c2f86e6bef62f930b37c6fbcc878b78df98c0334e5
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     1aec84b84b6c65a51220a9be7181965230210d62d6d33c48999c6b295a2b0a06
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     363384d14d1f2e0b7815626484c459ad57a318ef4396266048d058c5a19bbf76
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     c5d9d8a186e2c82d09afaa2a6f7f2e73870d3e64f72c4e08ef67796a840f0fbd
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     f52f83a3fa9cfbd6920f722824dbe4034534d25b8507246b3b957dac6e1bce7a
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     80b4d96931bf0d02fd91a61e19d14f1da452e66db2408ca8604d411f92659f0a
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]: New keys in filesystem:
+Nov  4 15:27:55 instance-20241003-032101 kernel: [   11.744982] audit: type=1400 audit(1730734075.795:53): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="/usr/lib/snapd/snap-confine" pid=716 comm="apparmor_parser"
+Nov  4 15:27:55 instance-20241003-032101 kernel: [   11.759715] audit: type=1400 audit(1730734075.811:54): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="/usr/lib/snapd/snap-confine//mount-namespace-capture-helper" pid=716 comm="apparmor_parser"
+Nov  4 15:27:56 instance-20241003-032101 avahi-daemon[604]: Server startup complete. Host name is instance-20241003-032101.local. Local service cookie is 4142469060.
+Nov  4 15:27:56 instance-20241003-032101 systemd[1]: secureboot-db.service: Succeeded.
+Nov  4 15:27:56 instance-20241003-032101 systemd[1]: Finished Secure Boot updates for DB and DBX.
+Nov  4 15:27:57 instance-20241003-032101 systemd[1]: Reached target Network.
+Nov  4 15:27:57 instance-20241003-032101 systemd[1]: Starting Modem Manager...
+Nov  4 15:27:57 instance-20241003-032101 ModemManager[724]: <info>  ModemManager (version 1.18.6) starting in system bus...
+Nov  4 15:27:58 instance-20241003-032101 systemd[1]: Starting Network Manager Wait Online...
+Nov  4 15:27:58 instance-20241003-032101 systemd[1]: Starting chrony, an NTP client/server...
+Nov  4 15:27:58 instance-20241003-032101 chronyd-starter.sh[735]: WARNING: libcap needs an update (cap=40 should have a name).
+Nov  4 15:27:58 instance-20241003-032101 chronyd[738]: chronyd version 3.5 starting (+CMDMON +NTP +REFCLOCK +RTC +PRIVDROP +SCFILTER +SIGND +ASYNCDNS +SECHASH +IPV6 -DEBUG)
+Nov  4 15:27:58 instance-20241003-032101 chronyd[738]: Frequency -58.574 +/- 0.006 ppm read from /var/lib/chrony/chrony.drift
+Nov  4 15:27:58 instance-20241003-032101 chronyd[738]: Loaded seccomp filter
+Nov  4 15:27:59 instance-20241003-032101 systemd[1]: Starting GRUB failed boot detection...
+Nov  4 15:28:00 instance-20241003-032101 systemd[1]: Condition check resulted in fast remote file copy program daemon being skipped.
+Nov  4 15:28:00 instance-20241003-032101 systemd[1]: Starting Service for snap application lxd.activate...
+Nov  4 15:28:00 instance-20241003-032101 ModemManager[724]: <info>  [base-manager] couldn't check support for device '/sys/devices/pci0000:00/0000:00:04.0': not supported by any plugin
+Nov  4 15:28:00 instance-20241003-032101 lxd.activate[742]: => Starting LXD activation
+Nov  4 15:28:00 instance-20241003-032101 lxd.activate[742]: ==> Loading snap configuration
+Nov  4 15:28:00 instance-20241003-032101 lxd.activate[742]: ==> Checking for socket activation support
+Nov  4 15:28:01 instance-20241003-032101 systemd[1]: Starting Hostname Service...
+Nov  4 15:28:01 instance-20241003-032101 dbus-daemon[607]: [system] Successfully activated service 'org.freedesktop.hostname1'
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1250] hostname: hostname: using hostnamed
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1250] hostname: hostname changed from (none) to "instance-20241003-032101"
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1258] dns-mgr[0x56429e769290]: init: dns=systemd-resolved rc-manager=symlink, plugin=systemd-resolved
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1266] manager[0x56429e787020]: rfkill: Wi-Fi hardware radio set enabled
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1266] manager[0x56429e787020]: rfkill: WWAN hardware radio set enabled
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1416] Loaded device plugin: NMAtmManager (/usr/lib/x86_64-linux-gnu/NetworkManager/1.22.10/libnm-device-plugin-adsl.so)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1518] Loaded device plugin: NMTeamFactory (/usr/lib/x86_64-linux-gnu/NetworkManager/1.22.10/libnm-device-plugin-team.so)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1576] Loaded device plugin: NMWifiFactory (/usr/lib/x86_64-linux-gnu/NetworkManager/1.22.10/libnm-device-plugin-wifi.so)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1668] Loaded device plugin: NMWwanFactory (/usr/lib/x86_64-linux-gnu/NetworkManager/1.22.10/libnm-device-plugin-wwan.so)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1784] Loaded device plugin: NMBluezManager (/usr/lib/x86_64-linux-gnu/NetworkManager/1.22.10/libnm-device-plugin-bluetooth.so)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1791] manager: rfkill: Wi-Fi enabled by radio killswitch; enabled by state file
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1792] manager: rfkill: WWAN enabled by radio killswitch; enabled by state file
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1793] manager: Networking is enabled by state file
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1794] dhcp-init: Using DHCP client 'internal'
+Nov  4 15:28:01 instance-20241003-032101 dbus-daemon[607]: [system] Activating via systemd: service name='org.freedesktop.nm_dispatcher' unit='dbus-org.freedesktop.nm-dispatcher.service' requested by ':1.4' (uid=0 pid=608 comm="/usr/sbin/NetworkManager --no-daemon " label="unconfined")
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1830] settings: Loaded settings plugin: ifupdown ("/usr/lib/x86_64-linux-gnu/NetworkManager/1.22.10/libnm-settings-plugin-ifupdown.so")
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1831] settings: Loaded settings plugin: keyfile (internal)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1831] ifupdown: management mode: unmanaged
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <warn>  [1730734081.1832] ifupdown: interfaces file /etc/network/interfaces doesn't exist
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1874] device (lo): carrier: link connected
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1890] manager: (lo): new Generic device (/org/freedesktop/NetworkManager/Devices/1)
+Nov  4 1
