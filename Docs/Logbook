@@ -18,3 +18,9 @@ October 20: Implemented thread pool
     insdie the classes to get optimum result.
     - Had to install g++-multilib for fsanitizer support make sure to include that
     in the installation guide (sudo apt-get install g++-multilib)
+
+
+Nov 4: Completed the sender file manager class
+    - had to install sudo apt-get install libssl-dev for managing md5checksum
+    - which might not be requried and could be removed to speed up code
+    - Created differnt methods for the filemanager class, including 

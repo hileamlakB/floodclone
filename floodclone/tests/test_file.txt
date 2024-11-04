@@ -1,0 +1,766 @@
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     b54f1ee636631fad68058d3b0937031ac1b90ccb17062a391cca68afdbe40d55
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     afe2030afb7d2cda13f9fa333a02e34f6751afec11b010dbcd441fdf4c4002b3
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     aeebae3151271273ed95aa2e671139ed31a98567303a332298f83709a9d55aa1
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     ad6826e1946d26d3eaf3685c88d97d85de3b4dcb3d0ee2ae81c70560d13c5720
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     a7f32f508d4eb0fead9a087ef94ed1ba0aec5de6f7ef6ff0a62b93bedf5d458d
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     a6b5151f3655d3a2af0d472759796be4a4200e5495a7d869754c4848857408a7
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     9e4a69173161682e55fde8fef560eb88ec1ffedcaf04001f66c0caf707b2b734
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     9998d363c491be16bd74ba10b94d9291001611736fdca643a36664bc0f315a42
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     8d8ea289cfe70a1c07ab7365cb28ee51edd33cf2506de888fbadd60ebf80481c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     8bf434b49e00ccf71502a2cd900865cb01ec3b3da03c35be505fdf7bd563f521
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     8ad64859f195b5f58dafaa940b6a6167acd67a886e8f469364177221c55945b9
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     895a9785f617ca1d7ed44fc1a1470b71f3f1223862d9ff9dcc3ae2df92163daf
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     82db3bceb4f60843ce9d97c3d187cd9b5941cd3de8100e586f2bda5637575f67
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     81a8b965bb84d3876b9429a95481cc955318cfaa1412d808c8a33bfd33fff0e4
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     7827af99362cfaf0717dade4b1bfe0438ad171c15addc248b75bf8caa44bb2c5
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     72e0bd1867cf5d9d56ab158adf3bddbc82bf32a8d8aa1d8c5e2f6df29428d6d8
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     726b3eb654046a30f3f83d9b96ce03f670e9a806d1708a0371e62dc49d2c23c1
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     71f2906fd222497e54a34662ab2497fcc81020770ff51368e9e3d9bfcbfd6375
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     6f1428ff71c9db0ed5af1f2e7bbfcbab647cc265ddf5b293cdb626f50a3a785e
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     6c8854478dd559e29351b826c06cb8bfef2b94ad3538358772d193f82ed1ca11
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     6b1d138078e4418aa68deb7bb35e066092cf479eeb8ce4cd12e7d072ccb42f66
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     5ae949ea8855eb93e439dbc65bda2e42852c2fdf6789fa146736e3c3410f2b5c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     518831fe7382b514d03e15c621228b8ab65479bd0cbfa3c5c1d0f48d9c306135
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     47cc086127e2069a86e03a6bef2cd410f8c55a6d6bdb362168c31b2ce32a5adf
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     4397daca839e7f63077cb50c92df43bc2d2fb2a8f59f26fc7a0e4bd4d9751692
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     3fce9b9fdf3ef09d5452b0f95ee481c2b7f06d743a737971558e70136ace3e73
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     3841d221368d1583d75c0a02e62160394d6c4e0a6760b6f607b90362bc855b02
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     3608edbaf5ad0f41a414a1777abf2faf5e670334675ec3995e6935829e0caad2
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     306628fa5477305728ba4a467de7d0387a54f569d3769fce5e75ec89d28d1593
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     2e70916786a6f773511fa7181fab0f1d70b557c6322ea923b2a8d3b92b51af7d
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     2c73d93325ba6dcbe589d4a4c63c5b935559ef92fbf050ed50c4e2085206f17d
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     2bbf2ca7b8f1d91f27ee52b6fb2a5dd049b85a2b9b529c5d6662068104b055f8
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     2b99cf26422e92fe365fbf4bc30d27086c9ee14b7a6fff44fb2f6b9001699939
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     18333429ff0562ed9f97033e1148dceee52dbe2e496d5410b5cfd6c864d2d10f
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     174e3a0b5b43c6a607bbd3404f05341e3dcf396267ce94f8b50e2e23a9da920c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     106faceacfecfd4e303b74f480a08098e2d0802b936f8ec774ce21f31686689c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     0dc9f3fb99962148c3ca833632758d3ed4fc8d0b0007b95b31e6528f2acd5bfc
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     0d0dbeca6f29eca06f331a7d72e4884b12097fb348983a2a14a0d73f4f10140f
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     0c189339762df336ab3dd006a463df715a39cfb0f492465c600e6c6bd7bd898c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     0bbb4392daac7ab89b30a4ac657531b97bfaab04f90b0dafe5f9b6eb90a06374
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     09df5f4e511208ec78b96d12d08125fdb603868de39f6f72927852599b659c26
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     07e6c6a858646fb1efc67903fe28b116011f2367fe92e6be2b36999eff39d09e
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     075eea060589548ba060b2feed10da3c20c7fe9b17cd026b94e8a683b8115238
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     90fbe70e69d633408d3e170c6832dbb2d209e0272527dfb63d49d29572a6f44c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     29c6eb52b43c3aa18b2cd8ed6ea8607cef3cfae1bafe1165755cf2e614844a44
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     d063ec28f67eba53f1642dbf7dff33c6a32add869f6013fe162e2c32f1cbe56d
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     d626157e1d6a718bc124ab8da27cbb65072ca03a7b6b257dbdcbbd60f65ef3d1
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     5391c3a2fb112102a6aa1edc25ae77e19f5d6f09cd09eeb2509922bfcd5992ea
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     58fb941aef95a25943b3fb5f2510a0df3fe44c58c95e0ab80487297568ab9771
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     c3a99a460da464a057c3586d83cef5f4ae08b7103979ed8932742df0ed530c66
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     e6ca68e94146629af03f69c2f86e6bef62f930b37c6fbcc878b78df98c0334e5
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     1aec84b84b6c65a51220a9be7181965230210d62d6d33c48999c6b295a2b0a06
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     363384d14d1f2e0b7815626484c459ad57a318ef4396266048d058c5a19bbf76
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     c5d9d8a186e2c82d09afaa2a6f7f2e73870d3e64f72c4e08ef67796a840f0fbd
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     f52f83a3fa9cfbd6920f722824dbe4034534d25b8507246b3b957dac6e1bce7a
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     80b4d96931bf0d02fd91a61e19d14f1da452e66db2408ca8604d411f92659f0a
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]: filesystem keys:
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:   PK:
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:   KEK:
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:   db:
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:   dbx:
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     45c7c8ae750acfbb48fc37527d6412dd644daed8913ccd8a24c94d856967df8e
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     64575bd912789a2e14ad56f6341f52af6bf80cf94400785975e9f04e2d64d745
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     939aeef4f5fa51e23340c3f2e49048ce8872526afdf752c3a7f3a3f2bc9f6049
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     3b0287533e0cc3d0ec1aa823cbf0a941aad8721579d1c499802dd1c3a636b8a9
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     c83cb13922ad99f560744675dd37cc94dcad5a1fcba6472fee341171d939e884
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     77dd190fa30d88ff5e3b011a0ae61e6209780c130b535ecb87e6f0888a0b6b2f
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     55b99b0de53dbcfe485aa9c737cf3fb616ef3d91fab599aa7cab19eda763b5ba
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     ca171d614a8d7e121c93948cd0fe55d39981f9d11aa96e03450a415227c2c65b
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     fecfb232d12e994b6d485d2c7167728aa5525984ad5ca61e7516221f079a1436
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     fe63a84f782cc9d3fcf2ccf9fc11fbd03760878758d26285ed12669bdc6e6d01
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     fddd6e3d29ea84c7743dad4a1bdbc700b5fec1b391f932409086acc71dd6dbd8
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     e92c22eb3b5642d65c1ec2caf247d2594738eebb7fb3841a44956f59e2b0d1fa
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     d8cbeb9735f5672b367e4f96cdc74969615d17074ae96c724d42ce0216f8f3fa
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     ce3bfabe59d67ce8ac8dfd4a16f7c43ef9c224513fbc655957d735fa29f540ce
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     cb6b858b40d3a098765815b592c1514a49604fafd60819da88d7a76e9778fef7
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     c90f336617b8e7f983975413c997f10b73eb267fd8a10cb9e3bdbfc667abdb8b
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     c617c1a8b1ee2a811c28b5a81b4c83d7c98b5b0c27281d610207ebe692c2967f
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     c409bdac4775add8db92aa22b5b718fb8c94a1462c1fe9a416b95d8a3388c2fc
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     bc87a668e81966489cb508ee805183c19e6acd24cf17799ca062d2e384da0ea7
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     b97a0889059c035ff1d54b6db53b11b9766668d9f955247c028b2837d7a04cd9
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     b8f078d983a24ac433216393883514cd932c33af18e7dd70884c8235f4275736
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     b54f1ee636631fad68058d3b0937031ac1b90ccb17062a391cca68afdbe40d55
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     afe2030afb7d2cda13f9fa333a02e34f6751afec11b010dbcd441fdf4c4002b3
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     aeebae3151271273ed95aa2e671139ed31a98567303a332298f83709a9d55aa1
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     ad6826e1946d26d3eaf3685c88d97d85de3b4dcb3d0ee2ae81c70560d13c5720
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     a7f32f508d4eb0fead9a087ef94ed1ba0aec5de6f7ef6ff0a62b93bedf5d458d
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     a6b5151f3655d3a2af0d472759796be4a4200e5495a7d869754c4848857408a7
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     9e4a69173161682e55fde8fef560eb88ec1ffedcaf04001f66c0caf707b2b734
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     9998d363c491be16bd74ba10b94d9291001611736fdca643a36664bc0f315a42
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     8d8ea289cfe70a1c07ab7365cb28ee51edd33cf2506de888fbadd60ebf80481c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     8bf434b49e00ccf71502a2cd900865cb01ec3b3da03c35be505fdf7bd563f521
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     8ad64859f195b5f58dafaa940b6a6167acd67a886e8f469364177221c55945b9
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     895a9785f617ca1d7ed44fc1a1470b71f3f1223862d9ff9dcc3ae2df92163daf
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     82db3bceb4f60843ce9d97c3d187cd9b5941cd3de8100e586f2bda5637575f67
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     81a8b965bb84d3876b9429a95481cc955318cfaa1412d808c8a33bfd33fff0e4
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     7827af99362cfaf0717dade4b1bfe0438ad171c15addc248b75bf8caa44bb2c5
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     72e0bd1867cf5d9d56ab158adf3bddbc82bf32a8d8aa1d8c5e2f6df29428d6d8
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     726b3eb654046a30f3f83d9b96ce03f670e9a806d1708a0371e62dc49d2c23c1
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     71f2906fd222497e54a34662ab2497fcc81020770ff51368e9e3d9bfcbfd6375
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     6f1428ff71c9db0ed5af1f2e7bbfcbab647cc265ddf5b293cdb626f50a3a785e
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     6c8854478dd559e29351b826c06cb8bfef2b94ad3538358772d193f82ed1ca11
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     6b1d138078e4418aa68deb7bb35e066092cf479eeb8ce4cd12e7d072ccb42f66
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     5ae949ea8855eb93e439dbc65bda2e42852c2fdf6789fa146736e3c3410f2b5c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     518831fe7382b514d03e15c621228b8ab65479bd0cbfa3c5c1d0f48d9c306135
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     47cc086127e2069a86e03a6bef2cd410f8c55a6d6bdb362168c31b2ce32a5adf
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     4397daca839e7f63077cb50c92df43bc2d2fb2a8f59f26fc7a0e4bd4d9751692
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     3fce9b9fdf3ef09d5452b0f95ee481c2b7f06d743a737971558e70136ace3e73
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     3841d221368d1583d75c0a02e62160394d6c4e0a6760b6f607b90362bc855b02
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     3608edbaf5ad0f41a414a1777abf2faf5e670334675ec3995e6935829e0caad2
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     306628fa5477305728ba4a467de7d0387a54f569d3769fce5e75ec89d28d1593
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     2e70916786a6f773511fa7181fab0f1d70b557c6322ea923b2a8d3b92b51af7d
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     2c73d93325ba6dcbe589d4a4c63c5b935559ef92fbf050ed50c4e2085206f17d
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     2bbf2ca7b8f1d91f27ee52b6fb2a5dd049b85a2b9b529c5d6662068104b055f8
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     2b99cf26422e92fe365fbf4bc30d27086c9ee14b7a6fff44fb2f6b9001699939
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     18333429ff0562ed9f97033e1148dceee52dbe2e496d5410b5cfd6c864d2d10f
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     174e3a0b5b43c6a607bbd3404f05341e3dcf396267ce94f8b50e2e23a9da920c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     106faceacfecfd4e303b74f480a08098e2d0802b936f8ec774ce21f31686689c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     0dc9f3fb99962148c3ca833632758d3ed4fc8d0b0007b95b31e6528f2acd5bfc
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     0d0dbeca6f29eca06f331a7d72e4884b12097fb348983a2a14a0d73f4f10140f
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     0c189339762df336ab3dd006a463df715a39cfb0f492465c600e6c6bd7bd898c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     0bbb4392daac7ab89b30a4ac657531b97bfaab04f90b0dafe5f9b6eb90a06374
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     09df5f4e511208ec78b96d12d08125fdb603868de39f6f72927852599b659c26
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     07e6c6a858646fb1efc67903fe28b116011f2367fe92e6be2b36999eff39d09e
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     075eea060589548ba060b2feed10da3c20c7fe9b17cd026b94e8a683b8115238
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     90fbe70e69d633408d3e170c6832dbb2d209e0272527dfb63d49d29572a6f44c
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     29c6eb52b43c3aa18b2cd8ed6ea8607cef3cfae1bafe1165755cf2e614844a44
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     d063ec28f67eba53f1642dbf7dff33c6a32add869f6013fe162e2c32f1cbe56d
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     d626157e1d6a718bc124ab8da27cbb65072ca03a7b6b257dbdcbbd60f65ef3d1
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     5391c3a2fb112102a6aa1edc25ae77e19f5d6f09cd09eeb2509922bfcd5992ea
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     58fb941aef95a25943b3fb5f2510a0df3fe44c58c95e0ab80487297568ab9771
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     c3a99a460da464a057c3586d83cef5f4ae08b7103979ed8932742df0ed530c66
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     e6ca68e94146629af03f69c2f86e6bef62f930b37c6fbcc878b78df98c0334e5
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     1aec84b84b6c65a51220a9be7181965230210d62d6d33c48999c6b295a2b0a06
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     363384d14d1f2e0b7815626484c459ad57a318ef4396266048d058c5a19bbf76
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     c5d9d8a186e2c82d09afaa2a6f7f2e73870d3e64f72c4e08ef67796a840f0fbd
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     f52f83a3fa9cfbd6920f722824dbe4034534d25b8507246b3b957dac6e1bce7a
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:     80b4d96931bf0d02fd91a61e19d14f1da452e66db2408ca8604d411f92659f0a
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]:      from /usr/share/secureboot/updates/dbx/MS-2016-08-08.bin
+Nov  4 15:27:55 instance-20241003-032101 sbkeysync[717]: New keys in filesystem:
+Nov  4 15:27:55 instance-20241003-032101 kernel: [   11.744982] audit: type=1400 audit(1730734075.795:53): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="/usr/lib/snapd/snap-confine" pid=716 comm="apparmor_parser"
+Nov  4 15:27:55 instance-20241003-032101 kernel: [   11.759715] audit: type=1400 audit(1730734075.811:54): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="/usr/lib/snapd/snap-confine//mount-namespace-capture-helper" pid=716 comm="apparmor_parser"
+Nov  4 15:27:56 instance-20241003-032101 avahi-daemon[604]: Server startup complete. Host name is instance-20241003-032101.local. Local service cookie is 4142469060.
+Nov  4 15:27:56 instance-20241003-032101 systemd[1]: secureboot-db.service: Succeeded.
+Nov  4 15:27:56 instance-20241003-032101 systemd[1]: Finished Secure Boot updates for DB and DBX.
+Nov  4 15:27:57 instance-20241003-032101 systemd[1]: Reached target Network.
+Nov  4 15:27:57 instance-20241003-032101 systemd[1]: Starting Modem Manager...
+Nov  4 15:27:57 instance-20241003-032101 ModemManager[724]: <info>  ModemManager (version 1.18.6) starting in system bus...
+Nov  4 15:27:58 instance-20241003-032101 systemd[1]: Starting Network Manager Wait Online...
+Nov  4 15:27:58 instance-20241003-032101 systemd[1]: Starting chrony, an NTP client/server...
+Nov  4 15:27:58 instance-20241003-032101 chronyd-starter.sh[735]: WARNING: libcap needs an update (cap=40 should have a name).
+Nov  4 15:27:58 instance-20241003-032101 chronyd[738]: chronyd version 3.5 starting (+CMDMON +NTP +REFCLOCK +RTC +PRIVDROP +SCFILTER +SIGND +ASYNCDNS +SECHASH +IPV6 -DEBUG)
+Nov  4 15:27:58 instance-20241003-032101 chronyd[738]: Frequency -58.574 +/- 0.006 ppm read from /var/lib/chrony/chrony.drift
+Nov  4 15:27:58 instance-20241003-032101 chronyd[738]: Loaded seccomp filter
+Nov  4 15:27:59 instance-20241003-032101 systemd[1]: Starting GRUB failed boot detection...
+Nov  4 15:28:00 instance-20241003-032101 systemd[1]: Condition check resulted in fast remote file copy program daemon being skipped.
+Nov  4 15:28:00 instance-20241003-032101 systemd[1]: Starting Service for snap application lxd.activate...
+Nov  4 15:28:00 instance-20241003-032101 ModemManager[724]: <info>  [base-manager] couldn't check support for device '/sys/devices/pci0000:00/0000:00:04.0': not supported by any plugin
+Nov  4 15:28:00 instance-20241003-032101 lxd.activate[742]: => Starting LXD activation
+Nov  4 15:28:00 instance-20241003-032101 lxd.activate[742]: ==> Loading snap configuration
+Nov  4 15:28:00 instance-20241003-032101 lxd.activate[742]: ==> Checking for socket activation support
+Nov  4 15:28:01 instance-20241003-032101 systemd[1]: Starting Hostname Service...
+Nov  4 15:28:01 instance-20241003-032101 dbus-daemon[607]: [system] Successfully activated service 'org.freedesktop.hostname1'
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1250] hostname: hostname: using hostnamed
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1250] hostname: hostname changed from (none) to "instance-20241003-032101"
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1258] dns-mgr[0x56429e769290]: init: dns=systemd-resolved rc-manager=symlink, plugin=systemd-resolved
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1266] manager[0x56429e787020]: rfkill: Wi-Fi hardware radio set enabled
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1266] manager[0x56429e787020]: rfkill: WWAN hardware radio set enabled
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1416] Loaded device plugin: NMAtmManager (/usr/lib/x86_64-linux-gnu/NetworkManager/1.22.10/libnm-device-plugin-adsl.so)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1518] Loaded device plugin: NMTeamFactory (/usr/lib/x86_64-linux-gnu/NetworkManager/1.22.10/libnm-device-plugin-team.so)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1576] Loaded device plugin: NMWifiFactory (/usr/lib/x86_64-linux-gnu/NetworkManager/1.22.10/libnm-device-plugin-wifi.so)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1668] Loaded device plugin: NMWwanFactory (/usr/lib/x86_64-linux-gnu/NetworkManager/1.22.10/libnm-device-plugin-wwan.so)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1784] Loaded device plugin: NMBluezManager (/usr/lib/x86_64-linux-gnu/NetworkManager/1.22.10/libnm-device-plugin-bluetooth.so)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1791] manager: rfkill: Wi-Fi enabled by radio killswitch; enabled by state file
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1792] manager: rfkill: WWAN enabled by radio killswitch; enabled by state file
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1793] manager: Networking is enabled by state file
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1794] dhcp-init: Using DHCP client 'internal'
+Nov  4 15:28:01 instance-20241003-032101 dbus-daemon[607]: [system] Activating via systemd: service name='org.freedesktop.nm_dispatcher' unit='dbus-org.freedesktop.nm-dispatcher.service' requested by ':1.4' (uid=0 pid=608 comm="/usr/sbin/NetworkManager --no-daemon " label="unconfined")
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1830] settings: Loaded settings plugin: ifupdown ("/usr/lib/x86_64-linux-gnu/NetworkManager/1.22.10/libnm-settings-plugin-ifupdown.so")
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1831] settings: Loaded settings plugin: keyfile (internal)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1831] ifupdown: management mode: unmanaged
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <warn>  [1730734081.1832] ifupdown: interfaces file /etc/network/interfaces doesn't exist
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1874] device (lo): carrier: link connected
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1890] manager: (lo): new Generic device (/org/freedesktop/NetworkManager/Devices/1)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1916] device (ens4): carrier: link connected
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1925] manager: (ens4): new Ethernet device (/org/freedesktop/NetworkManager/Devices/2)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <warn>  [1730734081.1981] Error: failed to open /run/network/ifstate
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.2095] modem-manager: ModemManager available
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.2096] manager: startup complete
+Nov  4 15:28:01 instance-20241003-032101 systemd[1]: Started Unattended Upgrades Shutdown.
+Nov  4 15:28:02 instance-20241003-032101 systemd[1]: Finished Network Manager Wait Online.
+Nov  4 15:28:02 instance-20241003-032101 systemd[1]: Started Modem Manager.
+Nov  4 15:28:03 instance-20241003-032101 chronyd[738]: Selected source 169.254.169.254
+Nov  4 15:28:03 instance-20241003-032101 systemd[1]: Started chrony, an NTP client/server.
+Nov  4 15:28:03 instance-20241003-032101 systemd[1]: grub-initrd-fallback.service: Succeeded.
+Nov  4 15:28:03 instance-20241003-032101 systemd[1]: Finished GRUB failed boot detection.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Hostname Service.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Reached target Network is Online.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Reached target System Time Synchronized.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Daily apt download activities.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Daily apt upgrade and clean activities.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Periodic ext4 Online Metadata Check for All Filesystems.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Discard unused blocks once a week.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Daily rotation of log files.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Daily man-db regeneration.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Message of the Day.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Condition check resulted in Timer to automatically fetch and run repair assertions being skipped.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Reached target Timers.
+Nov  4 15:28:04 instance-20241003-032101 dbus-daemon[607]: [system] Activating via systemd: service name='org.freedesktop.timedate1' unit='dbus-org.freedesktop.timedate1.service' requested by ':1.16' (uid=0 pid=646 comm="/usr/lib/snapd/snapd " label="unconfined")
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Network Manager Script Dispatcher Service...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Google Compute Engine Guest Agent...
+Nov  4 15:28:04 instance-20241003-032101 systemd-hostnamed[786]: Changed host name to 'instance-20241003-032101.c.computer-networks-437503.internal'
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Google OSConfig Agent.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Condition check resulted in Login to default iSCSI targets being skipped.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Reached target Remote File Systems (Pre).
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Reached target Remote File Systems.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting LSB: automatic crash report generation...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Deferred execution scheduler...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Availability of block devices...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Regular background program processing daemon.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Open vSwitch Record Hostname...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Condition check resulted in Pollinate to seed the pseudo random number generator being skipped.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Permit User Sessions...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Ubuntu Pro Background Auto Attach.
+Nov  4 15:28:04 instance-20241003-032101 dbus-daemon[607]: [system] Successfully activated service 'org.freedesktop.nm_dispatcher'
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Snap Daemon.
+Nov  4 15:28:04 instance-20241003-032101 cron[811]: (CRON) INFO (pidfile fd = 3)
+Nov  4 15:28:04 instance-20241003-032101 cron[811]: (CRON) INFO (Running @reboot jobs)
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: dmesg.service: Succeeded.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Deferred execution scheduler.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Availability of block devices.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Network Manager Script Dispatcher Service.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Permit User Sessions.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Online ext4 Metadata Check for All Filesystems...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Discard unused blocks on filesystems from /etc/fstab...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting GNOME Display Manager...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Google Compute Engine Shutdown Scripts...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Hold until boot process finishes up...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Time & Date Service...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Rotate log files...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Daily man-db regeneration...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: e2scrub_all.service: Succeeded.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Online ext4 Metadata Check for All Filesystems.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Google Compute Engine Shutdown Scripts.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: plymouth-quit-wait.service: Succeeded.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Hold until boot process finishes up.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Serial Getty on ttyS0.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Reached target Login Prompts.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Set console scheme...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Set console scheme.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Created slice system-getty.slice.
+Nov  4 15:28:04 instance-20241003-032101 apport[806]:  * Starting automatic crash report generation: apport
+Nov  4 15:28:04 instance-20241003-032101 ovs-vsctl: ovs|00001|vsctl|INFO|Called as ovs-vsctl --no-wait add Open_vSwitch . external-ids hostname=instance-20241003-032101.c.computer-networks-437503.internal
+Nov  4 15:28:04 instance-20241003-032101 apport[806]:    ...done.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started LSB: automatic crash report generation.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Open vSwitch Record Hostname.
+Nov  4 15:28:04 instance-20241003-032101 google_guest_agent[804]: GCE Agent Started (version 20240716.00-0ubuntu1~20.04.0)
+Nov  4 15:28:04 instance-20241003-032101 OSConfigAgent[805]: 2024-11-04T15:28:04.6273Z OSConfigAgent Info: OSConfig Agent (version 20240524.03-0ubuntu2~20.04.0) started.
+Nov  4 15:28:04 instance-20241003-032101 dbus-daemon[607]: [system] Successfully activated service 'org.freedesktop.timedate1'
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Time & Date Service.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Wait until snapd is fully seeded.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Cloud-init: Config Stage...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Condition check resulted in Auto import assertions from block devices being skipped.
+Nov  4 15:28:04 instance-20241003-032101 lxd.activate[742]: ==> Setting LXD socket ownership
+Nov  4 15:28:04 instance-20241003-032101 lxd.activate[742]: ==> LXD never started on this system, no need to start it now
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: snap.lxd.activate.service: Succeeded.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Service for snap application lxd.activate.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: logrotate.service: Succeeded.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Finished Rotate log files.
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Starting the scheduler to run jobs
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Scheduler - start: []
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Skipping scheduling credential generation job, failed to reach client credentials endpoint(instance/credentials/certs) with error: error connecting to metadata server, status code: 404
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: ERROR scheduler.go:177 Failed to schedule job MTLS_MDS_Credential_Boostrapper with error: ShouldEnable() returned false, cannot schedule job MTLS_MDS_Credential_Boostrapper
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Started Google Compute Engine Guest Agent.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Starting OpenBSD Secure Shell server...
+Nov  4 15:28:05 instance-20241003-032101 python3[816]: ["2024-11-04T15:28:05.419", "INFO", "ubuntupro.daemon", "main", 55, "daemon starting", {}]
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Starting the scheduler to run jobs
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Scheduling job: telemetryJobID
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Scheduling job "telemetryJobID" to run at 24.000000 hr interval
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Successfully scheduled job telemetryJobID
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Invoking job "telemetryJobID"
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Scheduler - added: [now 2024-11-04 15:28:05.549734019 +0000 UTC entry 1 next 2024-11-05 15:28:05 +0000 UTC]
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: ERROR non_windows_accounts.go:218 invalid ssh key entry - expired key: ehmyitayew:ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNWl71AveovmoN/ToxJm50tQ6KpgWuD1bHAhbnVcz+ZbzFNTS4wxJwrCBqNi+Vd7Adr+MBuh08FZAm2Dr0w6or8= google-ssh {"userName":"ehmyitayew@college.harvard.edu","expireOn":"2024-10-10T02:56:00+0000"}
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: ERROR non_windows_accounts.go:218 invalid ssh key entry - expired key: ehmyitayew:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCWKPex9F0UBF9bbwk2dPRIncnZXriG6Lt4L5jtxsd37jINrX4m4HpmX8u7xD40PUd+1Wp24mALwrspCCDLTN/EZb1H8ckbDBQzyrWCGjisalDgQV1kfUvpdCFbH8mfiGAMRgnuAVVQ24FTxt92GTIdhTIjniTNsYWgoM+g2yoarIfLZiSx3+2D5uDyIGhMTq+S6QStUWQ8aGXPDePjYpYyWiEDi3JMu4RkErpXkrZIE/GfluqbLoyVBIreZ1e3t2ZfQ1DkpNY+I+ksEPx+lKX/u6aWNANfa8GhjMz/hmw8Q7ohfrpBSZUWBNCFdgxl+0nMj9n6CwlXZoEmxq9AWCxD google-ssh {"userName":"ehmyitayew@college.harvard.edu","expireOn":"2024-10-10T02:56:03+0000"}
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Updating keys for user ehmyitayew.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Started OpenBSD Secure Shell server.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Reached target Multi-User System.
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: Internet Systems Consortium DHCP Client 4.4.1
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: Copyright 2004-2018 Internet Systems Consortium.
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: All rights reserved.
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: For info, please visit https://www.isc.org/software/dhcp/
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: 
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: Listening on Socket/ens4
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: Sending on   Socket/ens4
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Stopping Login Service...
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: man-db.service: Succeeded.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Finished Daily man-db regeneration.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: systemd-logind.service: Succeeded.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Stopped Login Service.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Condition check resulted in Load Kernel Module drm being skipped.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Starting Login Service...
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Started Login Service.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Stopping Regular background program processing daemon...
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: cron.service: Succeeded.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Stopped Regular background program processing daemon.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Started Regular background program processing daemon.
+Nov  4 15:28:05 instance-20241003-032101 cron[989]: (CRON) INFO (pidfile fd = 3)
+Nov  4 15:28:05 instance-20241003-032101 cron[989]: (CRON) INFO (Skipping @reboot jobs -- not system startup)
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Reloading OpenBSD Secure Shell server.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Reloaded OpenBSD Secure Shell server.
+Nov  4 15:28:06 instance-20241003-032101 cloud-init[998]: Cloud-init v. 24.2-0ubuntu1~20.04.1 running 'modules:config' at Mon, 04 Nov 2024 15:28:06 +0000. Up 21.79 seconds.
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: Finished Cloud-init: Config Stage.
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: Starting Cloud-init: Final Stage...
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: Starting "Ensure google-startup-scripts.service starts after cloud-config.service"...
+Nov  4 15:28:06 instance-20241003-032101 ensure-gss-startup-order.sh[1000]: This service exists solely to ensure that the google-startup-scripts.service starts after cloud-config.service.
+Nov  4 15:28:06 instance-20241003-032101 ensure-gss-startup-order.sh[1000]: This is ensured through the After=cloud-config.service and Before=google-startup-scripts.service clauses in the service definition.
+Nov  4 15:28:06 instance-20241003-032101 ensure-gss-startup-order.sh[1000]: This is a dummy service does not do any work of its own.
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: Finished "Ensure google-startup-scripts.service starts after cloud-config.service".
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: Starting Google Compute Engine Startup Scripts...
+Nov  4 15:28:06 instance-20241003-032101 google_metadata_script_runner[1001]: Starting startup scripts (version dev).
+Nov  4 15:28:06 instance-20241003-032101 google_metadata_script_runner[1001]: No startup scripts to run.
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: google-startup-scripts.service: Succeeded.
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: Finished Google Compute Engine Startup Scripts.
+Nov  4 15:28:07 instance-20241003-032101 snapd[646]: storehelpers.go:923: cannot refresh: snap has no updates available: "core20", "google-cloud-cli", "lxd", "snapd"
+Nov  4 15:28:07 instance-20241003-032101 rsyslogd: [origin software="rsyslogd" swVersion="8.2001.0" x-pid="635" x-info="https://www.rsyslog.com"] rsyslogd was HUPed
+Nov  4 15:28:07 instance-20241003-032101 cloud-init[1010]: Cloud-init v. 24.2-0ubuntu1~20.04.1 running 'modules:final' at Mon, 04 Nov 2024 15:28:07 +0000. Up 22.72 seconds.
+Nov  4 15:28:07 instance-20241003-032101 cloud-init[1010]: Cloud-init v. 24.2-0ubuntu1~20.04.1 finished at Mon, 04 Nov 2024 15:28:07 +0000. Datasource DataSourceGCELocal.  Up 22.87 seconds
+Nov  4 15:28:08 instance-20241003-032101 systemd[1]: Finished Cloud-init: Final Stage.
+Nov  4 15:28:08 instance-20241003-032101 systemd[1]: Reached target Cloud-init target.
+Nov  4 15:28:08 instance-20241003-032101 fstrim[831]: /boot/efi: 98.3 MiB (103084544 bytes) trimmed on /dev/sda15
+Nov  4 15:28:08 instance-20241003-032101 fstrim[831]: /: 442.6 MiB (464113664 bytes) trimmed on /dev/sda1
+Nov  4 15:28:08 instance-20241003-032101 systemd[1]: fstrim.service: Succeeded.
+Nov  4 15:28:08 instance-20241003-032101 systemd[1]: Finished Discard unused blocks on filesystems from /etc/fstab.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: NetworkManager-dispatcher.service: Succeeded.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Started GNOME Display Manager.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Reached target Graphical Interface.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Starting Update UTMP about System Runlevel Changes...
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: systemd-update-utmp-runlevel.service: Succeeded.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Finished Update UTMP about System Runlevel Changes.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Startup finished in 1.781s (kernel) + 28.273s (userspace) = 30.055s.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Created slice User Slice of UID 123.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Starting User Runtime Directory /run/user/123...
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Finished User Runtime Directory /run/user/123.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Starting User Manager for UID 123...
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Reached target Paths.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Reached target Timers.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Starting D-Bus User Message Bus Socket.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on GnuPG network certificate management daemon.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on GnuPG cryptographic agent and passphrase cache (access for web browsers).
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on GnuPG cryptographic agent and passphrase cache (restricted).
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on GnuPG cryptographic agent (ssh-agent emulation).
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on GnuPG cryptographic agent and passphrase cache.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on debconf communication socket.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on Sound System.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on REST API socket for snapd user session agent.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on D-Bus User Message Bus Socket.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Reached target Sockets.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Reached target Basic System.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Started User Manager for UID 123.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Starting Sound Service...
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Started Session c1 of user gdm.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Started D-Bus User Message Bus.
+Nov  4 15:28:14 instance-20241003-032101 dbus-daemon[1035]: [session uid=123 pid=1035] AppArmor D-Bus mediation is enabled
+Nov  4 15:28:14 instance-20241003-032101 dbus-daemon[607]: [system] Activating via systemd: service name='org.freedesktop.RealtimeKit1' unit='rtkit-daemon.service' requested by ':1.26' (uid=123 pid=1032 comm="/usr/bin/pulseaudio --daemonize=no --log-target=jo" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Starting RealtimeKit Scheduling Policy Service...
+Nov  4 15:28:14 instance-20241003-032101 dbus-daemon[607]: [system] Successfully activated service 'org.freedesktop.RealtimeKit1'
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Started RealtimeKit Scheduling Policy Service.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Successfully called chroot.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Successfully dropped privileges.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Successfully limited resources.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Running.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Watchdog thread running.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Canary thread running.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Successfully made thread 1032 of process 1032 owned by '123' high priority at nice level -11.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Supervising 1 threads of 1 processes of 1 users.
+Nov  4 15:28:14 instance-20241003-032101 dbus-daemon[607]: [system] Activating via systemd: service name='org.bluez' unit='dbus-org.bluez.service' requested by ':1.28' (uid=123 pid=1032 comm="/usr/bin/pulseaudio --daemonize=no --log-target=jo" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Condition check resulted in Bluetooth service being skipped.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Supervising 1 threads of 1 processes of 1 users.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Successfully made thread 1043 of process 1032 owned by '123' RT at priority 5.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Supervising 2 threads of 1 processes of 1 users.
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.1' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Started Sound Service.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Reached target Main User Target.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Startup finished in 365ms.
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 gnome-session[1039]: gnome-session-binary[1039]: WARNING: Falling back to non-systemd startup procedure due to error: GDBus.Error:org.freedesktop.DBus.Error.Spawn.ChildExited: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 gnome-session-binary[1039]: WARNING: Falling back to non-systemd startup procedure due to error: GDBus.Error:org.freedesktop.DBus.Error.Spawn.ChildExited: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 gnome-session[1039]: gnome-session-binary[1039]: WARNING: Could not parse desktop file orca-autostart.desktop or it references a not found TryExec binary
+Nov  4 15:28:14 instance-20241003-032101 gnome-session-binary[1039]: WARNING: Could not parse desktop file orca-autostart.desktop or it references a not found TryExec binary
+Nov  4 15:28:15 instance-20241003-032101 gnome-shell[1064]: Failed to create backend: No drm devices found
+Nov  4 15:28:15 instance-20241003-032101 gnome-session[1039]: gnome-session-binary[1039]: WARNING: App 'org.gnome.Shell.desktop' exited with code 1
+Nov  4 15:28:15 instance-20241003-032101 gnome-session-binary[1039]: WARNING: App 'org.gnome.Shell.desktop' exited with code 1
+Nov  4 15:28:15 instance-20241003-032101 gnome-session-binary[1039]: Unrecoverable failure in required component org.gnome.Shell.desktop
+Nov  4 15:28:15 instance-20241003-032101 gdm3: GdmDisplay: Session never registered, failing
+Nov  4 15:28:15 instance-20241003-032101 systemd[1]: session-c1.scope: Succeeded.
+Nov  4 15:28:15 instance-20241003-032101 gdm3: Child process -1033 was already dead.
+Nov  4 15:28:15 instance-20241003-032101 gdm3: Child process -1033 was already dead.
+Nov  4 15:28:15 instance-20241003-032101 systemd[1026]: pulseaudio.service: Succeeded.
+Nov  4 15:28:15 instance-20241003-032101 systemd[1]: Started Session c2 of user gdm.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (--) Log file renamed from "/var/log/Xorg.pid-1077.log" to "/var/log/Xorg.0.log"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: X.Org X Server 1.20.13
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: X Protocol Version 11, Revision 0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Build Operating System: linux Ubuntu
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Current Operating System: Linux instance-20241003-032101 5.15.0-1070-gcp #78~20.04.1-Ubuntu SMP Wed Oct 9 22:05:22 UTC 2024 x86_64
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Kernel command line: BOOT_IMAGE=/boot/vmlinuz-5.15.0-1070-gcp root=PARTUUID=d5aebd51-48ce-4b59-bfa2-c5718a33f639 ro console=ttyS0,115200 panic=-1
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Build Date: 09 April 2024  01:36:10AM
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: xorg-server 2:1.20.13-1ubuntu1~20.04.17 (For technical support please see http://www.ubuntu.com/support)
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Current version of pixman: 0.38.4
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Before reporting problems, check http://wiki.x.org
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011to make sure that you have the latest version.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Markers: (--) probed, (**) from config file, (==) default setting,
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011(++) from command line, (!!) notice, (II) informational,
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011(WW) warning, (EE) error, (NI) not implemented, (??) unknown.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Log file: "/var/log/Xorg.0.log", Time: Mon Nov  4 15:28:15 2024
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Using system config directory "/usr/share/X11/xorg.conf.d"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) No Layout section.  Using the first Screen section.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) No screen section available. Using defaults.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (**) |-->Screen "Default Screen Section" (0)
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (**) |   |-->Monitor "<default monitor>"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) No monitor specified for screen "Default Screen Section".
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Using a default monitor configuration.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Automatically adding devices
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Automatically enabling devices
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Automatically adding GPU devices
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Automatically binding GPU devices
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Max clients allowed: 256, resource mask: 0x1fffff
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (WW) The directory "/usr/share/fonts/X11/cyrillic" does not exist.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Entry deleted from font path.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (WW) The directory "/usr/share/fonts/X11/100dpi/" does not exist.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Entry deleted from font path.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (WW) The directory "/usr/share/fonts/X11/75dpi/" does not exist.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Entry deleted from font path.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (WW) The directory "/usr/share/fonts/X11/Type1" does not exist.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Entry deleted from font path.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (WW) The directory "/usr/share/fonts/X11/100dpi" does not exist.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Entry deleted from font path.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (WW) The directory "/usr/share/fonts/X11/75dpi" does not exist.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Entry deleted from font path.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) FontPath set to:
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011/usr/share/fonts/X11/misc,
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011built-ins
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) ModulePath set to "/usr/lib/xorg/modules"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) The server relies on udev to provide the list of input devices.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011If no devices become available, reconfigure udev or disable AutoAddDevices.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Loader magic: 0x555d221ef020
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Module ABI versions:
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011X.Org ANSI C Emulation: 0.4
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011X.Org Video Driver: 24.1
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011X.Org XInput driver : 24.1
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011X.Org Server Extension : 10.0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (++) using VT number 1
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) systemd-logind: took control of session /org/freedesktop/login1/session/c2
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (--) PCI:*(0@0:5:0) 1ae0:a002:1ae0:0001 rev 1, Mem @ 0xc0000000/8388608, BIOS @ 0x????????/131072
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) LoadModule: "glx"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Loading /usr/lib/xorg/modules/extensions/libglx.so
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Module glx: vendor="X.Org Foundation"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011compiled for 1.20.13, module version = 1.0.0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011ABI class: X.Org Server Extension, version 10.0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Matched modesetting as autoconfigured driver 0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Matched fbdev as autoconfigured driver 1
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Matched vesa as autoconfigured driver 2
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Assigned the driver to the xf86ConfigLayout
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) LoadModule: "modesetting"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Loading /usr/lib/xorg/modules/drivers/modesetting_drv.so
+Nov  4 15:28:15 instance-20241003-032101 python3[816]: ["2024-11-04T15:28:15.523", "INFO", "ubuntupro.daemon", "main", 67, "mode: poll for pro license", {}]
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Module modesetting: vendor="X.Org Foundation"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011compiled for 1.20.13, module version = 1.20.13
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Module class: X.Org Video Driver
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011ABI class: X.Org Video Driver, version 24.1
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) LoadModule: "fbdev"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Loading /usr/lib/xorg/modules/drivers/fbdev_drv.so
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Module fbdev: vendor="X.Org Foundation"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011compiled for 1.20.1, module version = 0.5.0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Module class: X.Org Video Driver
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011ABI class: X.Org Video Driver, version 24.0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) LoadModule: "vesa"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Loading /usr/lib/xorg/modules/drivers/vesa_drv.so
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Module vesa: vendor="X.Org Foundation"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011compiled for 1.20.4, module version = 2.4.0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Module class: X.Org Video Driver
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011ABI class: X.Org Video Driver, version 24.0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) modesetting: Driver for Modesetting Kernel Drivers: kms
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) FBDEV: driver for framebuffer: fbdev
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) VESA: driver for VESA chipsets: vesa
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (EE) open /dev/dri/card0: No such file or directory
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (WW) Falling back to old probe method for modesetting
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (EE) open /dev/dri/card0: No such file or directory
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Loading sub module "fbdevhw"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) LoadModule: "fbdevhw"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Loading /usr/lib/xorg/modules/libfbdevhw.so
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Module fbdevhw: vendor="X.Org Foundation"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011compiled for 1.20.13, module version = 0.0.2
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011ABI class: X.Org Video Driver, version 24.1
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (**) FBDEV(1): claimed PCI slot 0@0:5:0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) FBDEV(1): using default device
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (EE) Screen 0 deleted because of no matching config section.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) UnloadModule: "modesetting"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) FBDEV(0): Creating default Display subsection in Screen section
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011"Default Screen Section" for depth/fbbpp 24/32
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) FBDEV(0): Depth 24, (==) framebuffer bpp 32
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) FBDEV(0): RGB weight 888
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) FBDEV(0): Default visual is TrueColor
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) FBDEV(0): Using gamma correction (1.0, 1.0, 1.0)
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) FBDEV(0): hardware: EFI VGA (video memory: 6076kB)
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) FBDEV(0): checking modes against framebuffer device...
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) FBDEV(0): checking modes against monitor...
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) FBDEV(0): Virtual size is 1920x1080 (pitch 1920)
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (**) FBDEV(0):  Built-in mode "current": 207.4 MHz, 85.3 kHz, 77.2 Hz
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) FBDEV(0): Modeline "current"x0.0  207.38  1920 1952 2192 2432  1080 1084 1088 1104 -hsync -vsync -csync (85.3 kHz b)
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) FBDEV(0): DPI set to (96, 96)
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Loading sub module "fb"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) LoadModule: "fb"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Loading /usr/lib/xorg/modules/libfb.so
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Module fb: vendor="X.Org Foundation"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011compiled for 1.20.13, module version = 1.0.0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011ABI class: X.Org ANSI C Emulation, version 0.4
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (**) FBDEV(0): using shadow framebuffer
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Loading sub module "shadow"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) LoadModule: "shadow"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Loading /usr/lib/xorg/modules/libshadow.so
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Module shadow: vendor="X.Org Foundation"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011compiled for 1.20.13, module version = 1.1.0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011ABI class: X.Org ANSI C Emulation, version 0.4
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) UnloadModule: "vesa"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (II) Unloading vesa
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (EE) FBDEV(0): FBIOPUT_VSCREENINFO succeeded but modified mode
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (EE) FBDEV(0): mode initialization failed
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (EE)
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Fatal server error:
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (EE) AddScreen/ScreenInit failed for driver 0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (EE)
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (EE)
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Please consult the The X.Org Foundation support
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011 at http://wiki.x.org
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]:  for help.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (EE) Please also check the log file at "/var/log/Xorg.0.log" for additional information.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (EE)
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (EE) Server terminated with error (1). Closing log file.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1075]: Unable to run X server
+Nov  4 15:28:15 instance-20241003-032101 gdm3: Child process -1075 was already dead.
+Nov  4 15:28:15 instance-20241003-032101 systemd[1]: session-c2.scope: Succeeded.
+Nov  4 15:28:16 instance-20241003-032101 python3[816]: ["2024-11-04T15:28:16.131", "INFO", "ubuntupro.daemon.poll_for_pro_license", "poll_for_pro_license", 80, "Configured to not poll for pro license, shutting down", {}]
+Nov  4 15:28:16 instance-20241003-032101 python3[816]: ["2024-11-04T15:28:16.131", "INFO", "ubuntupro.daemon", "main", 76, "daemon ending", {}]
+Nov  4 15:28:16 instance-20241003-032101 systemd[1]: ubuntu-advantage.service: Succeeded.
+Nov  4 15:28:19 instance-20241003-032101 systemd[1]: systemd-fsckd.service: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1]: Stopping User Manager for UID 123...
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Stopped target Main User Target.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Stopping D-Bus User Message Bus...
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: dbus.service: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Stopped D-Bus User Message Bus.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Stopped target Basic System.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Stopped target Paths.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Stopped target Sockets.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Stopped target Timers.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: dbus.socket: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Closed D-Bus User Message Bus Socket.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: dirmngr.socket: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Closed GnuPG network certificate management daemon.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: gpg-agent-browser.socket: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Closed GnuPG cryptographic agent and passphrase cache (access for web browsers).
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: gpg-agent-extra.socket: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Closed GnuPG cryptographic agent and passphrase cache (restricted).
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: gpg-agent-ssh.socket: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Closed GnuPG cryptographic agent (ssh-agent emulation).
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: gpg-agent.socket: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Closed GnuPG cryptographic agent and passphrase cache.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: pk-debconf-helper.socket: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Closed debconf communication socket.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: pulseaudio.socket: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Closed Sound System.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: snapd.session-agent.socket: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Closed REST API socket for snapd user session agent.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Reached target Shutdown.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: systemd-exit.service: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Finished Exit the Session.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1026]: Reached target Exit the Session.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1]: user@123.service: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1]: Stopped User Manager for UID 123.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1]: Stopping User Runtime Directory /run/user/123...
+Nov  4 15:28:25 instance-20241003-032101 systemd[1]: run-user-123.mount: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1]: user-runtime-dir@123.service: Succeeded.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1]: Stopped User Runtime Directory /run/user/123.
+Nov  4 15:28:25 instance-20241003-032101 systemd[1]: Removed slice User Slice of UID 123.
+Nov  4 15:28:34 instance-20241003-032101 systemd[1]: systemd-hostnamed.service: Succeeded.
+Nov  4 15:28:34 instance-20241003-032101 systemd[1]: systemd-timedated.service: Succeeded.
+Nov  4 15:38:04 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 15:38:04 instance-20241003-032101 gce_workload_cert_refresh[1094]: 2024/11/04 15:38:04: Done
+Nov  4 15:38:04 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 15:38:04 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 15:43:04 instance-20241003-032101 systemd[1]: Starting Cleanup of Temporary Directories...
+Nov  4 15:43:04 instance-20241003-032101 systemd[1]: systemd-tmpfiles-clean.service: Succeeded.
+Nov  4 15:43:04 instance-20241003-032101 systemd[1]: Finished Cleanup of Temporary Directories.
+Nov  4 15:48:06 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 15:48:06 instance-20241003-032101 gce_workload_cert_refresh[1107]: 2024/11/04 15:48:06: Done
+Nov  4 15:48:06 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 15:48:06 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 15:58:14 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 15:58:14 instance-20241003-032101 gce_workload_cert_refresh[1115]: 2024/11/04 15:58:14: Done
+Nov  4 15:58:14 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 15:58:14 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 15:59:15 instance-20241003-032101 systemd[1]: Starting Daily apt upgrade and clean activities...
+Nov  4 15:59:45 instance-20241003-032101 apt-helper[1121]: E: Sub-process nm-online returned an error code (1)
+Nov  4 15:59:50 instance-20241003-032101 systemd[1]: apt-daily-upgrade.service: Succeeded.
+Nov  4 15:59:50 instance-20241003-032101 systemd[1]: Finished Daily apt upgrade and clean activities.
+Nov  4 16:01:21 instance-20241003-032101 systemd[1]: Starting Daily apt download activities...
+Nov  4 16:01:51 instance-20241003-032101 apt-helper[1208]: E: Sub-process nm-online returned an error code (1)
+Nov  4 16:01:52 instance-20241003-032101 systemd[1]: Starting Update APT News...
+Nov  4 16:01:52 instance-20241003-032101 systemd[1]: Starting Update the local ESM caches...
+Nov  4 16:01:53 instance-20241003-032101 systemd[1]: esm-cache.service: Succeeded.
+Nov  4 16:01:53 instance-20241003-032101 systemd[1]: Finished Update the local ESM caches.
+Nov  4 16:02:02 instance-20241003-032101 dbus-daemon[607]: [system] Activating via systemd: service name='org.freedesktop.PackageKit' unit='packagekit.service' requested by ':1.40' (uid=0 pid=1569 comm="/usr/bin/gdbus call --system --dest org.freedeskto" label="unconfined")
+Nov  4 16:02:02 instance-20241003-032101 systemd[1]: Starting PackageKit Daemon...
+Nov  4 16:02:02 instance-20241003-032101 PackageKit: daemon start
+Nov  4 16:02:02 instance-20241003-032101 dbus-daemon[607]: [system] Successfully activated service 'org.freedesktop.PackageKit'
+Nov  4 16:02:02 instance-20241003-032101 systemd[1]: Started PackageKit Daemon.
+Nov  4 16:02:19 instance-20241003-032101 systemd[1]: apt-daily.service: Succeeded.
+Nov  4 16:02:19 instance-20241003-032101 systemd[1]: Finished Daily apt download activities.
+Nov  4 16:02:23 instance-20241003-032101 systemd[1]: apt-news.service: Succeeded.
+Nov  4 16:02:23 instance-20241003-032101 systemd[1]: Finished Update APT News.
+Nov  4 16:07:07 instance-20241003-032101 PackageKit: daemon quit
+Nov  4 16:07:07 instance-20241003-032101 systemd[1]: packagekit.service: Succeeded.
+Nov  4 16:08:23 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 16:08:23 instance-20241003-032101 gce_workload_cert_refresh[1685]: 2024/11/04 16:08:23: Done
+Nov  4 16:08:23 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 16:08:23 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 16:17:01 instance-20241003-032101 CRON[1693]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 16:18:44 instance-20241003-032101 gce_workload_cert_refresh[1697]: 2024/11/04 16:18:44: Done
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: Created slice User Slice of UID 1002.
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: Starting User Runtime Directory /run/user/1002...
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: Finished User Runtime Directory /run/user/1002.
+Nov  4 16:18:44 instance-20241003-032101 systemd[1]: Starting User Manager for UID 1002...
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Reached target Paths.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Reached target Timers.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Starting D-Bus User Message Bus Socket.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on GnuPG network certificate management daemon.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on GnuPG cryptographic agent and passphrase cache (access for web browsers).
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on GnuPG cryptographic agent and passphrase cache (restricted).
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on GnuPG cryptographic agent (ssh-agent emulation).
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on GnuPG cryptographic agent and passphrase cache.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on debconf communication socket.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on Sound System.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on REST API socket for snapd user session agent.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Listening on D-Bus User Message Bus Socket.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Reached target Sockets.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Reached target Basic System.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1]: Started User Manager for UID 1002.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Starting Sound Service...
+Nov  4 16:18:45 instance-20241003-032101 systemd[1]: Started Session 3 of user ehmyitayew.
+Nov  4 16:18:45 instance-20241003-032101 dbus-daemon[607]: [system] Activating via systemd: service name='org.bluez' unit='dbus-org.bluez.service' requested by ':1.57' (uid=1002 pid=1711 comm="/usr/bin/pulseaudio --daemonize=no --log-target=jo" label="unconfined")
+Nov  4 16:18:45 instance-20241003-032101 systemd[1]: Condition check resulted in Bluetooth service being skipped.
+Nov  4 16:18:45 instance-20241003-032101 rtkit-daemon[1040]: Supervising 0 threads of 0 processes of 1 users.
+Nov  4 16:18:45 instance-20241003-032101 rtkit-daemon[1040]: message repeated 4 times: [ Supervising 0 threads of 0 processes of 1 users.]
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Started D-Bus User Message Bus.
+Nov  4 16:18:45 instance-20241003-032101 dbus-daemon[1731]: [session uid=1002 pid=1731] AppArmor D-Bus mediation is enabled
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Started Sound Service.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Reached target Main User Target.
+Nov  4 16:18:45 instance-20241003-032101 systemd[1704]: Startup finished in 297ms.
+Nov  4 16:19:07 instance-20241003-032101 systemd[1704]: pulseaudio.service: Succeeded.
+Nov  4 16:21:10 instance-20241003-032101 systemd[1]: Started Session 5 of user ehmyitayew.
+Nov  4 16:29:06 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 16:29:06 instance-20241003-032101 gce_workload_cert_refresh[2328]: 2024/11/04 16:29:06: Done
+Nov  4 16:29:06 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 16:29:06 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 16:39:37 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 16:39:37 instance-20241003-032101 gce_workload_cert_refresh[2403]: 2024/11/04 16:39:37: Done
+Nov  4 16:39:37 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 16:39:37 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 16:50:02 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 16:50:02 instance-20241003-032101 gce_workload_cert_refresh[2809]: 2024/11/04 16:50:02: Done
+Nov  4 16:50:02 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 16:50:02 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
+Nov  4 17:00:06 instance-20241003-032101 systemd[1]: Starting GCE Workload Certificate refresh...
+Nov  4 17:00:06 instance-20241003-032101 gce_workload_cert_refresh[3281]: 2024/11/04 17:00:06: Done
+Nov  4 17:00:06 instance-20241003-032101 systemd[1]: gce-workload-cert-refresh.service: Succeeded.
+Nov  4 17:00:06 instance-20241003-032101 systemd[1]: Finished GCE Workload Certificate refresh.
