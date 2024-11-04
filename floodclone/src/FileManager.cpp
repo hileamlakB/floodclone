@@ -6,13 +6,18 @@
 #include <filesystem>
 #include <regex>
 #include <openssl/sha.h>
+#include <sys/types.h>
+#include <sys/sendfile.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 
 using namespace std;
 namespace fs = std::filesystem;
 
-// Constructor implementation for FileManager
-FileManager::FileManager(const string& file_path, const int ipiece_size, const string& node_ip, const string& pieces_folder, ThreadPool* thread_pool)
+
+FileManager::FileManager(const string& file_path, const size_t ipiece_size, const string& node_ip, const string& pieces_folder, ThreadPool* thread_pool)
     : file_path(file_path), piece_size(ipiece_size == 0 ? 16384 : ipiece_size), node_ip(node_ip), num_pieces(0), pieces_folder(pieces_folder), thread_pool(thread_pool) {
 
     
@@ -190,4 +195,63 @@ void FileManager::reconstruct() {
         });
     }
 }
+
+std::string FileManager::send(size_t i) {
+
+    // this could potentially be improved using  sendfile
+    // if the receiving location is also passed in as an argument
+    
+    std::filesystem::path piece_path = std::filesystem::path(pieces_folder) / ("piece_" + std::to_string(i));
+
+    
+
+    // Open the piece file in binary read mode
+    std::ifstream piece_file(piece_path, std::ios::binary);
+    if (!piece_file) {
+        throw std::runtime_error("Cannot open piece file: " + piece_path.string());
+    }
+
+    // Move to the end once to get the file size
+    size_t piece_size = std::filesystem::file_size(piece_path);
+
+    // Allocate a string of the right size and read the file contents into it
+    std::string binary_data(piece_size, '\0');
+
+    // Return to the beginning of the file and read the contents
+    piece_file.seekg(0, std::ios::beg); // Optional, since most compilers reset automatically
+    piece_file.read(&binary_data[0], piece_size);
+
+    // Close the file and return the binary data
+    piece_file.close();
+    return binary_data;
+}
+
+
+void FileManager::receive(const std::string& binary_data, size_t i) {
+    
+    // Calculate the checksum for verification (optional)
+    std::string received_checksum = calculate_checksum(binary_data);
+    if (received_checksum != file_metadata.pieces[i].checksum) {
+        throw std::runtime_error("Checksum mismatch for received piece: " + std::to_string(i));
+    }
+
+
+    std::filesystem::path piece_path = std::filesystem::path(pieces_folder) / ("piece_" + std::to_string(i));
+
+    // Open the file in binary write mode and save the binary data
+    std::ofstream piece_file(piece_path, std::ios::binary | std::ios::trunc);
+    if (!piece_file) {
+        throw std::runtime_error("Cannot create piece file: " + piece_path.string());
+    }
+
+    // Write the binary data to the file
+    piece_file.write(binary_data.data(), binary_data.size());
+
+    // Close the file after writing
+    piece_file.close();
+}
+
+
+// will it be important to check the checksum, if lets stay I start using udp protocol, but if I am using tcp that won't be required rifht
+// how do we know which nodes are connected to this node 
 
