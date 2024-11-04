@@ -121,14 +121,20 @@ struct FileMetaData {
 
 class FileManager {
 public:
-    FileManager(const string& file, const size_t ipiece_size, const string& node_ip, const string& piece_folder, ThreadPool* thread_pool);
+    FileManager(const std::string& file_path, size_t ipiece_size, const std::string& node_ip,
+                const std::string& pieces_folder, ThreadPool* thread_pool, bool is_source, const std::string& metadata_file_path);
 
-    void save_metadata();
-    void reconstruct();  // reconutructs a file based on pieces 
+
+
+    const FileMetaData& get_metadata() const;
+    std::string  save_metadata();
+    void reconstruct();  // reconutructs a file based on pieces
+    void deconstruct(); 
     void receive(const std::string& binary_data, size_t i);
     std::string send(size_t i);
 
 private:
+   
     string file_path;                       // path to original path
     size_t piece_size;                              
     FileMetaData file_metadata; 
@@ -140,12 +146,15 @@ private:
 
     ThreadPool *thread_pool;
     
+     bool is_source; 
     
 
     void verify_ip(const string& ip);
     std::string calculate_checksum(const std::string& data); 
     void split(size_t i);  // splits the i-th peice file into piece_i 
     void merge(size_t i); // Merges the i-th piece into the main file
+    void initialize_source();
+    void initialize_receiver(const std::string& metadata_file_path);
 };
 
 FileManager FileManagerFromMetadata(const string& metadataPath, const string& srcIp, const string& piecePath);
