@@ -12,6 +12,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <cassert>
+#include <iostream>
 
 
 using namespace std;
@@ -61,6 +62,7 @@ void FileManager::initialize_source() {
     // Initialize metadata with actual data for source
     file_metadata.fileId = "example_file_id";  // Replace with actual hash function
     file_metadata.filename = fs::path(file_path).filename().string();
+    file_metadata.fileSize = file_size;
     file_metadata.numPieces = num_pieces;
     file_metadata.pieces.resize(num_pieces);
 
@@ -102,7 +104,26 @@ void FileManager::initialize_receiver(const std::string& metadata_file_path) {
 
     // Set num_pieces based on deserialized metadata
     num_pieces = file_metadata.numPieces;
+
+    std::filesystem::path reconstructed_file_path = std::filesystem::path(pieces_folder) / ("reconstructed_" + file_metadata.filename);
+    merged_fd = open(reconstructed_file_path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0666);
+    if (merged_fd < 0) {
+        throw std::runtime_error("Cannot create or open reconstructed file: " + reconstructed_file_path.string());
+    }
+
+    off_t total_size = num_pieces * piece_size;
+    if (ftruncate(merged_fd, total_size) == -1) {
+        close(merged_fd);
+        throw std::runtime_error("Error setting file size for reconstructed file");
+    }
+
+    reconstructed_file = mmap(nullptr, total_size, PROT_WRITE, MAP_SHARED, merged_fd, 0);
+    if (reconstructed_file == MAP_FAILED) {
+        close(merged_fd);
+        throw std::runtime_error("Error mapping reconstructed file into memory");
+    }
 }
+
 
 void FileManager::split(size_t i) {
     ifstream fileStream(file_path, ios::binary);
@@ -196,56 +217,29 @@ const FileMetaData& FileManager::get_metadata() const {
     return file_metadata;
 }
 
-
-void FileManager::merge(size_t i) {
-
-    // this code is thread unsfae if it is called  for the same i 
-    // and will endup overiwting the same portion of the merged file. 
-    
-    // Define paths
-    std::filesystem::path piece_path = std::filesystem::path(pieces_folder) / ("piece_" + std::to_string(i));
-    std::filesystem::path merged_file_path = std::filesystem::path(pieces_folder) / ("reconstructed_" + file_metadata.filename);
-
-    // Open the piece file in read-only mode
-    int piece_fd = open(piece_path.c_str(), O_RDONLY);
-    if (piece_fd < 0) {
-        throw std::runtime_error("Cannot open piece file: " + piece_path.string());
-    }
-
-    // Open the merged file in write-only mode
-    int merged_fd = open(merged_file_path.c_str(), O_WRONLY);
-    if (merged_fd < 0) {
-        close(piece_fd); // Clean up on error
-        throw std::runtime_error("Cannot open merged file: " + merged_file_path.string());
-    }
-
-    // Calculate the offset for the i-th piece
-    off_t offset = i * piece_size;
-
-    // Get the size of the piece
-    off_t piece_size = std::filesystem::file_size(piece_path);
-
-    // Copy the file data from piece_fd to merged_fd at the correct offset
-    if (sendfile(merged_fd, piece_fd, &offset, piece_size) == -1) {
-        close(piece_fd);
-        close(merged_fd);
-        throw std::runtime_error("Error copying data with sendfile");
-    }
-
-    // Close file descriptors
-    close(piece_fd);
-    close(merged_fd);
-}
-
 void FileManager::reconstruct() {
-    // Loop through all pieces and enqueue merge tasks in the thread pool
-    for (size_t i = 0; i < file_metadata.numPieces; ++i) {
-        // Enqueue a task to merge each piece; each task will call merge(i) for a unique i
-        thread_pool->enqueue([this, i] {
-            merge(i);
-        });
+    
+    // Sync memory to file and resize to original size
+    if (msync(reconstructed_file, num_pieces * piece_size, MS_SYNC) == -1) {
+        munmap(reconstructed_file, num_pieces * piece_size);
+        close(merged_fd);
+        throw std::runtime_error("Error syncing mapped memory to file");
     }
+
+    if (ftruncate(merged_fd, file_metadata.fileSize) == -1) {
+        munmap(reconstructed_file, num_pieces * piece_size);
+        close(merged_fd);
+        throw std::runtime_error("Error resizing reconstructed file");
+    }
+
+    // Unmap and close
+    munmap(reconstructed_file, num_pieces * piece_size);
+    close(merged_fd);
+    merged_fd = -1;
 }
+
+
+
 
 std::string FileManager::send(size_t i) {
 
@@ -279,28 +273,26 @@ std::string FileManager::send(size_t i) {
 
 
 void FileManager::receive(const std::string& binary_data, size_t i) {
-    
-    // Calculate the checksum for verification (optional)
-    std::string received_checksum = calculate_checksum(binary_data);
-    if (received_checksum != file_metadata.pieces[i].checksum) {
-        throw std::runtime_error("Checksum mismatch for received piece: " + std::to_string(i));
-    }
+    off_t offset = i * piece_size;
 
+    // copy piece to mmaped file
+    thread_pool->enqueue([this, binary_data, offset] {
+        std::copy(binary_data.begin(), binary_data.end(), static_cast<char*>(reconstructed_file) + offset);
+    });
 
-    std::filesystem::path piece_path = std::filesystem::path(pieces_folder) / ("piece_" + std::to_string(i));
+    // save piece to a separate file 
+    thread_pool->enqueue([this, binary_data, i] {
+        std::filesystem::path piece_path = std::filesystem::path(pieces_folder) / ("piece_" + std::to_string(i));
 
-    // Open the file in binary write mode and save the binary data
-    std::ofstream piece_file(piece_path, std::ios::binary | std::ios::trunc);
-    if (!piece_file) {
-        throw std::runtime_error("Cannot create piece file: " + piece_path.string());
-    }
-
-    // Write the binary data to the file
-    piece_file.write(binary_data.data(), binary_data.size());
-
-    // Close the file after writing
-    piece_file.close();
+        // Write binary_data to an individual piece file
+        std::ofstream piece_file(piece_path, std::ios::binary | std::ios::trunc);
+        if (!piece_file) {
+            throw std::runtime_error("Cannot create piece file: " + piece_path.string());
+        }
+        piece_file.write(binary_data.data(), binary_data.size());
+    });
 }
+
 
 
 // will it be important to check the checksum, if lets stay I start using udp protocol, but if I am using tcp that won't be required rifht

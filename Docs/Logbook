@@ -24,3 +24,6 @@ Nov 4: Completed the sender file manager class
     - had to install sudo apt-get install libssl-dev for managing md5checksum
     - which might not be requried and could be removed to speed up code
     - Created differnt methods for the filemanager class, including 
+    - Make sure the send fucntion could run a thread safe way when the piece being sent isn't 
+    avialable, if it isn't avialable it shoudl sleep and wake up again so that available pieces
+    could be sent

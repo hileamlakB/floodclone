@@ -7,6 +7,8 @@
 #include <array>
 #include <mutex>
 #include "ThreadPool.h"
+#include <sys/mman.h>  
+#include <unistd.h>  
 
 using namespace std;
 
@@ -66,27 +68,37 @@ struct FileMetaData {
     string fileId;         // unique hash of a specific file
     string filename;       // string name of the file
     size_t numPieces;         // number of pieces that make up the file
+    size_t fileSize;
     vector<PieceMetaData> pieces; // information about each of the pieces that make up a file 
 
     // serialize: converts the file metadata to a binary string
     string serialize() const {
-        stringstream ss;
+      stringstream ss;
+
+        // Serialize fileId
         size_t fileId_len = fileId.length();
         ss.write(reinterpret_cast<const char*>(&fileId_len), sizeof(fileId_len));
         ss.write(fileId.data(), fileId_len);
 
+        // Serialize filename
         size_t filename_len = filename.length();
         ss.write(reinterpret_cast<const char*>(&filename_len), sizeof(filename_len));
         ss.write(filename.data(), filename_len);
 
+        // Serialize fileSize
+        ss.write(reinterpret_cast<const char*>(&fileSize), sizeof(fileSize));
+
+        // Serialize numPieces
         ss.write(reinterpret_cast<const char*>(&numPieces), sizeof(numPieces));
 
-        for(const auto& piece : pieces) {
+        // Serialize each piece in pieces
+        for (const auto& piece : pieces) {
             string serialized_piece = piece.serialize();
             size_t piece_len = serialized_piece.length();
             ss.write(reinterpret_cast<const char*>(&piece_len), sizeof(piece_len));
             ss.write(serialized_piece.data(), piece_len);
         }
+
         return ss.str();
     }
 
@@ -95,26 +107,34 @@ struct FileMetaData {
         FileMetaData fileMeta;
         stringstream ss(binary);
 
+        // Deserialize fileId
         size_t fileId_len;
         ss.read(reinterpret_cast<char*>(&fileId_len), sizeof(fileId_len));
         fileMeta.fileId.resize(fileId_len);
         ss.read(&fileMeta.fileId[0], fileId_len);
 
+        // Deserialize filename
         size_t filename_len;
         ss.read(reinterpret_cast<char*>(&filename_len), sizeof(filename_len));
         fileMeta.filename.resize(filename_len);
         ss.read(&fileMeta.filename[0], filename_len);
 
+        // Deserialize fileSize
+        ss.read(reinterpret_cast<char*>(&fileMeta.fileSize), sizeof(fileMeta.fileSize));
+
+        // Deserialize numPieces
         ss.read(reinterpret_cast<char*>(&fileMeta.numPieces), sizeof(fileMeta.numPieces));
 
+        // Deserialize each piece in pieces
         fileMeta.pieces.resize(fileMeta.numPieces);
-        for(size_t i = 0; i < fileMeta.numPieces; ++i) {
+        for (size_t i = 0; i < fileMeta.numPieces; ++i) {
             size_t piece_len;
             ss.read(reinterpret_cast<char*>(&piece_len), sizeof(piece_len));
             string piece_binary(piece_len, '\0');
             ss.read(&piece_binary[0], piece_len);
             fileMeta.pieces[i] = PieceMetaData::deserialize(piece_binary);
         }
+
         return fileMeta;
     }
 };
@@ -133,6 +153,8 @@ public:
     void receive(const std::string& binary_data, size_t i);
     std::string send(size_t i);
 
+    std::string calculate_checksum(const std::string& data); 
+
 private:
    
     string file_path;                       // path to original path
@@ -146,15 +168,18 @@ private:
 
     ThreadPool *thread_pool;
     
-     bool is_source; 
+     bool is_source;
+
+    void* reconstructed_file = MAP_FAILED;
+    int merged_fd; 
     
 
     void verify_ip(const string& ip);
-    std::string calculate_checksum(const std::string& data); 
     void split(size_t i);  // splits the i-th peice file into piece_i 
     void merge(size_t i); // Merges the i-th piece into the main file
     void initialize_source();
     void initialize_receiver(const std::string& metadata_file_path);
+    
 };
 
 FileManager FileManagerFromMetadata(const string& metadataPath, const string& srcIp, const string& piecePath);

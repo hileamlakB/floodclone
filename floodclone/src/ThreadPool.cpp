@@ -23,9 +23,17 @@ ThreadPool::ThreadPool(size_t threads) : stop(false) {
                         return;
                     task = std::move(this->tasks.front());
                     this->tasks.pop();
+                    active_tasks++;  // Increment total active task count
                 }
 
                 task();
+                {
+                    std::unique_lock<std::mutex> lock(this->queue_mutex);
+                    active_tasks--;  // Decrement total active task count
+                    if (tasks.empty() && active_tasks == 0) {
+                        idle_condition.notify_all();  // Signal pool is idle
+                    }
+                }
             }
         });
     }
@@ -57,4 +65,9 @@ void ThreadPool::join() {
             worker.join();
         }
     }
+}
+
+void ThreadPool::wait() {
+    std::unique_lock<std::mutex> lock(queue_mutex);
+    idle_condition.wait(lock, [this] { return tasks.empty() && active_tasks == 0; });
 }
