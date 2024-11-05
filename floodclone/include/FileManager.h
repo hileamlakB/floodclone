@@ -1,150 +1,191 @@
 #ifndef FILEMANAGER_H
 #define FILEMANAGER_H
 
-#include <string>
 #include <vector>
-#include <set>
-#include <map>
-#include <memory>
-#include <fstream>
-#include <filesystem>
-#include <cassert>
-#include <arpa/inet.h>
-#include <cmath>
-#include <iostream>
+#include <string>
 #include <sstream>
+#include <array>
+#include <mutex>
+#include "ThreadPool.h"
+#include <sys/mman.h>  
+#include <unistd.h>  
 
-struct Metadata {
-    std::string fileId;
-    std::string filename;
-    std::string srcIp;
-    int numPieces;
-    std::vector<std::map<std::string, std::vector<std::string>>> pieces; // Metadata for each piece
+using namespace std;
 
-    // Serialize metadata to a binary file
-    void serialize(const std::string& path) const {
-        std::ofstream outFile(path, std::ios::binary);
-        if (!outFile) {
-            throw std::runtime_error("Unable to open file for writing metadata: " + path);
+constexpr size_t IP4_LENGTH = 15; // constant length for IPv4 address strings
+class ThreadPool;
+
+// contains information about a single piece of file
+struct PieceMetaData{
+    vector<array<char, IP4_LENGTH>> srcs; // list of ip addresses that are known to have the piece, fixed length for IPv4
+    std::string checksum; 
+
+
+    // serialize: converts the piece metadata to a binary string
+    string serialize() const {
+        stringstream ss;
+        
+        // Serialize the source IP addresses
+        size_t src_count = srcs.size();
+        ss.write(reinterpret_cast<const char*>(&src_count), sizeof(src_count));
+        for(const auto& src : srcs) {
+            ss.write(src.data(), IP4_LENGTH);
         }
-        size_t fileIdSize = fileId.size();
-        size_t filenameSize = filename.size();
-        size_t srcIpSize = srcIp.size();
 
-        outFile.write(reinterpret_cast<const char*>(&fileIdSize), sizeof(fileIdSize));
-        outFile.write(fileId.data(), fileIdSize);
-        outFile.write(reinterpret_cast<const char*>(&filenameSize), sizeof(filenameSize));
-        outFile.write(filename.data(), filenameSize);
-        outFile.write(reinterpret_cast<const char*>(&srcIpSize), sizeof(srcIpSize));
-        outFile.write(srcIp.data(), srcIpSize);
-        outFile.write(reinterpret_cast<const char*>(&numPieces), sizeof(numPieces));
+        // Serialize the checksum
+        size_t checksum_len = checksum.length();
+        ss.write(reinterpret_cast<const char*>(&checksum_len), sizeof(checksum_len));
+        ss.write(checksum.data(), checksum_len);
 
-        // Write piece metadata
-        size_t piecesCount = pieces.size();
-        outFile.write(reinterpret_cast<const char*>(&piecesCount), sizeof(piecesCount));
-        for (const auto& piece : pieces) {
-            size_t trackersCount = piece.at("tracker").size();
-            outFile.write(reinterpret_cast<const char*>(&trackersCount), sizeof(trackersCount));
-            for (const auto& tracker : piece.at("tracker")) {
-                size_t trackerSize = tracker.size();
-                outFile.write(reinterpret_cast<const char*>(&trackerSize), sizeof(trackerSize));
-                outFile.write(tracker.data(), trackerSize);
-            }
-        }
+        return ss.str();
     }
 
-    // Deserialize metadata from a binary file
-    void deserialize(const std::string& path) {
-        std::ifstream inFile(path, std::ios::binary);
-        if (!inFile) {
-            throw std::runtime_error("Unable to open file for reading metadata: " + path);
+    // Deserialize: populates the metadata from a binary string
+    static PieceMetaData deserialize(const string& binary) {
+        PieceMetaData pieceMeta;
+        stringstream ss(binary);
+
+        // Deserialize the source IP addresses
+        size_t src_count;
+        ss.read(reinterpret_cast<char*>(&src_count), sizeof(src_count));
+        pieceMeta.srcs.resize(src_count);
+        for(size_t i = 0; i < src_count; ++i) {
+            ss.read(pieceMeta.srcs[i].data(), IP4_LENGTH);
         }
-        size_t fileIdSize, filenameSize, srcIpSize;
 
-        inFile.read(reinterpret_cast<char*>(&fileIdSize), sizeof(fileIdSize));
-        fileId.resize(fileIdSize);
-        inFile.read(&fileId[0], fileIdSize);
+        // Deserialize the checksum
+        size_t checksum_len;
+        ss.read(reinterpret_cast<char*>(&checksum_len), sizeof(checksum_len));
+        pieceMeta.checksum.resize(checksum_len);
+        ss.read(&pieceMeta.checksum[0], checksum_len);
 
-        inFile.read(reinterpret_cast<char*>(&filenameSize), sizeof(filenameSize));
-        filename.resize(filenameSize);
-        inFile.read(&filename[0], filenameSize);
+        return pieceMeta;
+    }
+};
 
-        inFile.read(reinterpret_cast<char*>(&srcIpSize), sizeof(srcIpSize));
-        srcIp.resize(srcIpSize);
-        inFile.read(&srcIp[0], srcIpSize);
+// contains information about a file
+struct FileMetaData {
+    string fileId;         // unique hash of a specific file
+    string filename;       // string name of the file
+    size_t numPieces;         // number of pieces that make up the file
+    size_t fileSize;
+    vector<PieceMetaData> pieces; // information about each of the pieces that make up a file 
 
-        inFile.read(reinterpret_cast<char*>(&numPieces), sizeof(numPieces));
+    // serialize: converts the file metadata to a binary string
+    string serialize() const {
+      stringstream ss;
 
-        // Read piece metadata
-        size_t piecesCount;
-        inFile.read(reinterpret_cast<char*>(&piecesCount), sizeof(piecesCount));
-        pieces.resize(piecesCount);
-        for (auto& piece : pieces) {
-            size_t trackersCount;
-            inFile.read(reinterpret_cast<char*>(&trackersCount), sizeof(trackersCount));
-            std::vector<std::string> trackers(trackersCount);
-            for (auto& tracker : trackers) {
-                size_t trackerSize;
-                inFile.read(reinterpret_cast<char*>(&trackerSize), sizeof(trackerSize));
-                tracker.resize(trackerSize);
-                inFile.read(&tracker[0], trackerSize);
-            }
-            piece["tracker"] = trackers;
+        // Serialize fileId
+        size_t fileId_len = fileId.length();
+        ss.write(reinterpret_cast<const char*>(&fileId_len), sizeof(fileId_len));
+        ss.write(fileId.data(), fileId_len);
+
+        // Serialize filename
+        size_t filename_len = filename.length();
+        ss.write(reinterpret_cast<const char*>(&filename_len), sizeof(filename_len));
+        ss.write(filename.data(), filename_len);
+
+        // Serialize fileSize
+        ss.write(reinterpret_cast<const char*>(&fileSize), sizeof(fileSize));
+
+        // Serialize numPieces
+        ss.write(reinterpret_cast<const char*>(&numPieces), sizeof(numPieces));
+
+        // Serialize each piece in pieces
+        for (const auto& piece : pieces) {
+            string serialized_piece = piece.serialize();
+            size_t piece_len = serialized_piece.length();
+            ss.write(reinterpret_cast<const char*>(&piece_len), sizeof(piece_len));
+            ss.write(serialized_piece.data(), piece_len);
         }
+
+        return ss.str();
+    }
+
+    // deserialize: populates the metadata from a binary string
+    static FileMetaData deserialize(const string& binary) {
+        FileMetaData fileMeta;
+        stringstream ss(binary);
+
+        // Deserialize fileId
+        size_t fileId_len;
+        ss.read(reinterpret_cast<char*>(&fileId_len), sizeof(fileId_len));
+        fileMeta.fileId.resize(fileId_len);
+        ss.read(&fileMeta.fileId[0], fileId_len);
+
+        // Deserialize filename
+        size_t filename_len;
+        ss.read(reinterpret_cast<char*>(&filename_len), sizeof(filename_len));
+        fileMeta.filename.resize(filename_len);
+        ss.read(&fileMeta.filename[0], filename_len);
+
+        // Deserialize fileSize
+        ss.read(reinterpret_cast<char*>(&fileMeta.fileSize), sizeof(fileMeta.fileSize));
+
+        // Deserialize numPieces
+        ss.read(reinterpret_cast<char*>(&fileMeta.numPieces), sizeof(fileMeta.numPieces));
+
+        // Deserialize each piece in pieces
+        fileMeta.pieces.resize(fileMeta.numPieces);
+        for (size_t i = 0; i < fileMeta.numPieces; ++i) {
+            size_t piece_len;
+            ss.read(reinterpret_cast<char*>(&piece_len), sizeof(piece_len));
+            string piece_binary(piece_len, '\0');
+            ss.read(&piece_binary[0], piece_len);
+            fileMeta.pieces[i] = PieceMetaData::deserialize(piece_binary);
+        }
+
+        return fileMeta;
     }
 };
 
 class FileManager {
 public:
-    // Constructor to initialize FileManager with file path, piece size, source IP, and pieces path
-    FileManager(const std::string& filePath, int pieceSize, const std::string& srcIp, const std::string& piecesPath);
-
-    // Split the file into pieces of predefined size and store them on disk
-    void splitPieces();
-
-    // Receive a piece from another node and store it
-    void receivePiece(int pieceId, const std::vector<char>& data, const std::string& srcIp);
-
-    // Send a piece as a bytes vector
-    std::vector<char> sendPiece(int pieceId) const;
-
-    // Reassemble the complete file from pieces
-    void reassemble() const;
-
-    // Get the set of missing pieces
-    std::set<int> getMissingPieces() const;
-
-    // Get the set of available pieces
-    std::set<int> getAvailablePieces() const;
+    FileManager(const std::string& file_path, size_t ipiece_size, const std::string& node_ip,
+                const std::string& pieces_folder, ThreadPool* thread_pool, bool is_source, const std::string& metadata_file_path);
 
 
-    // Save metadata to a file
-    void saveMetadata(const std::string& metadataPath) const;
 
-    void updateMetaData(Metadata& metadata);
+    const FileMetaData& get_metadata() const;
+    std::string  save_metadata();
+    void reconstruct();  // reconutructs a file based on pieces
+    void deconstruct(); 
+    void receive(const std::string& binary_data, size_t i);
+    std::string send(size_t i);
+    bool has_piece(size_t i);
+
+
+    std::string calculate_checksum(const std::string& data); 
 
 private:
-    // Verify if the provided IP address is in a valid format
-    void verifyIp(const std::string& srcIp) const;
+   
+    string file_path;                       // path to original path
+    size_t piece_size;                              
+    FileMetaData file_metadata; 
+    std::mutex metadata_mutex; 
+    
+    string node_ip;                 
+    size_t num_pieces;
+    string pieces_folder;
 
-    // Calculate a unique ID for the file using SHA-1 hash
-    std::string calculateFileId(const std::string& filePath) const;
+    ThreadPool *thread_pool;
+    
+    bool is_source;
 
-    // Member variables
-    std::string filePath;
-    int pieceSize;
-    std::string srcIp;
-    std::string fileId;
-    std::string filename;
-    std::string fileDir;
-    std::string piecesPath;
-    size_t fileSize;
-    int numPieces;
-    std::set<int> availablePieces;
-    std::set<int> missingPieces;
-    Metadata metadata;
+    void* reconstructed_file = MAP_FAILED;
+    int merged_fd; 
+
+    std::deque<std::atomic<bool>> piece_status; // tells you about the current state of a piece weather it exists within this node or not
+    
+
+    void verify_ip(const string& ip);
+    void split(size_t i);  // splits the i-th peice file into piece_i 
+    void merge(size_t i); // Merges the i-th piece into the main file
+    void initialize_source();
+    void initialize_receiver(const std::string& metadata_file_path);
+    
 };
 
-FileManager FileManagerFromMetadata(const std::string& metadataPath, const std::string& srcIp, const std::string& piecePath);
+FileManager FileManagerFromMetadata(const string& metadataPath, const string& srcIp, const string& piecePath);
 
 #endif // FILEMANAGER_H

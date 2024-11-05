@@ -1,0 +1,145 @@
+5:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1916] device (ens4): carrier: link connected
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.1925] manager: (ens4): new Ethernet device (/org/freedesktop/NetworkManager/Devices/2)
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <warn>  [1730734081.1981] Error: failed to open /run/network/ifstate
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.2095] modem-manager: ModemManager available
+Nov  4 15:28:01 instance-20241003-032101 NetworkManager[608]: <info>  [1730734081.2096] manager: startup complete
+Nov  4 15:28:01 instance-20241003-032101 systemd[1]: Started Unattended Upgrades Shutdown.
+Nov  4 15:28:02 instance-20241003-032101 systemd[1]: Finished Network Manager Wait Online.
+Nov  4 15:28:02 instance-20241003-032101 systemd[1]: Started Modem Manager.
+Nov  4 15:28:03 instance-20241003-032101 chronyd[738]: Selected source 169.254.169.254
+Nov  4 15:28:03 instance-20241003-032101 systemd[1]: Started chrony, an NTP client/server.
+Nov  4 15:28:03 instance-20241003-032101 systemd[1]: grub-initrd-fallback.service: Succeeded.
+Nov  4 15:28:03 instance-20241003-032101 systemd[1]: Finished GRUB failed boot detection.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Hostname Service.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Reached target Network is Online.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Reached target System Time Synchronized.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Daily apt download activities.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Daily apt upgrade and clean activities.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Periodic ext4 Online Metadata Check for All Filesystems.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Discard unused blocks once a week.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Daily rotation of log files.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Daily man-db regeneration.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Message of the Day.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Condition check resulted in Timer to automatically fetch and run repair assertions being skipped.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Reached target Timers.
+Nov  4 15:28:04 instance-20241003-032101 dbus-daemon[607]: [system] Activating via systemd: service name='org.freedesktop.timedate1' unit='dbus-org.freedesktop.timedate1.service' requested by ':1.16' (uid=0 pid=646 comm="/usr/lib/snapd/snapd " label="unconfined")
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Network Manager Script Dispatcher Service...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Google Compute Engine Guest Agent...
+Nov  4 15:28:04 instance-20241003-032101 systemd-hostnamed[786]: Changed host name to 'instance-20241003-032101.c.computer-networks-437503.internal'
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Google OSConfig Agent.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Condition check resulted in Login to default iSCSI targets being skipped.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Reached target Remote File Systems (Pre).
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Reached target Remote File Systems.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting LSB: automatic crash report generation...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Deferred execution scheduler...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Availability of block devices...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Regular background program processing daemon.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Open vSwitch Record Hostname...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Condition check resulted in Pollinate to seed the pseudo random number generator being skipped.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Permit User Sessions...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Ubuntu Pro Background Auto Attach.
+Nov  4 15:28:04 instance-20241003-032101 dbus-daemon[607]: [system] Successfully activated service 'org.freedesktop.nm_dispatcher'
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Snap Daemon.
+Nov  4 15:28:04 instance-20241003-032101 cron[811]: (CRON) INFO (pidfile fd = 3)
+Nov  4 15:28:04 instance-20241003-032101 cron[811]: (CRON) INFO (Running @reboot jobs)
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: dmesg.service: Succeeded.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Deferred execution scheduler.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Availability of block devices.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Network Manager Script Dispatcher Service.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Permit User Sessions.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Online ext4 Metadata Check for All Filesystems...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Discard unused blocks on filesystems from /etc/fstab...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting GNOME Display Manager...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Google Compute Engine Shutdown Scripts...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Hold until boot process finishes up...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Time & Date Service...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Rotate log files...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Daily man-db regeneration...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: e2scrub_all.service: Succeeded.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Online ext4 Metadata Check for All Filesystems.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Google Compute Engine Shutdown Scripts.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: plymouth-quit-wait.service: Succeeded.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Hold until boot process finishes up.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Serial Getty on ttyS0.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Reached target Login Prompts.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Set console scheme...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Set console scheme.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Created slice system-getty.slice.
+Nov  4 15:28:04 instance-20241003-032101 apport[806]:  * Starting automatic crash report generation: apport
+Nov  4 15:28:04 instance-20241003-032101 ovs-vsctl: ovs|00001|vsctl|INFO|Called as ovs-vsctl --no-wait add Open_vSwitch . external-ids hostname=instance-20241003-032101.c.computer-networks-437503.internal
+Nov  4 15:28:04 instance-20241003-032101 apport[806]:    ...done.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started LSB: automatic crash report generation.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Open vSwitch Record Hostname.
+Nov  4 15:28:04 instance-20241003-032101 google_guest_agent[804]: GCE Agent Started (version 20240716.00-0ubuntu1~20.04.0)
+Nov  4 15:28:04 instance-20241003-032101 OSConfigAgent[805]: 2024-11-04T15:28:04.6273Z OSConfigAgent Info: OSConfig Agent (version 20240524.03-0ubuntu2~20.04.0) started.
+Nov  4 15:28:04 instance-20241003-032101 dbus-daemon[607]: [system] Successfully activated service 'org.freedesktop.timedate1'
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Started Time & Date Service.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Wait until snapd is fully seeded.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Starting Cloud-init: Config Stage...
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Condition check resulted in Auto import assertions from block devices being skipped.
+Nov  4 15:28:04 instance-20241003-032101 lxd.activate[742]: ==> Setting LXD socket ownership
+Nov  4 15:28:04 instance-20241003-032101 lxd.activate[742]: ==> LXD never started on this system, no need to start it now
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: snap.lxd.activate.service: Succeeded.
+Nov  4 15:28:04 instance-20241003-032101 systemd[1]: Finished Service for snap application lxd.activate.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: logrotate.service: Succeeded.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Finished Rotate log files.
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Starting the scheduler to run jobs
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Scheduler - start: []
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Skipping scheduling credential generation job, failed to reach client credentials endpoint(instance/credentials/certs) with error: error connecting to metadata server, status code: 404
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: ERROR scheduler.go:177 Failed to schedule job MTLS_MDS_Credential_Boostrapper with error: ShouldEnable() returned false, cannot schedule job MTLS_MDS_Credential_Boostrapper
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Started Google Compute Engine Guest Agent.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Starting OpenBSD Secure Shell server...
+Nov  4 15:28:05 instance-20241003-032101 python3[816]: ["2024-11-04T15:28:05.419", "INFO", "ubuntupro.daemon", "main", 55, "daemon starting", {}]
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Starting the scheduler to run jobs
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Scheduling job: telemetryJobID
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Scheduling job "telemetryJobID" to run at 24.000000 hr interval
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Successfully scheduled job telemetryJobID
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Invoking job "telemetryJobID"
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Scheduler - added: [now 2024-11-04 15:28:05.549734019 +0000 UTC entry 1 next 2024-11-05 15:28:05 +0000 UTC]
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: ERROR non_windows_accounts.go:218 invalid ssh key entry - expired key: ehmyitayew:ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNWl71AveovmoN/ToxJm50tQ6KpgWuD1bHAhbnVcz+ZbzFNTS4wxJwrCBqNi+Vd7Adr+MBuh08FZAm2Dr0w6or8= google-ssh {"userName":"ehmyitayew@college.harvard.edu","expireOn":"2024-10-10T02:56:00+0000"}
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: ERROR non_windows_accounts.go:218 invalid ssh key entry - expired key: ehmyitayew:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCWKPex9F0UBF9bbwk2dPRIncnZXriG6Lt4L5jtxsd37jINrX4m4HpmX8u7xD40PUd+1Wp24mALwrspCCDLTN/EZb1H8ckbDBQzyrWCGjisalDgQV1kfUvpdCFbH8mfiGAMRgnuAVVQ24FTxt92GTIdhTIjniTNsYWgoM+g2yoarIfLZiSx3+2D5uDyIGhMTq+S6QStUWQ8aGXPDePjYpYyWiEDi3JMu4RkErpXkrZIE/GfluqbLoyVBIreZ1e3t2ZfQ1DkpNY+I+ksEPx+lKX/u6aWNANfa8GhjMz/hmw8Q7ohfrpBSZUWBNCFdgxl+0nMj9n6CwlXZoEmxq9AWCxD google-ssh {"userName":"ehmyitayew@college.harvard.edu","expireOn":"2024-10-10T02:56:03+0000"}
+Nov  4 15:28:05 instance-20241003-032101 google_guest_agent[804]: Updating keys for user ehmyitayew.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Started OpenBSD Secure Shell server.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Reached target Multi-User System.
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: Internet Systems Consortium DHCP Client 4.4.1
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: Copyright 2004-2018 Internet Systems Consortium.
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: All rights reserved.
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: For info, please visit https://www.isc.org/software/dhcp/
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: 
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: Listening on Socket/ens4
+Nov  4 15:28:05 instance-20241003-032101 dhclient[968]: Sending on   Socket/ens4
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Stopping Login Service...
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: man-db.service: Succeeded.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Finished Daily man-db regeneration.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: systemd-logind.service: Succeeded.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Stopped Login Service.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Condition check resulted in Load Kernel Module drm being skipped.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Starting Login Service...
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Started Login Service.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Stopping Regular background program processing daemon...
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: cron.service: Succeeded.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Stopped Regular background program processing daemon.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Started Regular background program processing daemon.
+Nov  4 15:28:05 instance-20241003-032101 cron[989]: (CRON) INFO (pidfile fd = 3)
+Nov  4 15:28:05 instance-20241003-032101 cron[989]: (CRON) INFO (Skipping @reboot jobs -- not system startup)
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Reloading OpenBSD Secure Shell server.
+Nov  4 15:28:05 instance-20241003-032101 systemd[1]: Reloaded OpenBSD Secure Shell server.
+Nov  4 15:28:06 instance-20241003-032101 cloud-init[998]: Cloud-init v. 24.2-0ubuntu1~20.04.1 running 'modules:config' at Mon, 04 Nov 2024 15:28:06 +0000. Up 21.79 seconds.
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: Finished Cloud-init: Config Stage.
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: Starting Cloud-init: Final Stage...
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: Starting "Ensure google-startup-scripts.service starts after cloud-config.service"...
+Nov  4 15:28:06 instance-20241003-032101 ensure-gss-startup-order.sh[1000]: This service exists solely to ensure that the google-startup-scripts.service starts after cloud-config.service.
+Nov  4 15:28:06 instance-20241003-032101 ensure-gss-startup-order.sh[1000]: This is ensured through the After=cloud-config.service and Before=google-startup-scripts.service clauses in the service definition.
+Nov  4 15:28:06 instance-20241003-032101 ensure-gss-startup-order.sh[1000]: This is a dummy service does not do any work of its own.
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: Finished "Ensure google-startup-scripts.service starts after cloud-config.service".
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: Starting Google Compute Engine Startup Scripts...
+Nov  4 15:28:06 instance-20241003-032101 google_metadata_script_runner[1001]: Starting startup scripts (version dev).
+Nov  4 15:28:06 instance-20241003-032101 google_metadata_script_runner[1001]: No startup scripts to run.
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: google-startup-scripts.service: Succeeded.
+Nov  4 15:28:06 instance-20241003-032101 systemd[1]: Finished Google Compute Engine Startup Scripts.
+Nov  4 15:28:07 instance-20241003-032101 snapd[646]: storehelpers.go:923: cannot refresh: snap has no updates available: "core20", "google-cloud-cli", "lxd", "snapd"
+Nov  4 15:28:07 instance-20241003-032101 rsyslogd: [origin software="rsyslogd" swVersion="8.2001.0" x-pid="635" x-info="https://www.rsyslog.com"] rsyslogd was HUPed
+Nov  4 15:28:07 instance-20241003-032101 cloud-init[1010]: Cloud-init v. 24.2-0ubuntu1~20.04.1 running 'modules:final' at Mon, 04 Nov 2024 15:28:07 +0000. Up 22.72 seconds.
+Nov  4 15:28:07 instance-20241003-032101 cloud-init[1010]: Cloud-init v. 24.2-0ubuntu1~20.04.1 finished at Mon, 04 Nov 2024 15:28:07 +0000. Datasource DataSourceGCELocal.  Up 22.87 seconds
+Nov  4 15:28:08 instance-20241003-032101 systemd[1]: Finished Cloud-init: Final Stage.
+Nov  4 15:28:08 instance-20241003-032101 systemd[1]: Reached targe

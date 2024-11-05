@@ -34,3 +34,5 @@ if __name__ == '__main__':
     ctrl.tear_down_network()
     ctrl.debug_log_all_dl_times()
     logger.info(f"Worse download time: {ctrl.final_jct}")
+
+# sudo python main.py topologies/scenario1.txt --trace-file traces/sc1-trace2.txt

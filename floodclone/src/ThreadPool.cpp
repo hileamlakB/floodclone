@@ -5,6 +5,7 @@
 #include <condition_variable>
 #include <functional>
 
+
 ThreadPool::ThreadPool(size_t threads) : stop(false) {
     for (size_t i = 0; i < threads; ++i) {
 
@@ -22,22 +23,25 @@ ThreadPool::ThreadPool(size_t threads) : stop(false) {
                         return;
                     task = std::move(this->tasks.front());
                     this->tasks.pop();
+                    active_tasks++;  // Increment total active task count
                 }
 
                 task();
+                {
+                    std::unique_lock<std::mutex> lock(this->queue_mutex);
+                    active_tasks--;  // Decrement total active task count
+                    if (tasks.empty() && active_tasks == 0) {
+                        idle_condition.notify_all();  // Signal pool is idle
+                    }
+                }
             }
         });
     }
 }
 
 ThreadPool::~ThreadPool() {
-    {
-        std::unique_lock<std::mutex> lock(queue_mutex);
-        stop = true;
-    }
-    condition.notify_all();
-    for (std::thread &worker : workers)
-        worker.join();
+    join();
+   
 }
 
 void ThreadPool::enqueue(std::function<void()> task) {
@@ -46,4 +50,24 @@ void ThreadPool::enqueue(std::function<void()> task) {
         tasks.emplace(std::move(task));
     }
     condition.notify_one();
+}
+
+
+void ThreadPool::join() {
+    {
+        std::unique_lock<std::mutex> lock(queue_mutex);
+        stop = true;
+    }
+    condition.notify_all();
+
+    for (std::thread &worker : workers) {
+        if (worker.joinable()) {
+            worker.join();
+        }
+    }
+}
+
+void ThreadPool::wait() {
+    std::unique_lock<std::mutex> lock(queue_mutex);
+    idle_condition.wait(lock, [this] { return tasks.empty() && active_tasks == 0; });
 }
