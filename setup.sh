@@ -11,5 +11,6 @@ git apply mininet.patch
 cd ..
 mininet/util/install.sh -a
 pip install termcolor
+pip install networkx
 pip install numpy
 apt-get -y install bridge-utils
