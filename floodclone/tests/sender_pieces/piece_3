@@ -1,0 +1,121 @@
+t Cloud-init target.
+Nov  4 15:28:08 instance-20241003-032101 fstrim[831]: /boot/efi: 98.3 MiB (103084544 bytes) trimmed on /dev/sda15
+Nov  4 15:28:08 instance-20241003-032101 fstrim[831]: /: 442.6 MiB (464113664 bytes) trimmed on /dev/sda1
+Nov  4 15:28:08 instance-20241003-032101 systemd[1]: fstrim.service: Succeeded.
+Nov  4 15:28:08 instance-20241003-032101 systemd[1]: Finished Discard unused blocks on filesystems from /etc/fstab.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: NetworkManager-dispatcher.service: Succeeded.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Started GNOME Display Manager.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Reached target Graphical Interface.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Starting Update UTMP about System Runlevel Changes...
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: systemd-update-utmp-runlevel.service: Succeeded.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Finished Update UTMP about System Runlevel Changes.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Startup finished in 1.781s (kernel) + 28.273s (userspace) = 30.055s.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Created slice User Slice of UID 123.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Starting User Runtime Directory /run/user/123...
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Finished User Runtime Directory /run/user/123.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Starting User Manager for UID 123...
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Reached target Paths.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Reached target Timers.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Starting D-Bus User Message Bus Socket.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on GnuPG network certificate management daemon.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on GnuPG cryptographic agent and passphrase cache (access for web browsers).
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on GnuPG cryptographic agent and passphrase cache (restricted).
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on GnuPG cryptographic agent (ssh-agent emulation).
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on GnuPG cryptographic agent and passphrase cache.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on debconf communication socket.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on Sound System.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on REST API socket for snapd user session agent.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Listening on D-Bus User Message Bus Socket.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Reached target Sockets.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Reached target Basic System.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Started User Manager for UID 123.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Starting Sound Service...
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Started Session c1 of user gdm.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Started D-Bus User Message Bus.
+Nov  4 15:28:14 instance-20241003-032101 dbus-daemon[1035]: [session uid=123 pid=1035] AppArmor D-Bus mediation is enabled
+Nov  4 15:28:14 instance-20241003-032101 dbus-daemon[607]: [system] Activating via systemd: service name='org.freedesktop.RealtimeKit1' unit='rtkit-daemon.service' requested by ':1.26' (uid=123 pid=1032 comm="/usr/bin/pulseaudio --daemonize=no --log-target=jo" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Starting RealtimeKit Scheduling Policy Service...
+Nov  4 15:28:14 instance-20241003-032101 dbus-daemon[607]: [system] Successfully activated service 'org.freedesktop.RealtimeKit1'
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Started RealtimeKit Scheduling Policy Service.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Successfully called chroot.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Successfully dropped privileges.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Successfully limited resources.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Running.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Watchdog thread running.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Canary thread running.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Successfully made thread 1032 of process 1032 owned by '123' high priority at nice level -11.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Supervising 1 threads of 1 processes of 1 users.
+Nov  4 15:28:14 instance-20241003-032101 dbus-daemon[607]: [system] Activating via systemd: service name='org.bluez' unit='dbus-org.bluez.service' requested by ':1.28' (uid=123 pid=1032 comm="/usr/bin/pulseaudio --daemonize=no --log-target=jo" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 systemd[1]: Condition check resulted in Bluetooth service being skipped.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Supervising 1 threads of 1 processes of 1 users.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Successfully made thread 1043 of process 1032 owned by '123' RT at priority 5.
+Nov  4 15:28:14 instance-20241003-032101 rtkit-daemon[1040]: Supervising 2 threads of 1 processes of 1 users.
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.1' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Started Sound Service.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Reached target Main User Target.
+Nov  4 15:28:14 instance-20241003-032101 systemd[1026]: Startup finished in 365ms.
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 gnome-session[1039]: gnome-session-binary[1039]: WARNING: Falling back to non-systemd startup procedure due to error: GDBus.Error:org.freedesktop.DBus.Error.Spawn.ChildExited: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 gnome-session-binary[1039]: WARNING: Falling back to non-systemd startup procedure due to error: GDBus.Error:org.freedesktop.DBus.Error.Spawn.ChildExited: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=123 pid=1039 comm="/usr/libexec/gnome-session-binary --systemd --auto" label="unconfined")
+Nov  4 15:28:14 instance-20241003-032101 /usr/lib/gdm3/gdm-wayland-session[1038]: dbus-daemon[1038]: [session uid=123 pid=1038] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+Nov  4 15:28:14 instance-20241003-032101 gnome-session[1039]: gnome-session-binary[1039]: WARNING: Could not parse desktop file orca-autostart.desktop or it references a not found TryExec binary
+Nov  4 15:28:14 instance-20241003-032101 gnome-session-binary[1039]: WARNING: Could not parse desktop file orca-autostart.desktop or it references a not found TryExec binary
+Nov  4 15:28:15 instance-20241003-032101 gnome-shell[1064]: Failed to create backend: No drm devices found
+Nov  4 15:28:15 instance-20241003-032101 gnome-session[1039]: gnome-session-binary[1039]: WARNING: App 'org.gnome.Shell.desktop' exited with code 1
+Nov  4 15:28:15 instance-20241003-032101 gnome-session-binary[1039]: WARNING: App 'org.gnome.Shell.desktop' exited with code 1
+Nov  4 15:28:15 instance-20241003-032101 gnome-session-binary[1039]: Unrecoverable failure in required component org.gnome.Shell.desktop
+Nov  4 15:28:15 instance-20241003-032101 gdm3: GdmDisplay: Session never registered, failing
+Nov  4 15:28:15 instance-20241003-032101 systemd[1]: session-c1.scope: Succeeded.
+Nov  4 15:28:15 instance-20241003-032101 gdm3: Child process -1033 was already dead.
+Nov  4 15:28:15 instance-20241003-032101 gdm3: Child process -1033 was already dead.
+Nov  4 15:28:15 instance-20241003-032101 systemd[1026]: pulseaudio.service: Succeeded.
+Nov  4 15:28:15 instance-20241003-032101 systemd[1]: Started Session c2 of user gdm.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (--) Log file renamed from "/var/log/Xorg.pid-1077.log" to "/var/log/Xorg.0.log"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: X.Org X Server 1.20.13
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: X Protocol Version 11, Revision 0
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Build Operating System: linux Ubuntu
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Current Operating System: Linux instance-20241003-032101 5.15.0-1070-gcp #78~20.04.1-Ubuntu SMP Wed Oct 9 22:05:22 UTC 2024 x86_64
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Kernel command line: BOOT_IMAGE=/boot/vmlinuz-5.15.0-1070-gcp root=PARTUUID=d5aebd51-48ce-4b59-bfa2-c5718a33f639 ro console=ttyS0,115200 panic=-1
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Build Date: 09 April 2024  01:36:10AM
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: xorg-server 2:1.20.13-1ubuntu1~20.04.17 (For technical support please see http://www.ubuntu.com/support)
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Current version of pixman: 0.38.4
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Before reporting problems, check http://wiki.x.org
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011to make sure that you have the latest version.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: Markers: (--) probed, (**) from config file, (==) default setting,
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011(++) from command line, (!!) notice, (II) informational,
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011(WW) warning, (EE) error, (NI) not implemented, (??) unknown.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Log file: "/var/log/Xorg.0.log", Time: Mon Nov  4 15:28:15 2024
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Using system config directory "/usr/share/X11/xorg.conf.d"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) No Layout section.  Using the first Screen section.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) No screen section available. Using defaults.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (**) |-->Screen "Default Screen Section" (0)
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (**) |   |-->Monitor "<default monitor>"
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) No monitor specified for screen "Default Screen Section".
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Using a default monitor configuration.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Automatically adding devices
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Automatically enabling devices
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Automatically adding GPU devices
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Automatically binding GPU devices
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (==) Max clients allowed: 256, resource mask: 0x1fffff
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (WW) The directory "/usr/share/fonts/X11/cyrillic" does not exist.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Entry deleted from font path.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (WW) The directory "/usr/share/fonts/X11/100dpi/" does not exist.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Entry deleted from font path.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (WW) The directory "/usr/share/fonts/X11/75dpi/" does not exist.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Entry deleted from font path.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (WW) The directory "/usr/share/fonts/X11/Type1" does not exist.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Entry deleted from font path.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: (WW) The directory "/usr/share/fonts/X11/100dpi" does not exist.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-session[1077]: #011Entry deleted from font path.
+Nov  4 15:28:15 instance-20241003-032101 /usr/lib/gdm3/gdm-x-se
