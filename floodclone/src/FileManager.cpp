@@ -59,8 +59,6 @@ void FileManager::initialize_source() {
     // Calculate number of pieces
     num_pieces = (file_size + piece_size - 1) / piece_size;
 
-    piece_status.resize(num_pieces); 
-   
 
     // Initialize metadata with actual data for source
     file_metadata.fileId = "file_hash";  // Replace with actual hash function if I endup implementing relaibility
@@ -80,7 +78,7 @@ void FileManager::initialize_source() {
     // do this in a separate thread to not take away time
     // lock the metadat
     for (size_t i = 0; i < num_pieces; ++i) {
-        piece_status[i].store(false);
+        piece_status.emplace_back(false);
         thread_pool->enqueue([this, i] {
             split(i); 
             piece_status[i].store(true);
@@ -122,9 +120,8 @@ void FileManager::initialize_receiver(const std::string& metadata_file_path) {
         throw std::runtime_error("Error mapping reconstructed file into memory");
     }
 
-    piece_status.resize(num_pieces); 
     for (size_t i = 0; i < num_pieces; ++i) {
-        piece_status[i].store(false);
+        piece_status.emplace_back(false);
     }
 }
 
@@ -308,6 +305,12 @@ void FileManager::receive(const std::string& binary_data, size_t i) {
     });
 }
 
+
+bool FileManager::has_piece(size_t i)
+{
+    assert(i < num_pieces);
+    return piece_status[i].load();
+}
 
 
 // will it be important to check the checksum, if lets stay I start using udp protocol, but if I am using tcp that won't be required rifht

@@ -7,8 +7,8 @@ October 17-18: Improved philosphy
 
 Ocotober 19: Implemented fileManager in python
     - While implementing the FileManager class in python I and measing performance
-    I realized it taks a long time to split files and shoul only be don in parallel, which 
-    isn't well suported in python and thus have made the decision to transfer implementing this program in 
+    I realized it taks a long time to split files and should only be don in parallel, which 
+    isn't well suported in python and thus have made the decision to implement this program in 
     c++
 
 October 20: Implemented thread pool
@@ -23,7 +23,7 @@ October 20: Implemented thread pool
 Nov 4: Completed the sender file manager class
     - had to install sudo apt-get install libssl-dev for managing md5checksum
     - which might not be requried and could be removed to speed up code
-    - Created differnt methods for the filemanager class, including 
+    - Created differnt methods for the filemanager class, including send, recieve, initalize, split, merge
     - Make sure the send fucntion could run a thread safe way when the piece being sent isn't 
     avialable, if it isn't avialable it shoudl sleep and wake up again so that available pieces
     could be sent
@@ -33,3 +33,5 @@ Nov 4: Completed the sender file manager class
     in to the reconstract file at the same tim as creating the piece fie that could be used for future sharing
 
     - I need to addd a feature to check available and missing pieces
+    
+    - I will need to implement uint tests and look into how unit test creations work in c++
