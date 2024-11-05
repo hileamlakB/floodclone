@@ -152,6 +152,8 @@ public:
     void deconstruct(); 
     void receive(const std::string& binary_data, size_t i);
     std::string send(size_t i);
+    bool has_piece(size_t i);
+
 
     std::string calculate_checksum(const std::string& data); 
 
@@ -173,7 +175,7 @@ private:
     void* reconstructed_file = MAP_FAILED;
     int merged_fd; 
 
-    std::vector<std::atomic<bool>> piece_status; // tells you about the current state of a piece weather it exists within this node or not
+    std::deque<std::atomic<bool>> piece_status; // tells you about the current state of a piece weather it exists within this node or not
     
 
     void verify_ip(const string& ip);
