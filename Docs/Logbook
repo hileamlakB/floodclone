@@ -27,3 +27,9 @@ Nov 4: Completed the sender file manager class
     - Make sure the send fucntion could run a thread safe way when the piece being sent isn't 
     avialable, if it isn't avialable it shoudl sleep and wake up again so that available pieces
     could be sent
+
+    - i just realized recieving reconstructing could be done at the same time, 
+    there is no point in doing them separelty in two steps instead we can use mmaped file to direclty copy data
+    in to the reconstract file at the same tim as creating the piece fie that could be used for future sharing
+
+    - I need to addd a feature to check available and missing pieces
