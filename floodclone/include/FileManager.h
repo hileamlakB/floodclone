@@ -168,10 +168,12 @@ private:
 
     ThreadPool *thread_pool;
     
-     bool is_source;
+    bool is_source;
 
     void* reconstructed_file = MAP_FAILED;
     int merged_fd; 
+
+    std::vector<std::atomic<bool>> piece_status; // tells you about the current state of a piece weather it exists within this node or not
     
 
     void verify_ip(const string& ip);

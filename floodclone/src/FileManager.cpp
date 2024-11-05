@@ -59,19 +59,17 @@ void FileManager::initialize_source() {
     // Calculate number of pieces
     num_pieces = (file_size + piece_size - 1) / piece_size;
 
+    piece_status.resize(num_pieces); 
+   
+
     // Initialize metadata with actual data for source
-    file_metadata.fileId = "example_file_id";  // Replace with actual hash function
+    file_metadata.fileId = "file_hash";  // Replace with actual hash function if I endup implementing relaibility
     file_metadata.filename = fs::path(file_path).filename().string();
     file_metadata.fileSize = file_size;
     file_metadata.numPieces = num_pieces;
     file_metadata.pieces.resize(num_pieces);
 
-    // Populate metadata and split in parallel using thread pool
-    for (size_t i = 0; i < num_pieces; ++i) {
-        thread_pool->enqueue([this, i] {
-            split(i);  // Split each piece within the thread pool
-        });
-    }
+    deconstruct();
 }
 
  void  FileManager::deconstruct(){
@@ -82,11 +80,12 @@ void FileManager::initialize_source() {
     // do this in a separate thread to not take away time
     // lock the metadat
     for (size_t i = 0; i < num_pieces; ++i) {
+        piece_status[i].store(false);
         thread_pool->enqueue([this, i] {
-            split(i); // Each piece processing is handled by split(i) within the thread pool
+            split(i); 
+            piece_status[i].store(true);
         });
     }
-
  }
 
 void FileManager::initialize_receiver(const std::string& metadata_file_path) {
@@ -121,6 +120,11 @@ void FileManager::initialize_receiver(const std::string& metadata_file_path) {
     if (reconstructed_file == MAP_FAILED) {
         close(merged_fd);
         throw std::runtime_error("Error mapping reconstructed file into memory");
+    }
+
+    piece_status.resize(num_pieces); 
+    for (size_t i = 0; i < num_pieces; ++i) {
+        piece_status[i].store(false);
     }
 }
 
@@ -245,6 +249,10 @@ std::string FileManager::send(size_t i) {
 
     // this could potentially be improved using  sendfile
     // if the receiving location is also passed in as an argument
+
+    // check if the piece is avialable first
+    assert(i < num_pieces);
+    assert(piece_status[i].load());
     
     std::filesystem::path piece_path = std::filesystem::path(pieces_folder) / ("piece_" + std::to_string(i));
 
@@ -273,11 +281,18 @@ std::string FileManager::send(size_t i) {
 
 
 void FileManager::receive(const std::string& binary_data, size_t i) {
+
+    if (piece_status[i].load()){
+        std::cout << "RECIEVING a piec that already exists" << std::endl;
+        return;
+    }
+
     off_t offset = i * piece_size;
 
     // copy piece to mmaped file
-    thread_pool->enqueue([this, binary_data, offset] {
+    thread_pool->enqueue([this, binary_data, offset, i] {
         std::copy(binary_data.begin(), binary_data.end(), static_cast<char*>(reconstructed_file) + offset);
+        piece_status[i].store(true);
     });
 
     // save piece to a separate file 
