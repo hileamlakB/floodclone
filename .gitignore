@@ -2,3 +2,6 @@
 .idea/
 venv/
 topologies/
+__pycache__/
+*.pyc
+*.pyo
