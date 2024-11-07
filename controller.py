@@ -9,8 +9,11 @@ from time import sleep
 from mininet.node import CPULimitedHost, Switch
 from mininet.net import Mininet, Link
 from mininet.util import dumpNodeConnections
+from mininet.cli import CLI
 from topology import BackboneTopo
 from typing import List, Type, Union
+
+from collections import defaultdict
 
 class Controller:
     def __init__(self, cli_args: Namespace, agent_class: Type[Agent]):
@@ -27,7 +30,86 @@ class Controller:
         else:
             self.network_events = []
         self.network_conditions_thread = StoppableThread(target=self.dynamic_network, args=())
+        self.nodes = self._gather_dests() # will store infromatin about destination nodes and hopcounts to them
+    
+    def _get_ip_aliases(self):
+        """
+        Retrieves all IP addresses (including secondary IPs) for each interface on each node.
+        Returns a dictionary with node names as keys and a list of (interface, IP) tuples as values.
+        
+        This calculation should not be included in the protocol download time. Instead, it can be viewed 
+        as a prerequisite for a node to present its interfaces and all available IPs to join the swarm. This 
+        setup constitutes part of the dynamic information necessary for effective network participation. 
+        """
+        ip_aliases = defaultdict(list)
 
+        for node in self.net.hosts:
+            ip_output = node.cmd("ip addr show").splitlines()
+            current_intf = None
+
+            for line in ip_output:
+                # Detect IP and interface in "inet" lines
+                if "inet " in line:
+                    parts = line.split()
+                    ip = parts[1].split("/")[0]  # Extract the IP address, discard CIDR
+                    interface_name = parts[-1]  # Extract the interface name at the end of the line
+                    if interface_name != "lo":  # Skip loopback interface
+                        ip_aliases[node.name].append((interface_name, ip))
+
+        return ip_aliases
+    
+    def _gather_dests(self):
+        """
+        Gather node information, storing hop counts and path details between every node pair in a dictionary of dictionaries.
+        Each entry is {node_name: {other_node_name: [(connection_interface, hop_count, [list of hops])]}}.
+        """
+        node_paths = defaultdict(dict)
+
+        node_info = self._get_ip_aliases()
+        print(node_info)
+        # Create an inverse mapping of IPs to node names
+        node_infoInv = {ip: name for name, intf_ips in node_info.items() for _, ip in intf_ips}
+
+        for node in self.net.hosts:
+            for other_node in self.net.hosts:
+                if node == other_node:
+                    continue  # Skip self-pairs
+
+                interfaces = []
+                paths = []
+
+                # Loop over each IP of other_node
+                for _, other_ip in node_info[other_node.name]:
+                    # Determine interfaces used from node to each IP of other_node
+                    route_info = node.cmd(f"ip route get {other_ip}")
+                    self.logger.debug(f"Route Info for {node.name} to {other_node.name} at {other_ip}: {route_info}")
+
+                    for line in route_info.splitlines():
+                        if "dev" in line:
+                            interface = line.split("dev")[1].split()[0]
+                            if interface not in interfaces:
+                                interfaces.append(interface)
+                    self.logger.debug(f"Interfaces used from {node.name} to {other_node.name}: {interfaces}")
+
+                    # Run mtr for each interface to determine hop count and path
+                    for iface in interfaces:
+                        mtr_output = node.cmd(f"mtr -n -c 1 -r -I {iface} {other_ip}")
+                        self.logger.debug(f"MTR Output for {node.name} to {other_node.name} via {iface}:\n{mtr_output}")
+
+                        hop_count = len(mtr_output.splitlines()) - 2
+                        path = [
+                            node_infoInv.get(line.split()[1], line.split()[1])  # Use node name if available, else keep IP
+                            for line in mtr_output.splitlines()[2:]
+                        ]
+
+                        paths.append((iface, hop_count, path))
+
+                # Store paths in only one direction
+                node_paths[node.name][other_node.name] = paths
+                self.logger.debug(f"Node Paths for {node.name} to {other_node.name}: {node_paths[node.name][other_node.name]}")
+
+        self.logger.info(f"Final Node Paths:\n{node_paths}")
+        return node_paths
 
     def create_net(self):
         topo = BackboneTopo(topology_file=self.topology_file)
