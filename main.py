@@ -3,6 +3,7 @@ from controller import Controller
 from argparse import ArgumentParser
 
 from mininet.log import lg
+from mininet.cli import CLI
 import logging
 import sys
 
