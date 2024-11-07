@@ -1,0 +1,12 @@
+--2024-11-06 20:48:35--  http://10.0.0.3:8000/file
+Connecting to 10.0.0.3:8000... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 10485760 (10M) [application/octet-stream]
+Saving to: ‘/var/mn/d2/file’
+
+/var/mn/d2/file      10%[=>                  ]   1.10M   313KB/s    eta 31s    /var/mn/d2/file      11%[=>                  ]   1.16M   315KB/s    eta 31s    /var/mn/d2/file      12%[=>                  ]   1.21M   323KB/s    eta 31s    /var/mn/d2/file      12%[=>                  ]   1.28M   313KB/s    eta 31s    /var/mn/d2/file      13%[=>                  ]   1.34M   293KB/s    eta 31s    /var/mn/d2/file      14%[=>                  ]   1.40M   296KB/s    eta 31s    /var/mn/d2/file      14%[=>                  ]   1.47M   309KB/s    eta 29s    /var/mn/d2/file      15%[==>                 ]   1.54M   300KB/s    eta 29s    /var/mn/d2/file      16%[==>                 ]   1.62M   304KB/s    eta 29s    /var/mn/d2/file      16%[==>                 ]   1.62M   304KB/s    in 5.5s    
+
+2024-11-06 20:48:41 (304 KB/s) - Connection closed at byte 1701400. Retrying.
+
+--2024-11-06 20:48:42--  (try: 2)  http://10.0.0.3:8000/file
+Connecting to 10.0.0.3:8000... failed: Network is unreachable.
