@@ -35,3 +35,23 @@ Nov 4: Completed the sender file manager class
     - I need to addd a feature to check available and missing pieces
     
     - I will need to implement uint tests and look into how unit test creations work in c++
+
+Nov 6: Implemented RouteInspector
+
+    - Developed a component to analyze the network topology before the download time begins.
+        - Rationale for Excluding This from Download Time:
+        - The topology remains static and represents constant information.
+        - Gathering interface and destination details (such as the interface used to connect to a specific node) should be considered a constant-time operation and treated as given, as it isn’t the primary focus of the project.
+        - If necessary, this inspection can be incorporated into the download time after discussing with the TFs.
+    
+    - For inspection, I avoid relying on the network (self.net) to gather information, as this would conflict with the requirement of being unaware of the underlying network. I only use self.net to obtain the destination IP addresses, which I assume must be provided; otherwise, there would be no way to identify the nodes to which the source is sending files.
+    - Future plans include expanding the project to allow dynamic node joining, similar to how new nodes join a torrent swarm, potentially using a distributed hash table (DHT) approach. This however isn't part of the project scope
+    - Here is the general logic 
+    ```
+     # for each node
+        #   for every other node starting from node + 1
+        #       # first find all interfaces that connected this nodes
+        #       for each interface:
+        #           # find the hop count
+    ```
+    I use ip route get to get the interfaces that connec two nodes
