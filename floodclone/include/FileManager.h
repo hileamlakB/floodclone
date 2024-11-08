@@ -15,6 +15,9 @@ using namespace std;
 constexpr size_t IP4_LENGTH = 15; // constant length for IPv4 address strings
 class ThreadPool;
 
+
+class ConnectionManager; 
+
 // contains information about a single piece of file
 struct PieceMetaData{
     vector<array<char, IP4_LENGTH>> srcs; // list of ip addresses that are known to have the piece, fixed length for IPv4
@@ -183,6 +186,7 @@ private:
     void merge(size_t i); // Merges the i-th piece into the main file
     void initialize_source();
     void initialize_receiver(const std::string& metadata_file_path);
+    friend class ConnectionManager; 
     
 };
 

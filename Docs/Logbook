@@ -55,3 +55,16 @@ Nov 6: Implemented RouteInspector
         #           # find the hop count
     ```
     I use ip route get to get the interfaces that connec two nodes
+
+Nov 7: Implement a communication thread
+
+    - Nodes need to both make and handle requests from each other. To ensure scalability, 
+    I've decided to leverage the existing thread pool I built. This allows incoming requests 
+    to be queued as tasks, while a dedicated thread continuously listens for new requests.
+
+Nov 8: Communication Manger
+    - I have implementeed a connection_map to keep track of already created connections so that
+    I don't have to create connectin each time
+    - I have passed the Filemanager as a friend to the connection manger but I don't like that 
+    - i want to decouple the connection amanger and the filemanager and create a separate class/function
+    for the differnt requests that use both the filemanager and the communication manager class 
