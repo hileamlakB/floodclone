@@ -18,11 +18,9 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-
-
 FileManager::FileManager(const std::string& file_path, size_t ipiece_size, const std::string& node_ip,
                          const std::string& pieces_folder, ThreadPool* thread_pool, bool is_source,
-                         const std::string& metadata_file_path)
+                         const FileMetaData* metadata)
     : file_path(file_path), piece_size(ipiece_size == 0 ? 16384 : ipiece_size), node_ip(node_ip),
       num_pieces(0), pieces_folder(pieces_folder), thread_pool(thread_pool), is_source(is_source) 
 {
@@ -40,7 +38,10 @@ FileManager::FileManager(const std::string& file_path, size_t ipiece_size, const
     if (is_source) {
         initialize_source();  // Source mode, calculate and populate metadata from file
     } else {
-        initialize_receiver(metadata_file_path);  // Receiver mode, initialize from metadata file
+         if (!metadata) {
+            throw std::runtime_error("Metadata required for receiver nodes");
+        }
+        initialize_receiver(*metadata);// Receiver mode, initialize from metadata file
     }
 }
 
@@ -86,21 +87,11 @@ void FileManager::initialize_source() {
     }
  }
 
-void FileManager::initialize_receiver(const std::string& metadata_file_path) {
-    std::ifstream metaFile(metadata_file_path, std::ios::binary);
-    if (!metaFile) {
-        throw std::runtime_error("Cannot open metadata file: " + metadata_file_path);
-    }
 
-    // Read the entire file content into a string
-    std::string binary((std::istreambuf_iterator<char>(metaFile)), std::istreambuf_iterator<char>());
-    metaFile.close();
-
-    // Deserialize the binary string to populate file_metadata
-    file_metadata = FileMetaData::deserialize(binary);
-
-    // Set num_pieces based on deserialized metadata
-    num_pieces = file_metadata.numPieces;
+void FileManager::initialize_receiver(const FileMetaData& metadata) {
+    // Directly set the metadata without file reading/deserialization
+    file_metadata = metadata;
+    num_pieces = metadata.numPieces;
 
     std::filesystem::path reconstructed_file_path = std::filesystem::path(pieces_folder) / ("reconstructed_" + file_metadata.filename);
     merged_fd = open(reconstructed_file_path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0666);
