@@ -9,6 +9,7 @@
 #include "ThreadPool.h"
 #include <sys/mman.h>  
 #include <unistd.h>  
+#include <cassert>
 
 using namespace std;
 
@@ -140,12 +141,53 @@ struct FileMetaData {
 
         return fileMeta;
     }
+
+    static FileMetaData deserialize(const vector<char>& binary) {
+        FileMetaData fileMeta;
+        stringstream ss;
+        ss.write(binary.data(), binary.size());
+        ss.seekg(0);  // Reset position for reading
+
+        // Deserialize fileId
+        size_t fileId_len;
+        ss.read(reinterpret_cast<char*>(&fileId_len), sizeof(fileId_len));
+        fileMeta.fileId.resize(fileId_len);
+        ss.read(&fileMeta.fileId[0], fileId_len);
+
+        // Deserialize filename
+        size_t filename_len;
+        ss.read(reinterpret_cast<char*>(&filename_len), sizeof(filename_len));
+        fileMeta.filename.resize(filename_len);
+        ss.read(&fileMeta.filename[0], filename_len);
+
+        // Deserialize fileSize
+        ss.read(reinterpret_cast<char*>(&fileMeta.fileSize), sizeof(fileMeta.fileSize));
+
+        // Deserialize numPieces
+        ss.read(reinterpret_cast<char*>(&fileMeta.numPieces), sizeof(fileMeta.numPieces));
+
+        // Deserialize each piece in pieces
+        fileMeta.pieces.resize(fileMeta.numPieces);
+        for (size_t i = 0; i < fileMeta.numPieces; ++i) {
+            size_t piece_len;
+            ss.read(reinterpret_cast<char*>(&piece_len), sizeof(piece_len));
+            string piece_binary(piece_len, '\0');
+            ss.read(&piece_binary[0], piece_len);
+            fileMeta.pieces[i] = PieceMetaData::deserialize(piece_binary);
+        }
+
+        return fileMeta;
+    }
 };
+
+class ConnectionManager;
 
 class FileManager {
 public:
+
     FileManager(const std::string& file_path, size_t ipiece_size, const std::string& node_ip,
-                const std::string& pieces_folder, ThreadPool* thread_pool, bool is_source, const std::string& metadata_file_path);
+                const std::string& pieces_folder, ThreadPool* thread_pool, bool is_source, 
+                const FileMetaData* metadata);  
 
 
 
@@ -185,8 +227,9 @@ private:
     void split(size_t i);  // splits the i-th peice file into piece_i 
     void merge(size_t i); // Merges the i-th piece into the main file
     void initialize_source();
-    void initialize_receiver(const std::string& metadata_file_path);
-    friend class ConnectionManager; 
+    void initialize_receiver(const FileMetaData& metadata) ;
+
+    friend class ConnectionManager;
     
 };
 
