@@ -56,7 +56,11 @@ class BackboneTopo( Topo ):
                         break
                 if port1 is None or port2 is None:
                     raise ValueError("Topology file has path across non-existent link.")
-                self.pending_routing_updates.extend(self.set_non_trivial_path(node1, node2, port1, port2))
+                if len(hops) == 1:
+                    self.pending_routing_updates.extend(self.set_non_trivial_path(node1, node2, port1, port2))
+                else:
+                    self.pending_routing_updates.extend(self.set_non_trivial_via_path(node1, node2, hops[1]))
+                    self.pending_routing_updates.extend(self.set_non_trivial_via_path(node2, node1, hops[-2]))
         else:
             for h in hosts:
                 if len(self.ports[h]) > 1:
@@ -102,6 +106,13 @@ class BackboneTopo( Topo ):
         return [
             (Updates.add_routes, node1, node2, port1, port2),
             (Updates.add_routes, node2, node1, port2, port1),
+        ]
+
+    @staticmethod
+    def set_non_trivial_via_path(node1: str, node2: str, via: str):
+        return [
+            (Updates.add_via_routes, node1, node2, via),
+            (Updates.ip_forward, via)
         ]
 
     def build_default(self):

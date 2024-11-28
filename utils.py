@@ -16,9 +16,9 @@ md5_re = re.compile("(?P<md5>[0-9a-zA-Z]+) +/var/mn/(?P<node>[a-z0-9A-Z]+)/file"
 class Updates(Enum):
     flush = auto()
     add_addr = auto()
+    ip_forward = auto()
     add_routes = auto()
     add_via_routes = auto()
-    ip_forward = auto()
 
 # https://stackoverflow.com/questions/323972/is-there-any-way-to-kill-a-thread
 class StoppableThread(Thread):
