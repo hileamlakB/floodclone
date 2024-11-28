@@ -5,8 +5,9 @@ from agent import Agent
 from datetime import datetime
 from utils import *
 from time import sleep
+import networkx as nx
 
-from mininet.node import CPULimitedHost, Switch
+from mininet.node import CPULimitedHost, Switch, Host
 from mininet.net import Mininet, Link
 from mininet.util import dumpNodeConnections
 from mininet.cli import CLI
@@ -22,7 +23,7 @@ class Controller:
         self.agent_class = agent_class
         self.logger = logging.getLogger("Project")
         self.topology_file = cli_args.topology
-        self.net, self.src, self.dests = self.init_network()
+        self.net, self.src, self.dests, self.topo = self.init_network()
         self.md5, self.server_pid = self.create_file_and_start_server()
         self.trace_file = cli_args.trace_file
         if self.trace_file is not None:
@@ -121,7 +122,10 @@ class Controller:
         dumpNodeConnections(net.hosts)
         net.topo.resolve_pending_routing_updates(net)
         src = net.get("src")
-        return net, src, [d for d in net.hosts if d != src]
+        return net, src, [d for d in net.hosts if d != src], net.topo.g.convertTo(nx.MultiGraph)
+
+    def traceroute(self, from_node: Host, to_node: Host):
+        return [self.net.get(n) for n in nx.shortest_path(self.topo, from_node.name, to_node.name)[1:] if isinstance(self.net.get(n), Host)]
 
     def tear_down_network(self):
         self.src.cmd(f"kill -9 {self.server_pid}", verbose=VERBOSE)
@@ -215,3 +219,4 @@ class Controller:
         md5s = {dest.name: self.poll_cmd(dest, f"md5sum {dest.privateDirs[0]}/file", md5_re, "md5") for dest in self.dests}
         self.logger.debug(f"All md5sums: {md5s}")
         assert all(md5s[dest.name] == self.md5 for dest in self.dests), "Some files were not downloaded properly."
+

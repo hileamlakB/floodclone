@@ -68,3 +68,11 @@ Nov 8: Communication Manger
     - I have passed the Filemanager as a friend to the connection manger but I don't like that 
     - i want to decouple the connection amanger and the filemanager and create a separate class/function
     for the differnt requests that use both the filemanager and the communication manager class 
+Nov 27:
+    - Connection Pooling: use a connection map to keep sokets open so that we don't have to worry about
+    opening and closing sockets
+    - std::string_view allows you to convert a vector of chars as just simple stings in O(1) time
+
+    - when I use send_all in my connection manager I have to first send a header of expected size in one go
+    - and then send the data in a subsewuent call to send so that  
+    - a reciever always knows to first expect a requet header from which it could extract the payload length
