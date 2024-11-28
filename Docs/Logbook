@@ -55,3 +55,12 @@ Nov 6: Implemented RouteInspector
         #           # find the hop count
     ```
     I use ip route get to get the interfaces that connec two nodes
+
+Nov 27:
+    - Connection Pooling: use a connection map to keep sokets open so that we don't have to worry about
+    opening and closing sockets
+    - std::string_view allows you to convert a vector of chars as just simple stings in O(1) time
+
+    - when I use send_all in my connection manager I have to first send a header of expected size in one go
+    - and then send the data in a subsewuent call to send so that  
+    - a reciever always knows to first expect a requet header from which it could extract the payload length
