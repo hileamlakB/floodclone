@@ -63,12 +63,13 @@ void ConnectionManager::start_listening() {
 
         // Lambda task for processing the request, capturing clientSocket by value
         auto task = [this, clientSocket]() {
-            try {
-                process_request(clientSocket);
-            } catch (const std::exception& e) {
-                std::cerr << "Error processing request: " << e.what() << std::endl;
+            while(true){
+                try {
+                    process_request(clientSocket);
+                } catch (const std::exception& e) {
+                    std::cerr << "Error processing request: " << e.what() << std::endl;
+                }
             }
-            close(clientSocket);  
         };
 
         
@@ -140,9 +141,13 @@ void ConnectionManager::send_all(int socket, const std::string& data) {
        
         ssize_t sent = send(socket, data.data() + totalSent, data.size() - totalSent, 0);
         if (sent < 0) {
+            if (errno == EPIPE) {
+                std::cerr << "SIGPIPE: Peer closed the connection." << std::endl;
+                throw std::runtime_error("Socket closed by peer");
+            }
             throw std::runtime_error("Failed to send data to socket");
         }
-        totalSent += sent;
+                totalSent += sent;
         std::cout << "Sent "<< totalSent << "/" << data.size() <<"\n";
     }
 }
@@ -241,6 +246,7 @@ std::string ConnectionManager::request_piece(const std::string& destAddress, int
     // Receive response header
     RequestHeader responseHeader;
     receive_all(sock, reinterpret_cast<char*>(&responseHeader), sizeof(RequestHeader));
+    std::cout << "Reiveived Piece response \n";
 
     if (responseHeader.type != PIECE_RES) {
         throw std::runtime_error("Unexpected response type for piece request");
@@ -249,6 +255,7 @@ std::string ConnectionManager::request_piece(const std::string& destAddress, int
     // Receive piece data
     std::vector<char> pieceBuffer(responseHeader.payloadSize);
     receive_all(sock, pieceBuffer.data(), responseHeader.payloadSize);
+    std::cout << "Reiveived Piece data \n";
     
     return std::string(pieceBuffer.begin(), pieceBuffer.end());
 }
@@ -258,12 +265,14 @@ void ConnectionManager::process_piece_request(int clientSocket, const RequestHea
         throw std::runtime_error("Cannot serve piece request: no FileManager available");
     }
 
+    std::cout << "Processing Piece Request \n";
+
     // Receive piece index
     std::vector<char> requestBuffer(header.payloadSize);
     receive_all(clientSocket, requestBuffer.data(), header.payloadSize);
     PieceRequest request = PieceRequest::deserialize(requestBuffer);
 
-    std::cout << "Recieved Piece rquest of size " << request.pieceIndex << " \n";
+    std::cout << "Recieved Piece rquest of size  \n";
 
     std::string pieceData = fileManager_->send(request.pieceIndex);
     
@@ -271,7 +280,9 @@ void ConnectionManager::process_piece_request(int clientSocket, const RequestHea
     std::vector<char> serializedHeader = responseHeader.serialize();
     
     send_all(clientSocket, std::string(serializedHeader.begin(), serializedHeader.end()));
+    std::cout << "Sent Piece response \n";
     send_all(clientSocket, std::string(pieceData.begin(), pieceData.end()));
+     std::cout << "Sent Piece data \n";
 }
 
 
