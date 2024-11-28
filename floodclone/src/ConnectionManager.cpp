@@ -4,6 +4,11 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <sys/epoll.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 
@@ -11,26 +16,30 @@ ConnectionManager::~ConnectionManager() {
     stop_listening();
     
     std::lock_guard<std::mutex> lock(connectionMapMutex_);
-    for (const auto& [key, sock] : connectionMap_) {
-        close(sock);
+    for (const auto& [key, fd] : connectionMap_) {
+        close(fd);
     }
     connectionMap_.clear();
+    
+    std::lock_guard<std::mutex> lockMap(fdLocksMapMutex_);
+    fdLocks_.clear();
 }
 
 void ConnectionManager::stop_listening() {
-    {
-        std::lock_guard<std::mutex> lock(listeningMutex_);
-        isListening_ = false;
-        if (listeningSocket_ >= 0) {
-            close(listeningSocket_);
-            listeningSocket_ = -1;
-        }
-    }
+    isListening_ = false;
 }
 
 
 
 void ConnectionManager::start_listening() {
+    
+    
+    int epoll_fd = epoll_create1(0);
+    if (epoll_fd == -1) {
+        throw std::runtime_error("Failed to create epoll instance");
+    }
+
+    // Create and bind listening socket as before
     listeningSocket_ = socket(AF_INET, SOCK_STREAM, 0);
     if (listeningSocket_ < 0) {
         throw std::runtime_error("Failed to create socket");
@@ -46,68 +55,89 @@ void ConnectionManager::start_listening() {
         throw std::runtime_error("Failed to bind");
     }
 
-    if (listen(listeningSocket_, 10) < 0) {  // Listen with a backlog of 10 connections
+    if (listen(listeningSocket_, SOMAXCONN) < 0) {
         close(listeningSocket_);
         throw std::runtime_error("Failed to listen");
     }
 
-    isListening_ = true;
-
-    while (isListening_) {
-        std::cout << "Listening Attentively"<< "\n";
-        int clientSocket = accept(listeningSocket_, nullptr, nullptr);
-        if (clientSocket < 0) {
-            std::cerr << "Failed to accept connection" << std::endl;
-            continue;
-        }
-
-        // Lambda task for processing the request, capturing clientSocket by value
-        auto task = [this, clientSocket]() {
-            while(true){
-                try {
-                    process_request(clientSocket);
-                } catch (const std::exception& e) {
-                    std::cerr << "Error processing request: " << e.what() << std::endl;
-                }
-            }
-        };
-
-        
-        threadPool_.enqueue(task);
+    // Add listening socket to epoll
+    struct epoll_event ev;
+    ev.events = EPOLLIN;
+    ev.data.fd = listeningSocket_;
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listeningSocket_, &ev) == -1) {
+        throw std::runtime_error("Failed to add listening socket to epoll");
     }
 
-    close(listeningSocket_);  
+    isListening_ = true;
+    const int MAX_EVENTS = 32;
+    struct epoll_event events[MAX_EVENTS];
+
+    while (isListening_) {
+
+        // Wait for events
+        int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
+        if (nfds == -1) {
+            if (errno == EINTR) continue;
+            throw std::runtime_error("epoll_wait failed");
+        }
+
+        // Process the sockets that have events
+        for (int n = 0; n < nfds; n++) {
+            int fd = events[n].data.fd;
+
+            if (fd == listeningSocket_) {
+                // Handle new connection
+                int clientSocket = accept(listeningSocket_, nullptr, nullptr);
+                if (clientSocket >= 0) {
+                    std::cout << "New connection accepted: " << clientSocket << "\n";
+                    
+                    // Add new socket to epoll
+                    struct epoll_event client_ev;
+                    client_ev.events = EPOLLIN;
+                    client_ev.data.fd = clientSocket;
+                    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, clientSocket, &client_ev) == -1) {
+                        close(clientSocket);
+                        std::cerr << "Failed to add client to epoll" << std::endl;
+                    }
+                }
+            } else {
+                if (events[n].events & EPOLLIN) {
+                    // Data available to read
+                    threadPool_.enqueue([this, fd]() {
+                            process_request(fd);
+                    });
+                }
+                else{
+                    std::cout << "Here 2 to: ";
+                }
+                
+                if (events[n].events & (EPOLLHUP | EPOLLERR)) {
+                    std::cout << "Here ";
+                    // Socket closed or error
+                    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, nullptr);
+                    close(fd);
+                }
+            }
+        }
+    }
+
+    close(epoll_fd);
+    close(listeningSocket_);
 }
 
 
 
 int ConnectionManager::connect_to(const std::string& destAddress, int destPort) {
-    
-    // check if ther eis already a connextion
     auto key = std::make_pair(destAddress, destPort);
-
+    
     {
         std::lock_guard<std::mutex> lock(connectionMapMutex_);
-        
         auto it = connectionMap_.find(key);
         if (it != connectionMap_.end()) {
-            // Verify connection is still valid
-            int error = 0;
-            socklen_t len = sizeof(error);
-            int retval = getsockopt(it->second, SOL_SOCKET, SO_ERROR, &error, &len);
-            
-            if (retval == 0 && error == 0) {
-                std::cout << "Existing connection found - ";
-                return it->second;
-            }
-            
-            // Connection is dead, remove it
-            close(it->second);
-            connectionMap_.erase(it);
+            return it->second;
         }
     }
 
-    // Create new connection 
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
         throw std::runtime_error("Failed to create socket");
@@ -123,23 +153,26 @@ int ConnectionManager::connect_to(const std::string& destAddress, int destPort) 
 
     if (connect(sock, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) < 0) {
         close(sock);
-        throw std::runtime_error("Failed to connect to server at " + destAddress + ":" + std::to_string(destPort));
+        throw std::runtime_error("Failed to connect");
     }
 
-    // store the new connection
     {
         std::lock_guard<std::mutex> lock(connectionMapMutex_);
         connectionMap_[key] = sock;
     }
+    
+    // Create a lock for the new socket
+    fd_lock(sock);
 
     return sock;
 }
 
-void ConnectionManager::send_all(int socket, const std::string& data) {
+
+void ConnectionManager::send_all(int fd, const std::string& data) {
+    std::lock_guard<std::mutex> lock(fd_lock(fd));
     size_t totalSent = 0;
     while (totalSent < data.size()) {
-       
-        ssize_t sent = send(socket, data.data() + totalSent, data.size() - totalSent, 0);
+        ssize_t sent = send(fd, data.data() + totalSent, data.size() - totalSent, 0);
         if (sent < 0) {
             if (errno == EPIPE) {
                 std::cerr << "SIGPIPE: Peer closed the connection." << std::endl;
@@ -147,22 +180,23 @@ void ConnectionManager::send_all(int socket, const std::string& data) {
             }
             throw std::runtime_error("Failed to send data to socket");
         }
-                totalSent += sent;
+        totalSent += sent;
         std::cout << "Sent "<< totalSent << "/" << data.size() <<"\n";
     }
 }
 
-void ConnectionManager::receive_all(int socket, char* buffer, size_t size) {
+void ConnectionManager::receive_all(int fd, char* buffer, size_t size) {
+    std::lock_guard<std::mutex> lock(fd_lock(fd));
     size_t totalReceived = 0;
     while (totalReceived < size) {
-        ssize_t received = recv(socket, buffer + totalReceived, size - totalReceived, 0);
+        ssize_t received = recv(fd, buffer + totalReceived, size - totalReceived, 0);
         if (received < 0) {
             throw std::runtime_error("Failed to receive data from socket");
         } else if (received == 0) {
             throw std::runtime_error("Connection closed unexpectedly");
         }
         totalReceived += received;
-        std::cout << "Recieved "<< totalReceived << "/" << size <<"\n";
+        std::cout << "Received "<< totalReceived << "/" << size <<"\n";
     }
 }
 
@@ -180,6 +214,7 @@ void ConnectionManager::process_request(int clientSocket) {
             process_piece_request(clientSocket, header);
             break;
         default:
+            std::cout << "Unkown request: " << header.type;
             throw std::runtime_error("Unknown request type");
     }
 }
@@ -216,10 +251,19 @@ FileMetaData ConnectionManager::request_metadata(const std::string& destAddress,
 
 void ConnectionManager::close_connection(const std::string& destAddress, int destPort) {
     auto key = std::make_pair(destAddress, destPort);
-    auto it = connectionMap_.find(key);
-    if (it != connectionMap_.end()) {
-        close(it->second);  
-        connectionMap_.erase(it);  
+    int fd_to_close = -1;
+    {
+        std::lock_guard<std::mutex> lock(connectionMapMutex_);
+        auto it = connectionMap_.find(key);
+        if (it != connectionMap_.end()) {
+            fd_to_close = it->second;
+            connectionMap_.erase(it);
+        }
+    }
+    
+    if (fd_to_close != -1) {
+        dfd_lock(fd_to_close);
+        close(fd_to_close);
     }
 }
 

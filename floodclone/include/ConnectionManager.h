@@ -86,18 +86,37 @@ private:
     FileManager* fileManager_;  // Optional pointer to FileManager
 
     int listeningSocket_;
-    bool isListening_;
+    std::atomic<bool> isListening_;
     std::mutex connectionMapMutex_;
     std::mutex listeningMutex_;
+    std::mutex  fdLocksMapMutex_;
     std::map<std::pair<std::string, int>, int> connectionMap_;
+    std::unordered_map<int, std::unique_ptr<std::mutex>> fdLocks_;  // fd -> lock
+
+    // Helper to get or create lock for a fd
+    std::mutex& fd_lock(int fd) {
+        std::lock_guard<std::mutex> lock(fdLocksMapMutex_);
+        auto it = fdLocks_.find(fd);
+        if (it == fdLocks_.end()) {
+            auto [inserted_it, success] = fdLocks_.emplace(fd, std::make_unique<std::mutex>());
+            return *inserted_it->second;
+        }
+        return *it->second;
+    }
+
+    // Helper to remove lock when fd is closed
+    void dfd_lock(int fd) {
+        std::lock_guard<std::mutex> lock(fdLocksMapMutex_);
+        fdLocks_.erase(fd);
+    }
 
     // Helper methods
-    void process_request(int clientSocket);
-    void process_meta_request(int clientSocket, const RequestHeader& header);
-    void process_piece_request(int clientSocket, const RequestHeader& header);
-    void send_all(int socket, const std::string& data);
-    void receive_all(int socket, char* buffer, size_t size);
+    void process_request(int fd);
+    void process_meta_request(int fd, const RequestHeader& header);
+    void process_piece_request(int fd, const RequestHeader& header);
     int connect_to(const std::string& destAddress, int destPort);
+    void send_all(int fd, const std::string& data);
+    void receive_all(int found, char* buffer, size_t size);
 };
 
 #endif // CONNECTION_MANAGER_H
