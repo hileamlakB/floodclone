@@ -83,6 +83,8 @@ void run_client(ThreadPool& threadPool) {
     }
 }
 
+
+#ifdef TESTING
 int main() {
     ThreadPool threadPool(4);  // Single thread pool for both client and server
 
@@ -109,3 +111,4 @@ int main() {
     
     return 0;
 }
+#endif

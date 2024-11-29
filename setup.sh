@@ -14,3 +14,6 @@ pip install termcolor
 pip install networkx
 pip install numpy
 apt-get -y install bridge-utils
+
+sudo apt-get install nlohmann-json3-dev
+
