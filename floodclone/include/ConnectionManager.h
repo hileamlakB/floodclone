@@ -79,9 +79,14 @@ public:
     std::string request_piece(const std::string& destAddress, int destPort, size_t pieceIndex);
     void close_connection(const std::string& destAddress, int destPort);
 
+    void set_file_manager(FileManager& manager) {
+        fileManager_ = &manager;
+    }
+
 private:
     std::string localAddress_;
     int localPort_;
+    int wake_fd_ = -1;  
     ThreadPool& threadPool_;
     FileManager* fileManager_;  // Optional pointer to FileManager
 

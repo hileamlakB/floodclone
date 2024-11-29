@@ -9,6 +9,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/eventfd.h> 
 
 
 
@@ -27,19 +28,22 @@ ConnectionManager::~ConnectionManager() {
 
 void ConnectionManager::stop_listening() {
     isListening_ = false;
+    
+    
+    // Wake up epoll_wait
+    uint64_t value = 1;
+    write(wake_fd_, &value, sizeof(value));
 }
 
 
 
+
 void ConnectionManager::start_listening() {
-    
-    
     int epoll_fd = epoll_create1(0);
     if (epoll_fd == -1) {
         throw std::runtime_error("Failed to create epoll instance");
     }
 
-    // Create and bind listening socket as before
     listeningSocket_ = socket(AF_INET, SOCK_STREAM, 0);
     if (listeningSocket_ < 0) {
         throw std::runtime_error("Failed to create socket");
@@ -49,6 +53,8 @@ void ConnectionManager::start_listening() {
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(localPort_);
     serverAddress.sin_addr.s_addr = inet_addr(localAddress_.c_str());
+
+    std::cout << "Binding to "<<localAddress_.c_str()<<":" << localPort_ <<"\n";
 
     if (bind(listeningSocket_, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
         close(listeningSocket_);
@@ -60,40 +66,64 @@ void ConnectionManager::start_listening() {
         throw std::runtime_error("Failed to listen");
     }
 
+    // Create eventfd for waking up epoll
+    wake_fd_ = eventfd(0, EFD_NONBLOCK);
+    if (wake_fd_ == -1) {
+        close(epoll_fd);
+        throw std::runtime_error("Failed to create eventfd");
+    }
+
+    // Add eventfd to epoll
+    struct epoll_event wake_ev;
+    wake_ev.events = EPOLLIN;
+    wake_ev.data.fd = wake_fd_;
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, wake_fd_, &wake_ev) == -1) {
+        close(wake_fd_);
+        close(epoll_fd);
+        throw std::runtime_error("Failed to add eventfd to epoll");
+    }
+
+
     // Add listening socket to epoll
     struct epoll_event ev;
     ev.events = EPOLLIN;
     ev.data.fd = listeningSocket_;
     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listeningSocket_, &ev) == -1) {
+        close(epoll_fd);
         throw std::runtime_error("Failed to add listening socket to epoll");
     }
+
 
     isListening_ = true;
     const int MAX_EVENTS = 32;
     struct epoll_event events[MAX_EVENTS];
 
     while (isListening_) {
-
-        // Wait for events
         int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
         if (nfds == -1) {
             if (errno == EINTR) continue;
             throw std::runtime_error("epoll_wait failed");
         }
 
-        // Process the sockets that have events
         for (int n = 0; n < nfds; n++) {
             int fd = events[n].data.fd;
 
-            if (fd == listeningSocket_) {
+            if (fd == wake_fd_) {
+                // Just drain the eventfd
+                uint64_t value;
+                read(wake_fd_, &value, sizeof(value));
+                std::cout << "Stopping \n";
+                continue;
+            }
+            else if (fd == listeningSocket_) {
                 // Handle new connection
                 int clientSocket = accept(listeningSocket_, nullptr, nullptr);
                 if (clientSocket >= 0) {
                     std::cout << "New connection accepted: " << clientSocket << "\n";
                     
-                    // Add new socket to epoll
+                    // Add new socket to epoll with EPOLLONESHOT
                     struct epoll_event client_ev;
-                    client_ev.events = EPOLLIN;
+                    client_ev.events = EPOLLIN | EPOLLONESHOT;
                     client_ev.data.fd = clientSocket;
                     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, clientSocket, &client_ev) == -1) {
                         close(clientSocket);
@@ -103,16 +133,19 @@ void ConnectionManager::start_listening() {
             } else {
                 if (events[n].events & EPOLLIN) {
                     // Data available to read
-                    threadPool_.enqueue([this, fd]() {
-                            process_request(fd);
+                    threadPool_.enqueue([this, fd, epoll_fd]() {
+                        std::cout << "Adding task from " << fd <<"\n";
+                        process_request(fd);
+                        
+                        // Re-arm the socket after processing
+                        struct epoll_event client_ev;
+                        client_ev.events = EPOLLIN | EPOLLONESHOT;
+                        client_ev.data.fd = fd;
+                        epoll_ctl(epoll_fd, EPOLL_CTL_MOD, fd, &client_ev);
                     });
-                }
-                else{
-                    std::cout << "Here 2 to: ";
                 }
                 
                 if (events[n].events & (EPOLLHUP | EPOLLERR)) {
-                    std::cout << "Here ";
                     // Socket closed or error
                     epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, nullptr);
                     close(fd);
@@ -121,6 +154,7 @@ void ConnectionManager::start_listening() {
         }
     }
 
+    close(wake_fd_);
     close(epoll_fd);
     close(listeningSocket_);
 }
