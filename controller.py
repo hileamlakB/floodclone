@@ -128,7 +128,7 @@ class Controller:
         return [self.net.get(n) for n in nx.shortest_path(self.topo, from_node.name, to_node.name)[1:] if isinstance(self.net.get(n), Host)]
 
     def tear_down_network(self):
-        self.src.cmd(f"kill -9 {self.server_pid}", verbose=VERBOSE)
+        # self.src.cmd(f"kill -9 {self.server_pid}", verbose=VERBOSE)
         self.net.stop()
 
     def create_file_and_start_server(self):
@@ -136,9 +136,9 @@ class Controller:
         self.src.cmd("ls /var/mn/src", verbose=VERBOSE)
         self.src.cmd("chmod 777 /var/mn/src/file", verbose=VERBOSE)
         self.src.cmd(f"python -m http.server --directory {self.src.privateDirs[0]}/ --bind {self.src.IP()} {PORT} &", verbose=VERBOSE)
-        sleep(2)
-        server_pid = self.poll_cmd(self.src, "ps aux | grep http.server", server_pid_re_psAux, "server_pid")
-        return self.poll_cmd(self.src, f"md5sum {self.src.privateDirs[0]}/file", md5_re, "md5"), server_pid
+        
+        md5sum = self.poll_cmd(self.src, f"md5sum {self.src.privateDirs[0]}/file", md5_re, "md5")
+        return md5sum, None
 
     # Sometimes other commands bleed over. Sending a bunch of md5 commands to be sure we get what we want
     @staticmethod
