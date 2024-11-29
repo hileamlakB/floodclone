@@ -68,6 +68,7 @@ Nov 8: Communication Manger
     - I have passed the Filemanager as a friend to the connection manger but I don't like that 
     - i want to decouple the connection amanger and the filemanager and create a separate class/function
     for the differnt requests that use both the filemanager and the communication manager class 
+
 Nov 27:
     - Connection Pooling: use a connection map to keep sokets open so that we don't have to worry about
     opening and closing sockets
@@ -76,3 +77,39 @@ Nov 27:
     - when I use send_all in my connection manager I have to first send a header of expected size in one go
     - and then send the data in a subsewuent call to send so that  
     - a reciever always knows to first expect a requet header from which it could extract the payload length
+
+Nov 28:
+    - In my current impelmentation every thread has to continlsy check if there has been chages to a scoket
+    and process it but this has two problems
+    - I need a thread per connection which isn't efficent specially when each thread will continlsy be polling ucnessaly
+    some of the solution I thoguth about include using seelct to block instead of poll 
+    but an even better solution I came up with is to use even driven appraoche where instead of blocking or polling 
+    I let the kenerl add a task to my que whenever there is network card triggered hardware interrupt 
+
+    - Multiple threads shoudln't be able to read and write to the same scokets at the saem time that will cause a race
+    codintion thus I hsould implement some sort of locing mechanims tha prevents this form happening. That is why 
+    I created the connection class intead of storing fd related to a socket we will store both a lock and fd assoicated
+    with each socket and a thread has to get a hold of the lock before it could read or writh to it.
+
+    For threadsanitizers
+    sudo apt install g++-multilib
+    sudo apt install gcc-multilib
+
+    There was an ubuntu bug and the fix was 
+    sudo apt install libgcc-10-dev
+    sudo ln -s /usr/lib/gcc/x86_64-linux-gnu/10/libtsan_preinit.o /usr/lib/libtsan_preinit.o
+
+    from stackoverflow: https://stackoverflow.com/questions/77858687/tsan-usr-bin-ld-cant-find-libtsan-preinit-o
+
+    I used EPOLLONESHOT in my socket handling to ensure reliable request processing. This guarantees that only one thread processes a socket at a time, with requests handled sequentially for each connection. When epoll detects data on a socket, it automatically disarms that socket after delivering the event, preventing other threads from processing it until explicitly rearmed. Since my process_request function reads all data associated with a request, any additional data arriving during processing is safely caught when the socket is rearmed. This design prevents race conditions between threads and ensures that epoll wake-ups always correspond to the start of a proper request header. When data arrives while a socket is disarmed (during request processing), it remains buffered and triggers a new event once the socket is rearmed, maintaining both order and data integrity.
+
+    Here is an example
+        Time 1: Data A arrives
+        Time 2: EPOLLIN triggers
+        Time 3: EPOLLONESHOT automatically disarms the socket
+        Time 4: While processing A, data B arrives (socket is disarmed)
+        Time 5: Finish processing A, rearm socket with EPOLL_CTL_MOD
+
+
+
+     
