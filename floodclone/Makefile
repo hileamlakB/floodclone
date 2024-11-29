@@ -1,26 +1,29 @@
-# Compiler
 CXX = g++
 O ?= 0
-
-# -fsanitize options for Thread and Memory
 SAN_FLAGS = 
 ifeq ($(SAN),1)
-	# -fsanitize=address
-    SAN_FLAGS =  -fsanitize=thread
+    SAN_FLAGS = -fsanitize=thread
 endif
 
 CXXFLAGS = -std=c++17 -Iinclude -Wall -Wextra -pthread -g $(SAN_FLAGS)
 LINKEDBINARIES = -lssl -lcrypto
 
-# Source and binary files
-SRC = src/*.cpp
+SRC_DIR = src
+TEST_DIR = tests
+SRC = $(SRC_DIR)/*.cpp
+TEST_SRC = $(TEST_DIR)/*.cpp
+
 TARGET = floodclone
+TEST_TARGET = run_tests
 
-# Build target
-$(TARGET): $(SRC)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRC) $(LINKEDBINARIES) -O$(O)
+$(TARGET): floodclone.cpp $(SRC)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) floodclone.cpp $(SRC) $(LINKEDBINARIES) -O$(O)
 
-# Clean target
-.PHONY: clean
+test: $(TEST_SRC) $(SRC)
+	$(CXX) $(CXXFLAGS) -DTESTING -o $(TEST_TARGET) $(TEST_SRC) $(SRC) $(LINKEDBINARIES) -O$(O)
+
+.PHONY: clean all
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGET) $(TEST_TARGET)
+
+all: $(TARGET) test

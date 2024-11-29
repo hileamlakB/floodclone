@@ -14,3 +14,19 @@ pip install termcolor
 pip install networkx
 pip install numpy
 apt-get -y install bridge-utils
+
+
+// required c++ liberaries
+sudo apt-get -y install nlohmann-json3-dev
+sudo apt-get -y install g++-multilib
+sudo apt -y install libgcc-10-dev
+sudo ln -s /usr/lib/gcc/x86_64-linux-gnu/10/libtsan_preinit.o /usr/lib/libtsan_preinit.o
+sudo apt-get install libssl-dev
+
+cd -
+cd floodclone
+make clean
+make 
+cd ..
+
+

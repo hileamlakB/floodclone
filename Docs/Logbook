@@ -110,6 +110,8 @@ Nov 28:
         Time 4: While processing A, data B arrives (socket is disarmed)
         Time 5: Finish processing A, rearm socket with EPOLL_CTL_MOD
 
-
+Nov 29: Adopt Agent day
+    - worked on interfacing the python code and the c++ code
+    - decided to use 
 
      

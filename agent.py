@@ -4,6 +4,7 @@ from utils import *
 from mininet.node import Node
 from typing import Union
 from datetime import datetime, timedelta
+import json
 
 class Agent(ABC):
 
@@ -45,6 +46,52 @@ class NaiveAgent(Agent):
         _ = self.node.waitOutput(verbose=VERBOSE)
         self.end_time = datetime.now()
 
-#TODO: Add your custom agent class
-class TorrentAgent(Agent):
-    pass
+
+class FloodClone(Agent):
+    def __init__(self, uid: int, node: Node, src: Node, controller: "Controller", *args, **kwargs):
+        super().__init__(uid, node, src, controller, *args, **kwargs)
+        
+        self.cpp_bin_path = "./floodclone/floodclone"  
+        self.piece_folder = f"{node.privateDirs[0]}/pieces" 
+        
+    def start_download(self, *args, **kwargs):
+        self.start_time = datetime.now()
+        network_info = self.controller.nodes  # This contains your full network topology with interfaces
+        
+        self.node.cmd(f"mkdir -p {self.piece_folder}")
+        
+        if self.node == self.src:
+            self._start_source(network_info)
+        else:
+            self._start_destination(network_info)
+
+    def _start_source(self, network_info):
+        cmd = (f"{self.cpp_bin_path} "
+                f"--mode source "
+                f"--node-name {self.node.name} "
+                f"--file {self.node.privateDirs[0]}/file "  # Source file location
+                f"--pieces-dir {self.piece_folder} "
+                f"--network-info '{json.dumps(network_info)}' "
+                f"--timestamp-file {self.piece_folder}/completion_time")
+        print(f"Executing command: {cmd}")
+        self.node.sendCmd(cmd)
+        
+    def _start_destination(self, network_info):
+        cmd = (f"{self.cpp_bin_path} "
+                f"--mode destination "
+                f"--node-name {self.node.name} "
+                f"--src-name {self.src.name} "
+                f"--pieces-dir {self.piece_folder} "
+                f"--network-info '{json.dumps(network_info)}' "
+                f"--timestamp-file {self.piece_folder}/completion_time")
+        print(f"Executing command: {cmd}")
+        self.node.sendCmd(cmd)
+       
+    def wait_output_wrapper(self) -> None:
+        output = self.node.waitOutput(verbose=VERBOSE)
+        print(f"Command output: {output}")
+        
+        timestamp_str = self.node.cmd(f"cat {self.piece_folder}/completion_time").strip()
+        completion_timestamp = datetime.fromtimestamp(float(timestamp_str)/1000000.0)
+        self.end_time = completion_timestamp
+        
