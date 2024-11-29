@@ -34,20 +34,38 @@ Arguments parse_args(int argc, char* argv[]) {
 }
 
 int main(int argc, char* argv[]) {
-   try {
-       auto args = parse_args(argc, argv);
-       
-       std::cout << "Mode: " << args.mode << std::endl;
-       std::cout << "Node name: " << args.node_name << std::endl;
-       std::cout << "Source name: " << args.src_name << std::endl;
-       std::cout << "File path: " << args.file_path << std::endl;
-       std::cout << "Pieces directory: " << args.pieces_dir << std::endl;
-       std::cout << "Timestamp file: " << args.timestamp_file << std::endl;
-       std::cout << "Network info: " << args.network_info.dump(2) << std::endl;
-       
-       return 0;
-   } catch(const std::exception& e) {
-       std::cerr << "Error: " << e.what() << std::endl;
-       return 1;
+   auto args = parse_args(argc, argv);
+   
+   std::cout << "Mode: " << args.mode << std::endl;
+   std::cout << "Node name: " << args.node_name << std::endl;
+   std::cout << "Source name: " << args.src_name << std::endl;
+   std::cout << "File path: " << args.file_path << std::endl;
+   std::cout << "Pieces directory: " << args.pieces_dir << std::endl;
+   std::cout << "Timestamp file: " << args.timestamp_file << std::endl;
+   std::cout << "Network info: " << args.network_info.dump(2) << std::endl;
+
+
+   if (args.mode == "source") {
+       std::ifstream file(args.file_path, std::ios::binary);
+       std::vector<char> buffer(100);
+       file.read(buffer.data(), 100);
+       std::cout << "First 100 bytes of source file: ";
+       for (size_t i = 0; i < file.gcount(); ++i) {
+           std::cout << static_cast<int>(buffer[i]) << " ";
+       }
+       std::cout << std::endl;
+   } else if (args.mode == "destination") {
+       std::ofstream outfile(args.pieces_dir + "/../file");
+       outfile.close();
    }
+
+   auto now = std::chrono::system_clock::now();
+   auto micros = std::chrono::duration_cast<std::chrono::microseconds>(
+       now.time_since_epoch()
+   ).count();
+
+   std::ofstream timestamp_file(args.timestamp_file);
+   timestamp_file << micros << std::endl;
+   
+   return 0;
 }

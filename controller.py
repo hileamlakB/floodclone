@@ -131,11 +131,13 @@ class Controller:
         # self.src.cmd(f"kill -9 {self.server_pid}", verbose=VERBOSE)
         self.net.stop()
 
+    # modified this becuase i am not doing a client server design 
+    # instead I am doing a peer to peer network
     def create_file_and_start_server(self):
         self.src.cmd(f"head -c {FILE_SIZE} </dev/urandom >{self.src.privateDirs[0]}/file", verbose=VERBOSE)
         self.src.cmd("ls /var/mn/src", verbose=VERBOSE)
         self.src.cmd("chmod 777 /var/mn/src/file", verbose=VERBOSE)
-        self.src.cmd(f"python -m http.server --directory {self.src.privateDirs[0]}/ --bind {self.src.IP()} {PORT} &", verbose=VERBOSE)
+        # self.src.cmd(f"python -m http.server --directory {self.src.privateDirs[0]}/ --bind {self.src.IP()} {PORT} &", verbose=VERBOSE)
         
         md5sum = self.poll_cmd(self.src, f"md5sum {self.src.privateDirs[0]}/file", md5_re, "md5")
         return md5sum, None
@@ -188,15 +190,23 @@ class Controller:
 
     def start_agents(self):
         self.network_conditions_thread.start()
+        # Add source node as an agent
+        self.agents.append(self.agent_class(0, self.src, self.src, self))
+        self.agents[-1].start_time = datetime.now()
+        self.agents[-1].start_download()
+        
+        # Add destination nodes
         for i, dest in enumerate(self.dests):
-            self.agents.append(self.agent_class(i, dest, self.src, self))
+            self.agents.append(self.agent_class(i+1, dest, self.src, self))
             self.agents[-1].start_time = datetime.now()
             self.agents[-1].start_download()
         self.logger.info("Started all downloads")
 
     def join_agents(self):
-        for i, dest in enumerate(self.dests):
-            thread = Thread(target=self.agents[i].wait_output_wrapper, args=())
+        # I made this modfification since now src is being treated as a normal peer and nothing 
+        # different
+        for agent in self.agents:  # Loop through all agents including source
+            thread = Thread(target=agent.wait_output_wrapper, args=())
             thread.start()
             self.agent_threads.append(thread)
         for agent_thread in self.agent_threads:
