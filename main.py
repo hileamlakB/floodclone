@@ -1,4 +1,4 @@
-from agent import NaiveAgent
+from agent import NaiveAgent, FloodClone
 from controller import Controller
 from argparse import ArgumentParser
 
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     logger.addHandler(handler)
     logger.setLevel(args.loglevel)
     #TODO: Change the agent class to your custom agent
-    ctrl = Controller(args, NaiveAgent)
+    ctrl = Controller(args, FloodClone)
     ctrl.start_agents()
     ctrl.join_agents()
     ctrl.check_all_md5()
