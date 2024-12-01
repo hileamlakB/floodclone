@@ -31,7 +31,7 @@ class Controller:
         else:
             self.network_events = []
         self.network_conditions_thread = StoppableThread(target=self.dynamic_network, args=())
-        self.nodes = self._gather_dests() # will store infromatin about destination nodes and hopcounts to them
+        self.nodes, self.ip_map = self._gather_dests() # will store infromatin about destination nodes and hopcounts to them
     
     def _get_ip_aliases(self):
         """
@@ -56,7 +56,7 @@ class Controller:
                     interface_name = parts[-1]  # Extract the interface name at the end of the line
                     if interface_name != "lo":  # Skip loopback interface
                         ip_aliases[node.name].append((interface_name, ip))
-
+        
         return ip_aliases
     
     def _gather_dests(self):
@@ -110,7 +110,7 @@ class Controller:
                 self.logger.debug(f"Node Paths for {node.name} to {other_node.name}: {node_paths[node.name][other_node.name]}")
 
         self.logger.info(f"Final Node Paths:\n{node_paths}")
-        return node_paths
+        return node_paths, node_info
 
     def create_net(self):
         topo = BackboneTopo(topology_file=self.topology_file)
@@ -197,7 +197,7 @@ class Controller:
         
         # Add destination nodes
         for i, dest in enumerate(self.dests):
-            self.agents.append(self.agent_class(i+1, dest, self.src, self))
+            self.agents.append(self.agent_class(i+2, dest, self.src, self))
             self.agents[-1].start_time = datetime.now()
             self.agents[-1].start_download()
         self.logger.info("Started all downloads")

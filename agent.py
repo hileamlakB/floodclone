@@ -6,6 +6,8 @@ from typing import Union
 from datetime import datetime, timedelta
 import json
 
+from utils import FILE_NAME
+
 class Agent(ABC):
 
     def __init__(self, uid: int, node: Node, src: Node, controller: "controller.Controller", *args, **kwargs) -> None:
@@ -55,35 +57,46 @@ class FloodClone(Agent):
         self.piece_folder = f"{node.privateDirs[0]}/pieces" 
         
     def start_download(self, *args, **kwargs):
-        self.start_time = datetime.now()
+
+        # call my c++ interface and start time
         network_info = self.controller.nodes  # This contains your full network topology with interfaces
+        ip_map = self.controller.ip_map
         
-        self.node.cmd(f"mkdir -p {self.piece_folder}")
+        # clean up folder from preivous runs
+        self.node.cmd(f"rm -rf {self.piece_folder} && mkdir -p {self.piece_folder}")
         
         if self.node == self.src:
-            self._start_source(network_info)
+            self._start_source(network_info, ip_map)
         else:
-            self._start_destination(network_info)
+            self._start_destination(network_info, ip_map)
+        # set start time
+        self.start_time = datetime.now()
 
-    def _start_source(self, network_info):
+    def _start_source(self, network_info, ip_map):
+        
+        print(network_info, ip_map)
         cmd = (f"{self.cpp_bin_path} "
                 f"--mode source "
                 f"--node-name {self.node.name} "
-                f"--file {self.node.privateDirs[0]}/file "  # Source file location
+                f"--file {self.node.privateDirs[0]}/{FILE_NAME} "  # Source file location
                 f"--pieces-dir {self.piece_folder} "
                 f"--network-info '{json.dumps(network_info)}' "
+                f"--ip-map '{json.dumps(ip_map)}' "
                 f"--timestamp-file {self.piece_folder}/completion_time")
         print(f"Executing command: {cmd}")
         self.node.sendCmd(cmd)
         
-    def _start_destination(self, network_info):
+    def _start_destination(self, network_info, ip_map):
         cmd = (f"{self.cpp_bin_path} "
                 f"--mode destination "
                 f"--node-name {self.node.name} "
+                f"--file {self.node.privateDirs[0]}/{FILE_NAME} "  # final file location
                 f"--src-name {self.src.name} "
                 f"--pieces-dir {self.piece_folder} "
                 f"--network-info '{json.dumps(network_info)}' "
+                f"--ip-map '{json.dumps(ip_map)}' "
                 f"--timestamp-file {self.piece_folder}/completion_time")
+        
         print(f"Executing command: {cmd}")
         self.node.sendCmd(cmd)
        
@@ -91,7 +104,15 @@ class FloodClone(Agent):
         output = self.node.waitOutput(verbose=VERBOSE)
         print(f"Command output: {output}")
         
+        # Extract time stamp from c++ program
         timestamp_str = self.node.cmd(f"cat {self.piece_folder}/completion_time").strip()
-        completion_timestamp = datetime.fromtimestamp(float(timestamp_str)/1000000.0)
-        self.end_time = completion_timestamp
+        print(timestamp_str)
+        start_micros, end_micros = map(float, timestamp_str.split())
+
+        self.start_time = datetime.fromtimestamp(start_micros / 1_000_000)
+        self.end_time = datetime.fromtimestamp(end_micros / 1_000_000)
+
+
+        print(f"Start Time: {start_time}, End Time: {end_time}")
+
         

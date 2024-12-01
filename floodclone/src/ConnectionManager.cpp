@@ -29,7 +29,6 @@ ConnectionManager::~ConnectionManager() {
 void ConnectionManager::stop_listening() {
     isListening_ = false;
     
-    
     // Wake up epoll_wait
     uint64_t value = 1;
     write(wake_fd_, &value, sizeof(value));
@@ -58,8 +57,11 @@ void ConnectionManager::start_listening() {
 
     if (bind(listeningSocket_, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
         close(listeningSocket_);
-        throw std::runtime_error("Failed to bind");
+        throw std::runtime_error(std::string(__FILE__) + ":" + std::to_string(__LINE__) + " Failed to bind");
     }
+
+    std::cout << "Listening \n";
+
 
     if (listen(listeningSocket_, SOMAXCONN) < 0) {
         close(listeningSocket_);
@@ -227,7 +229,7 @@ void ConnectionManager::receive_all(int fd, char* buffer, size_t size) {
         if (received < 0) {
             throw std::runtime_error("Failed to receive data from socket");
         } else if (received == 0) {
-            throw std::runtime_error("Connection closed unexpectedly");
+            throw std::runtime_error("Connection closed unexpectedly while recieving");
         }
         totalReceived += received;
         std::cout << "Received "<< totalReceived << "/" << size <<"\n";
