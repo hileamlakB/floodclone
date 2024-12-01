@@ -196,7 +196,7 @@ public:
     void reconstruct();  // reconutructs a file based on pieces
     void deconstruct(); 
     void receive(const std::string& binary_data, size_t i);
-    std::string send(size_t i);
+    std::string_view send(size_t i);
     bool has_piece(size_t i);
 
 
@@ -217,7 +217,7 @@ private:
     
     bool is_source;
 
-    void* reconstructed_file = MAP_FAILED;
+    void* mapped_file = MAP_FAILED;
     int merged_fd; 
 
     std::deque<std::atomic<bool>> piece_status; // tells you about the current state of a piece weather it exists within this node or not

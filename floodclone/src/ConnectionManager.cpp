@@ -204,7 +204,7 @@ int ConnectionManager::connect_to(const std::string& destAddress, int destPort) 
 }
 
 
-void ConnectionManager::send_all(int fd, const std::string& data) {
+void ConnectionManager::send_all(int fd, const std::string_view& data)  {
     std::lock_guard<std::mutex> lock(fd_lock(fd));
     size_t totalSent = 0;
     while (totalSent < data.size()) {
@@ -261,7 +261,7 @@ FileMetaData ConnectionManager::request_metadata(const std::string& destAddress,
 
     RequestHeader header = {META_REQ, 0};
     std::vector<char> serializedHeader = header.serialize();
-    send_all(sock, std::string(serializedHeader.begin(), serializedHeader.end()));
+    send_all(sock, std::string_view(serializedHeader.data(), serializedHeader.size()));
 
     std::cout << "Send Meta data request\n";
 
@@ -318,10 +318,10 @@ std::string ConnectionManager::request_piece(const std::string& destAddress, int
     RequestHeader header = {PIECE_REQ, static_cast<uint32_t>(serializedRequest.size())};
     std::vector<char> serializedHeader = header.serialize();
     
-    send_all(sock, std::string(serializedHeader.begin(), serializedHeader.end()));
-    std::cout << "Send Header \n";
-    send_all(sock, std::string(serializedRequest.begin(), serializedRequest.end()));
-    std::cout << "Send Piece Request \n";
+    send_all(sock, std::string_view(serializedHeader.data(), serializedHeader.size()));
+    std::cout << "Send Header\n";
+    send_all(sock, std::string_view(serializedRequest.data(), serializedRequest.size()));
+    std::cout << "Send Piece Request\n";
 
     // Receive response header
     RequestHeader responseHeader;
@@ -345,25 +345,25 @@ void ConnectionManager::process_piece_request(int clientSocket, const RequestHea
         throw std::runtime_error("Cannot serve piece request: no FileManager available");
     }
 
-    std::cout << "Processing Piece Request \n";
+    std::cout << "Processing Piece Request\n";
 
-    // Receive piece index
     std::vector<char> requestBuffer(header.payloadSize);
     receive_all(clientSocket, requestBuffer.data(), header.payloadSize);
     PieceRequest request = PieceRequest::deserialize(requestBuffer);
 
-    std::cout << "Recieved Piece rquest of size  \n";
+    std::cout << "Received Piece request\n";
 
-    std::string pieceData = fileManager_->send(request.pieceIndex);
+    std::string_view pieceData = fileManager_->send(request.pieceIndex);
     
     RequestHeader responseHeader = {PIECE_RES, static_cast<uint32_t>(pieceData.size())};
     std::vector<char> serializedHeader = responseHeader.serialize();
     
-    send_all(clientSocket, std::string(serializedHeader.begin(), serializedHeader.end()));
-    std::cout << "Sent Piece response \n";
-    send_all(clientSocket, std::string(pieceData.begin(), pieceData.end()));
-     std::cout << "Sent Piece data \n";
+    send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
+    std::cout << "Sent Piece response\n";
+    send_all(clientSocket, pieceData);
+    std::cout << "Sent Piece data\n";
 }
+
 
 
 void ConnectionManager::process_meta_request(int clientSocket, const RequestHeader& header) {
@@ -375,15 +375,11 @@ void ConnectionManager::process_meta_request(int clientSocket, const RequestHead
 
     std::cout << "Got meta data request\n";
 
-    // Get serialized metadata as a string
     std::string serializedData = fileManager_->get_metadata().serialize();
-    
-    // Prepare the response header
     RequestHeader responseHeader = {META_RES, static_cast<uint32_t>(serializedData.size())};
     std::vector<char> serializedHeader = responseHeader.serialize();
 
-    // Send serialized header and serialized data
-    send_all(clientSocket, std::string(serializedHeader.begin(), serializedHeader.end()));
+    send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
     std::cout << "SENT META header\n";
-    send_all(clientSocket, serializedData); 
+    send_all(clientSocket, std::string_view(serializedData)); 
 }
