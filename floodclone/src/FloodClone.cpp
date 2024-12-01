@@ -72,6 +72,9 @@ std::string FloodClone::get_ip(const std::string& target_node) {
     return iface_it->second;
 }
 void FloodClone::setup_node() {
+    total_nodes_ = network_map.size();
+    std::cout << "Total nodes "<< total_nodes_ << "\n";
+
     auto node_ips = ip_map[args.node_name];
     if (node_ips.empty()) {
         throw std::runtime_error("No IPs found for node: " + args.node_name);
@@ -80,6 +83,7 @@ void FloodClone::setup_node() {
     std::cout << args.node_name << " using IP " << my_ip << std::endl;
     
     if (args.mode == "source") {
+        total_nodes_ -= 1; // source doens't expect notificaiton from itself
         file_manager = std::make_unique<FileManager>(
             args.file_path, 0, my_ip, 
             args.pieces_dir, &thread_pool, true, nullptr
@@ -90,6 +94,8 @@ void FloodClone::setup_node() {
             my_ip, LISTEN_PORT, thread_pool, *file_manager
         );
     } else {
+
+        total_nodes_ -= 2; // destination doesnt' expect notifiation from src and itself
         connection_manager = std::make_unique<ConnectionManager>(
             my_ip, LISTEN_PORT, thread_pool
         );
@@ -97,8 +103,7 @@ void FloodClone::setup_node() {
 }
 
 void FloodClone::start() {
-    total_nodes_ = network_map.size();
-    std::cout << "Total nodes "<< total_nodes_ << "\n";
+    
 
     setup_completion();
 
@@ -116,17 +121,16 @@ void FloodClone::start() {
             node_change.wait(lock);
         }
 
+        std::cout << "Notification found from " << total_nodes_ << " nodes\n"<<std::flush;
+
         connection_manager->stop_listening();
 
         if (listen_thread.joinable()) {
             listen_thread.join();
         }
 
-
-
-        std::cout << "Source: Finished listening\n";
+        std::cout << "Source: Finished listening\n"<<std::flush;
        
-        
     } 
 
     else{
@@ -161,7 +165,7 @@ void FloodClone::start() {
             }
         }
 
-        std::this_thread::sleep_for(std::chrono::seconds(30));
+        thread_pool.wait();
 
         // Verify all pieces
         for (size_t i = 0; i < metadata.numPieces; i++) {
@@ -172,12 +176,14 @@ void FloodClone::start() {
 
         file_manager->reconstruct();
         record_time();
-
+        
         notify_completion();
+        
         std::unique_lock<std::mutex> lock(node_mtx);
         while (completed_nodes_ < total_nodes_) {
             node_change.wait(lock);
         }
+        std::cout << "Finished completion\n"<< std::flush;
 
         connection_manager->stop_listening();
         if (listen_thread.joinable()) {
@@ -200,14 +206,13 @@ void FloodClone::start() {
     if (completion_thread_.joinable()) {
         completion_thread_.join();
     }
-    close(completion_socket_);
-    
-    
-    
-    
+    close(completion_socket_);  
+
+
+    thread_pool.wait();
+
+
 }
-
-
 
 void FloodClone::record_time() {
    
@@ -272,20 +277,28 @@ void FloodClone::listen_for_completion() {
         int client_fd = accept(completion_socket_, (struct sockaddr*)&client_addr, &client_len);
         if (client_fd < 0) continue;
 
-        node_mtx.lock();
-        completed_nodes_++;
-        std::cout << "Node completed. Count: " << completed_nodes_ << "/" 
-                 << total_nodes_ << "\n";
-        node_change.notify_all();
-        node_mtx.unlock();
+       
+
+        {
+            std::lock_guard<std::mutex> lock(node_mtx);
+            completed_nodes_++;
+            std::cout << "Node completed. Count: " << completed_nodes_ << "/" 
+                      << total_nodes_ << "\n" << std::flush;
+            node_change.notify_all();
+        }
+
         close(client_fd);
     }
 }
 
 void FloodClone::notify_completion() {
+    
     for (const auto& [node, routes] : network_map) {
         if (node == args.node_name) continue;  // Skip self
         
+
+        std::cout << "Sending Notification to: " <<  node << "\n" << std::flush;
+
         std::string peer_ip = get_ip(node);
         int sock = socket(AF_INET, SOCK_STREAM, 0);
         if (sock < 0) continue;
@@ -294,6 +307,8 @@ void FloodClone::notify_completion() {
         peer_addr.sin_family = AF_INET;
         peer_addr.sin_addr.s_addr = inet_addr(peer_ip.c_str());
         peer_addr.sin_port = htons(COMPLETION_PORT);
+        std::cout << "Sending Notification: " <<  peer_ip << ":" << COMPLETION_PORT << "\n" << std::flush;
+
 
         if (connect(sock, (struct sockaddr*)&peer_addr, sizeof(peer_addr)) >= 0) {
             std::cout << "Notified completion to " << node << "\n";
