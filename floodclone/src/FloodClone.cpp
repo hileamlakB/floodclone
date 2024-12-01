@@ -1,0 +1,213 @@
+#include "FloodClone.h"
+#include <fstream>
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+constexpr int LISTEN_PORT = 9089;
+
+FloodClone::FloodClone(const Arguments& args)
+    : thread_pool(4), args(args), 
+      start_time(std::chrono::system_clock::now())
+{
+    setup_net_info();
+    setup_node();
+}
+void FloodClone::setup_net_info() {
+    // Setup IP mappings
+    // Input format: {"d1": [["d1-eth0", "10.0.0.1"]], "src": [["src-eth0", "10.0.0.2"]]}
+    for (const auto& [node, interfaces] : args.ip_map.items()) {
+        for (const auto& interface_info : interfaces) {
+            std::string iface = interface_info[0];
+            std::string ip = interface_info[1];
+            ip_map[node][iface] = ip;
+        }
+    }
+    
+    // Setup network topology mappings
+    // Input format: {"d1": {"src": [["d1-eth0", 1, ["d1"]]]}, "src": {"d1": [["src-eth0", 1, ["src"]]]}}
+    for (const auto& [src_node, destinations] : args.network_info.items()) {
+        for (const auto& [dest_node, routes] : destinations.items()) {
+            for (const auto& route : routes) {
+                RouteInfo route_info{
+                    route[0],           // interface
+                    route[1],           // hop_count
+                    route[2]            // path
+                };
+                network_map[src_node][dest_node].push_back(route_info);
+            }
+        }
+    }
+}
+
+std::string FloodClone::get_ip(const std::string& target_node) {
+    // Find how target_node connects to us
+    auto src_it = network_map.find(target_node);
+    if (src_it == network_map.end()) {
+        throw std::runtime_error("No route from " + target_node + " to " + args.node_name);
+    }
+
+    auto dest_it = src_it->second.find(args.node_name);
+    if (dest_it == src_it->second.end()) {  // Fixed: compare with src_it instead of dest_it
+        throw std::runtime_error("No route from " + target_node + " to " + args.node_name);
+    }
+
+    // Get the interface target uses to reach us
+    assert(dest_it->second.size() == 1 && "Multiple routes not yet supported");
+    std::string target_interface = dest_it->second[0].interface;
+
+    // Lookup the IP for this interface
+    auto node_it = ip_map.find(target_node);
+    if (node_it == ip_map.end()) {
+        throw std::runtime_error("No IP found for node: " + target_node);
+    }
+
+    auto iface_it = node_it->second.find(target_interface);
+    if (iface_it == node_it->second.end()) {
+        throw std::runtime_error("No IP found for interface: " + target_interface);
+    }
+
+    return iface_it->second;
+}
+void FloodClone::setup_node() {
+    auto node_ips = ip_map[args.node_name];
+    if (node_ips.empty()) {
+        throw std::runtime_error("No IPs found for node: " + args.node_name);
+    }
+    my_ip = node_ips.begin()->second;  // Get first interface's IP
+    std::cout << args.node_name << " using IP " << my_ip << std::endl;
+    
+    if (args.mode == "source") {
+        file_manager = std::make_unique<FileManager>(
+            args.file_path, 0, my_ip, 
+            args.pieces_dir, &thread_pool, true, nullptr
+        );
+        std::cout << "Source: FileManager created and file split into pieces.\n";
+
+        connection_manager = std::make_unique<ConnectionManager>(
+            my_ip, LISTEN_PORT, thread_pool, *file_manager
+        );
+    } else {
+        connection_manager = std::make_unique<ConnectionManager>(
+            my_ip, LISTEN_PORT, thread_pool
+        );
+    }
+}
+
+void FloodClone::start() {
+    std::thread listen_thread;
+    
+    if (args.mode == "source") {
+        record_time();
+        listen_thread = std::thread([this]() {
+            connection_manager->start_listening();
+        });
+        //wait for 1 min and stop process
+        std::this_thread::sleep_for(std::chrono::seconds(120));
+        connection_manager->stop_listening();
+
+        if (listen_thread.joinable()) {
+            listen_thread.join();
+        }
+
+
+
+        std::cout << "Source: Finished listening\n";
+        return;
+        
+    } 
+    
+    
+    try {
+        listen_thread = std::thread([this]() {
+            connection_manager->start_listening();
+        });
+
+        std::cout << "Destination: Started listening thread.\n";
+
+
+        std::string src_ip = get_ip(args.src_name);
+        std::cout << "Destination: src ip: " << src_ip<<"\n";
+        auto metadata = connection_manager->request_metadata(src_ip, LISTEN_PORT);
+        
+        file_manager = std::make_unique<FileManager>(
+            args.file_path, 0, my_ip,
+            args.pieces_dir, &thread_pool, false, &metadata
+        );
+
+        std::cout << "Destination: FileManager created. Num pieces: " 
+                    << metadata.numPieces << "\n";
+
+        for (size_t i = 0; i < metadata.numPieces; i++) {
+            if (!file_manager->has_piece(i)) {
+                std::string piece_data = connection_manager->request_piece(
+                    src_ip, LISTEN_PORT, i
+                );
+                file_manager->receive(piece_data, i);
+                std::cout << "Received piece " << i << "/" 
+                            << metadata.numPieces - 1 << std::endl;
+            }
+        }
+
+        std::this_thread::sleep_for(std::chrono::seconds(30));
+
+        // Verify all pieces
+        for (size_t i = 0; i < metadata.numPieces; i++) {
+            if (!file_manager->has_piece(i)) {
+                throw std::runtime_error("Missing piece " + std::to_string(i));
+            }
+        }
+
+        file_manager->reconstruct();
+        record_time();
+
+        connection_manager->stop_listening();
+        if (listen_thread.joinable()) {
+            listen_thread.join();
+        }
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Fatal error in " << args.node_name << " at "
+                 << __FILE__ << ":" << __LINE__ << ": " << e.what() << std::endl;
+        connection_manager->stop_listening();
+        if (listen_thread.joinable()) {
+            listen_thread.join();
+        }
+        throw;
+    }
+    
+}
+
+
+
+void FloodClone::record_time() {
+   
+    end_time = std::chrono::system_clock::now(); 
+    auto start_micros = std::chrono::duration_cast<std::chrono::microseconds>(
+        start_time.time_since_epoch()
+    ).count();
+
+    auto end_micros = std::chrono::duration_cast<std::chrono::microseconds>(
+        end_time.time_since_epoch()
+    ).count();
+
+    std::ofstream timestamp_file(args.timestamp_file);
+    timestamp_file << start_micros << "\n";
+    timestamp_file << end_micros;
+}
+
+Arguments parse_args(int argc, char* argv[]) {
+    Arguments args;
+    for(int i = 1; i < argc; i++) {
+        std::string arg = argv[i];
+        if(arg == "--mode") args.mode = argv[++i];
+        else if(arg == "--node-name") args.node_name = argv[++i];
+        else if(arg == "--src-name") args.src_name = argv[++i];
+        else if(arg == "--file") args.file_path = argv[++i];
+        else if(arg == "--pieces-dir") args.pieces_dir = argv[++i];
+        else if(arg == "--timestamp-file") args.timestamp_file = argv[++i];
+        else if(arg == "--network-info") args.network_info = nlohmann::json::parse(argv[++i]);
+        else if(arg == "--ip-map") args.ip_map = nlohmann::json::parse(argv[++i]);
+    }
+    return args;
+}

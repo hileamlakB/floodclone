@@ -93,10 +93,11 @@ void FileManager::initialize_receiver(const FileMetaData& metadata) {
     file_metadata = metadata;
     num_pieces = metadata.numPieces;
 
-    std::filesystem::path reconstructed_file_path = std::filesystem::path(pieces_folder) / ("reconstructed_" + file_metadata.filename);
-    merged_fd = open(reconstructed_file_path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0666);
+    // std::filesystem::path reconstructed_file_path = std::filesystem::path(pieces_folder) / ("reconstructed_" + file_metadata.filename);
+    // std::filesystem::path reconstructed_file_path = std::filesystem::path(pieces_folder) / (file_metadata.filename);
+    merged_fd = open(file_path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0666);
     if (merged_fd < 0) {
-        throw std::runtime_error("Cannot create or open reconstructed file: " + reconstructed_file_path.string());
+        throw std::runtime_error("Cannot create or open reconstructed file: " + file_path);
     }
 
     off_t total_size = num_pieces * piece_size;

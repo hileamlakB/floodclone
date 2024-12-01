@@ -114,4 +114,28 @@ Nov 29: Adopt Agent day
     - worked on interfacing the python code and the c++ code
     - decided to use 
 
+Nov 30: Implement Piece discovery 
+    - Run into a big problem
+    The original code has a conflict between two concurrent operations:
+
+    Running the FloodClone file transfer program, which needs to run continuously
+    Making dynamic network changes (like bandwidth adjustments) based on a trace file
+
+
+    The specific problem occurs because:
+
+    Mininet uses a single shell per node
+    When a command is run with waitOutput(), it blocks the shell
+    The network changes require the shell to be available to execute commands
+    This creates a deadlock where network changes can't be made while waiting for FloodClone to finish
+
+
+    The solution we implemented:
+
+    Runs FloodClone in the background with &
+    Redirects output to log files
+    Uses process IDs to monitor completion
+    This keeps the Mininet shell free to handle network changes
+    Preserves the original network change functionality in the starter code
+
      

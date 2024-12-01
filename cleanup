@@ -1,0 +1,5 @@
+#!/bin/bash
+sudo pkill -f python
+sudo pkill -f mininet
+sudo pkill -f floodclone
+sudo mn -c

@@ -46,7 +46,7 @@ void run_client(ThreadPool& threadPool) {
         FileMetaData metadata = client_manager->request_metadata("127.0.0.1", 9085);
         
         // Create receiver FileManager with received metadata
-        FileManager receiverFileManager("", 0, "127.0.0.1", "tests/receiver_pieces", 
+        FileManager receiverFileManager("tests/received_test_file.txt", 0, "127.0.0.1", "tests/receiver_pieces", 
                                      &threadPool, false, &metadata);
         std::cout << "Client: FileManager created from metadata. Num pieces: " 
                   << metadata.numPieces << "\n";
