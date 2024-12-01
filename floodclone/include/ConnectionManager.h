@@ -120,7 +120,7 @@ private:
     void process_meta_request(int fd, const RequestHeader& header);
     void process_piece_request(int fd, const RequestHeader& header);
     int connect_to(const std::string& destAddress, int destPort);
-    void send_all(int fd, const std::string& data);
+    void send_all(int fd, const std::string_view& data);
     void receive_all(int found, char* buffer, size_t size);
 };
 
