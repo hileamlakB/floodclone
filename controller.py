@@ -67,7 +67,7 @@ class Controller:
         node_paths = defaultdict(dict)
 
         node_info = self._get_ip_aliases()
-        print(node_info)
+
         # Create an inverse mapping of IPs to node names
         node_infoInv = {ip: name for name, intf_ips in node_info.items() for _, ip in intf_ips}
 
@@ -134,12 +134,12 @@ class Controller:
     # modified this becuase i am not doing a client server design 
     # instead I am doing a peer to peer network
     def create_file_and_start_server(self):
-        self.src.cmd(f"head -c {FILE_SIZE} </dev/urandom >{self.src.privateDirs[0]}/file", verbose=VERBOSE)
+        self.src.cmd(f"head -c {FILE_SIZE} </dev/urandom >{self.src.privateDirs[0]}/{FILE_NAME}", verbose=VERBOSE)
         self.src.cmd("ls /var/mn/src", verbose=VERBOSE)
-        self.src.cmd("chmod 777 /var/mn/src/file", verbose=VERBOSE)
+        self.src.cmd(f"chmod 777 {self.src.privateDirs[0]}/{FILE_NAME}", verbose=VERBOSE)
         # self.src.cmd(f"python -m http.server --directory {self.src.privateDirs[0]}/ --bind {self.src.IP()} {PORT} &", verbose=VERBOSE)
         
-        md5sum = self.poll_cmd(self.src, f"md5sum {self.src.privateDirs[0]}/file", md5_re, "md5")
+        md5sum = self.poll_cmd(self.src, f"md5sum {self.src.privateDirs[0]}/{FILE_NAME}", md5_re, "md5")
         return md5sum, None
 
     # Sometimes other commands bleed over. Sending a bunch of md5 commands to be sure we get what we want
@@ -176,7 +176,9 @@ class Controller:
             if event.event_type == "link":
                 node1 = self.net.get(event.event_data.node1)
                 node2 = self.net.get(event.event_data.node2)
+                print(f"Node1 type: {type(node1)}, Node2 type: {type(node2)}")
                 link = self.net.linksBetween(node1, node2)[event.event_data.link_number]
+                print("node:", node1, node2)
                 if isinstance(node1, Switch):
                     link.intf1.config(**event.event_data.different_link_params)
                 elif isinstance(node2, Switch):
@@ -189,15 +191,20 @@ class Controller:
                 sleep(max((experiment_start + self.network_events[i+1].tdTimestamp - datetime.now()).total_seconds(), 0))
 
     def start_agents(self):
-        self.network_conditions_thread.start()
+        
         # Add source node as an agent
+        # I have removed the server setup that was done inside
+        # write server
         self.agents.append(self.agent_class(0, self.src, self.src, self))
         self.agents[-1].start_time = datetime.now()
         self.agents[-1].start_download()
         
+       
+        
+        self.network_conditions_thread.start()
         # Add destination nodes
         for i, dest in enumerate(self.dests):
-            self.agents.append(self.agent_class(i+2, dest, self.src, self))
+            self.agents.append(self.agent_class(i+1, dest, self.src, self))
             self.agents[-1].start_time = datetime.now()
             self.agents[-1].start_download()
         self.logger.info("Started all downloads")

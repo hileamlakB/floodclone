@@ -3,6 +3,8 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <arpa/inet.h>
+#include <sys/socket.h>
 
 constexpr int LISTEN_PORT = 9089;
 
@@ -95,6 +97,11 @@ void FloodClone::setup_node() {
 }
 
 void FloodClone::start() {
+    total_nodes_ = network_map.size();
+    std::cout << "Total nodes "<< total_nodes_ << "\n";
+
+    setup_completion();
+
     std::thread listen_thread;
     
     if (args.mode == "source") {
@@ -102,8 +109,13 @@ void FloodClone::start() {
         listen_thread = std::thread([this]() {
             connection_manager->start_listening();
         });
-        //wait for 1 min and stop process
-        std::this_thread::sleep_for(std::chrono::seconds(120));
+
+        //wait for all the nodes to complete
+        std::unique_lock<std::mutex> lock(node_mtx);
+        while (completed_nodes_ < total_nodes_) {
+            node_change.wait(lock);
+        }
+
         connection_manager->stop_listening();
 
         if (listen_thread.joinable()) {
@@ -113,12 +125,12 @@ void FloodClone::start() {
 
 
         std::cout << "Source: Finished listening\n";
-        return;
+       
         
     } 
-    
-    
-    try {
+
+    else{
+        try {
         listen_thread = std::thread([this]() {
             connection_manager->start_listening();
         });
@@ -161,6 +173,12 @@ void FloodClone::start() {
         file_manager->reconstruct();
         record_time();
 
+        notify_completion();
+        std::unique_lock<std::mutex> lock(node_mtx);
+        while (completed_nodes_ < total_nodes_) {
+            node_change.wait(lock);
+        }
+
         connection_manager->stop_listening();
         if (listen_thread.joinable()) {
             listen_thread.join();
@@ -175,6 +193,17 @@ void FloodClone::start() {
         }
         throw;
     }
+
+    }
+
+    is_listening_ = false;
+    if (completion_thread_.joinable()) {
+        completion_thread_.join();
+    }
+    close(completion_socket_);
+    
+    
+    
     
 }
 
@@ -210,4 +239,65 @@ Arguments parse_args(int argc, char* argv[]) {
         else if(arg == "--ip-map") args.ip_map = nlohmann::json::parse(argv[++i]);
     }
     return args;
+}
+
+
+void FloodClone::setup_completion() {
+    completion_socket_ = socket(AF_INET, SOCK_STREAM, 0);
+    if (completion_socket_ < 0) {
+        throw std::runtime_error("Failed to create completion socket");
+    }
+
+    sockaddr_in addr;
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = inet_addr(my_ip.c_str());
+    addr.sin_port = htons(COMPLETION_PORT);
+
+    if (bind(completion_socket_, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
+        throw std::runtime_error("Failed to bind completion socket");
+    }
+
+    if (listen(completion_socket_, SOMAXCONN) < 0) {
+        throw std::runtime_error("Failed to listen on completion socket");
+    }
+
+    completion_thread_ = std::thread(&FloodClone::listen_for_completion, this);
+}
+
+void FloodClone::listen_for_completion() {
+    while (is_listening_) {
+        sockaddr_in client_addr;
+        socklen_t client_len = sizeof(client_addr);
+        
+        int client_fd = accept(completion_socket_, (struct sockaddr*)&client_addr, &client_len);
+        if (client_fd < 0) continue;
+
+        node_mtx.lock();
+        completed_nodes_++;
+        std::cout << "Node completed. Count: " << completed_nodes_ << "/" 
+                 << total_nodes_ << "\n";
+        node_change.notify_all();
+        node_mtx.unlock();
+        close(client_fd);
+    }
+}
+
+void FloodClone::notify_completion() {
+    for (const auto& [node, routes] : network_map) {
+        if (node == args.node_name) continue;  // Skip self
+        
+        std::string peer_ip = get_ip(node);
+        int sock = socket(AF_INET, SOCK_STREAM, 0);
+        if (sock < 0) continue;
+
+        sockaddr_in peer_addr;
+        peer_addr.sin_family = AF_INET;
+        peer_addr.sin_addr.s_addr = inet_addr(peer_ip.c_str());
+        peer_addr.sin_port = htons(COMPLETION_PORT);
+
+        if (connect(sock, (struct sockaddr*)&peer_addr, sizeof(peer_addr)) >= 0) {
+            std::cout << "Notified completion to " << node << "\n";
+        }
+        close(sock);
+    }
 }
