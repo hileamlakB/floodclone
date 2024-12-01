@@ -306,39 +306,57 @@ void ConnectionManager::close_connection(const std::string& destAddress, int des
 
 
 
-std::string ConnectionManager::request_piece(const std::string& destAddress, int destPort, size_t pieceIndex) {
+void ConnectionManager::request_piece(const std::string& destAddress, int destPort, size_t pieceIndex) {
+    if (!fileManager_) {
+        throw std::runtime_error("No FileManager available for receiving pieces");
+    }
+
+    // Safety checks first
+    assert(pieceIndex < fileManager_->num_pieces);
+    
+    // Check if we already have the piece
+    if (fileManager_->has_piece(pieceIndex)) {
+        std::cout << "RECEIVING a piece that already exists" << std::endl;
+        return;
+    }
+
     int sock = connect_to(destAddress, destPort);
-    std::cout << "Connected to: " << destAddress<<":"<< destPort<<"\n";
+    std::cout << "Connected to: " << destAddress << ":" << destPort << "\n";
 
-
-    // Prepare piece request
-    PieceRequest request{static_cast<size_t>(pieceIndex)};
+   // Prepare piece request
+    PieceRequest request{pieceIndex};
     std::vector<char> serializedRequest = request.serialize();
     
     // Send request header followed by piece index
     RequestHeader header = {PIECE_REQ, static_cast<uint32_t>(serializedRequest.size())};
     std::vector<char> serializedHeader = header.serialize();
     
+    
     send_all(sock, std::string_view(serializedHeader.data(), serializedHeader.size()));
-    std::cout << "Send Header\n";
     send_all(sock, std::string_view(serializedRequest.data(), serializedRequest.size()));
-    std::cout << "Send Piece Request\n";
+
 
     // Receive response header
     RequestHeader responseHeader;
     receive_all(sock, reinterpret_cast<char*>(&responseHeader), sizeof(RequestHeader));
-    std::cout << "Reiveived Piece response \n";
-
+    
     if (responseHeader.type != PIECE_RES) {
         throw std::runtime_error("Unexpected response type for piece request");
     }
 
-    // Receive piece data
-    std::vector<char> pieceBuffer(responseHeader.payloadSize);
-    receive_all(sock, pieceBuffer.data(), responseHeader.payloadSize);
-    std::cout << "Reiveived Piece data \n";
+    // Size check
+    assert(responseHeader.payloadSize == fileManager_->piece_size);
+
+    // Get direct write buffer from FileManager
+    size_t buffer_size;
+    char* write_buffer = fileManager_->get_piece_buffer(pieceIndex, buffer_size);
+    assert(write_buffer != nullptr);  // Should never be null since we checked has_piece
+
+    // Receive directly into mapped file
+    receive_all(sock, write_buffer, responseHeader.payloadSize);
     
-    return std::string(pieceBuffer.begin(), pieceBuffer.end());
+    // Mark piece as complete
+    fileManager_->piece_status[pieceIndex].store(true);
 }
 
 void ConnectionManager::process_piece_request(int clientSocket, const RequestHeader& header) {

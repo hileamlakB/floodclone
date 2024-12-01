@@ -313,3 +313,12 @@ bool FileManager::has_piece(size_t i)
 }
 
 
+char* FileManager::get_piece_buffer(size_t i, size_t& size) {
+        assert(i < num_pieces);
+        if (piece_status[i].load()) {
+            return nullptr;  // Already have this piece
+        }
+        size = piece_size;
+        return static_cast<char*>(mapped_file) + (i * piece_size);
+}
+

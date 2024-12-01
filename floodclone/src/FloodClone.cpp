@@ -154,12 +154,13 @@ void FloodClone::start() {
         std::cout << "Destination: FileManager created. Num pieces: " 
                     << metadata.numPieces << "\n";
 
+        connection_manager->set_file_manager(*file_manager);
+
         for (size_t i = 0; i < metadata.numPieces; i++) {
             if (!file_manager->has_piece(i)) {
-                std::string piece_data = connection_manager->request_piece(
+                connection_manager->request_piece(
                     src_ip, LISTEN_PORT, i
                 );
-                file_manager->receive(piece_data, i);
                 std::cout << "Received piece " << i << "/" 
                             << metadata.numPieces - 1 << std::endl;
             }

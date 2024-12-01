@@ -51,13 +51,14 @@ void run_client(ThreadPool& threadPool) {
         std::cout << "Client: FileManager created from metadata. Num pieces: " 
                   << metadata.numPieces << "\n";
 
+        client_manager->set_file_manager(receiverFileManager);
+
         // Request each piece
         for (size_t i = 0; i < metadata.numPieces; ++i) {
             std::cout << "About to request piece " << i << "-"
                      << receiverFileManager.has_piece(i)<<" \n";
             if (!receiverFileManager.has_piece(i)) {
-                std::string piece_data = client_manager->request_piece("127.0.0.1", 9085, i);
-                receiverFileManager.receive(piece_data, i);
+                client_manager->request_piece("127.0.0.1", 9085, i);
                 std::cout << "Client: Received piece " << i << std::endl;
             }
         }

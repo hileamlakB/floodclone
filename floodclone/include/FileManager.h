@@ -227,7 +227,8 @@ private:
     void split(size_t i);  // splits the i-th peice file into piece_i 
     void merge(size_t i); // Merges the i-th piece into the main file
     void initialize_source();
-    void initialize_receiver(const FileMetaData& metadata) ;
+    void initialize_receiver(const FileMetaData& metadata);
+    char* get_piece_buffer(size_t i, size_t& size);
 
     friend class ConnectionManager;
     

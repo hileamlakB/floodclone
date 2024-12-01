@@ -76,7 +76,7 @@ public:
 
     // Client operations
     FileMetaData request_metadata(const std::string& destAddress, int destPort);
-    std::string request_piece(const std::string& destAddress, int destPort, size_t pieceIndex);
+    void request_piece(const std::string& destAddress, int destPort, size_t pieceIndex);
     void close_connection(const std::string& destAddress, int destPort);
 
     void set_file_manager(FileManager& manager) {
