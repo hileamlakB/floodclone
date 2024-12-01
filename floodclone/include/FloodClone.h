@@ -30,6 +30,15 @@ private:
     std::chrono::system_clock::time_point start_time;  // New: Start time
     std::chrono::system_clock::time_point end_time;
 
+    std::mutex node_mtx;
+    size_t completed_nodes_;
+    std::condition_variable node_change;
+    size_t total_nodes_;
+
+    static constexpr int COMPLETION_PORT = 9090;
+    int completion_socket_;
+    std::thread completion_thread_;
+    bool is_listening_{true};
 
     std::string my_ip;
 
@@ -51,6 +60,9 @@ private:
     void setup_net_info();
     std::string get_ip(const std::string& node_name);
     void record_time();
+    void setup_completion();
+    void listen_for_completion();
+    void notify_completion();
 
 public:
     FloodClone(const Arguments& args);
