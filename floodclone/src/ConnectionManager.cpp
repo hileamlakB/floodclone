@@ -223,17 +223,18 @@ void ConnectionManager::send_all(int fd, const std::string_view& data)  {
 
 void ConnectionManager::receive_all(int fd, char* buffer, size_t size) {
     std::lock_guard<std::mutex> lock(fd_lock(fd));
-    size_t totalReceived = 0;
-    while (totalReceived < size) {
-        ssize_t received = recv(fd, buffer + totalReceived, size - totalReceived, 0);
-        if (received < 0) {
-            throw std::runtime_error("Failed to receive data from socket");
-        } else if (received == 0) {
-            throw std::runtime_error("Connection closed unexpectedly while recieving");
-        }
-        totalReceived += received;
-        std::cout << "Received "<< totalReceived << "/" << size <<"\n";
+    
+    ssize_t received = recv(fd, buffer, size, MSG_WAITALL);
+    if (received < 0) {
+        throw std::runtime_error("Failed to receive data from socket");
+    } else if (received == 0) {
+        throw std::runtime_error("Connection closed unexpectedly while receiving");
+    } else if (received != static_cast<ssize_t>(size)) {
+        // This should rarely happen with MSG_WAITALL unless there's an error or interrupt
+        throw std::runtime_error("Incomplete data received despite MSG_WAITALL");
     }
+    
+    std::cout << "Received " << received << " bytes\n";
 }
 
 
