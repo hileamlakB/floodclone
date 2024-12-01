@@ -286,33 +286,23 @@ std::string_view FileManager::send(size_t i) {
 }
 
 
-void FileManager::receive(const std::string& binary_data, size_t i) {
+void FileManager::receive(const std::string_view& binary_data, size_t i) {
+    assert(i < num_pieces);
+    assert(binary_data.size() <= piece_size);  // Safety check
 
-    if (piece_status[i].load()){
-        std::cout << "RECIEVING a piec that already exists" << std::endl;
+    if (piece_status[i].load()) {
+        std::cout << "RECEIVING a piece that already exists" << std::endl;
         return;
     }
 
     off_t offset = i * piece_size;
 
-    // copy piece to mmaped file
-    thread_pool->enqueue([this, binary_data, offset, i] {
-        std::copy(binary_data.begin(), binary_data.end(), static_cast<char*>(mapped_file) + offset);
+    // Use memcpy directly and avoid string copy in lambda capture
+    thread_pool->enqueue([this, data_ptr = binary_data.data(), 
+                         data_size = binary_data.size(), offset, i] {
+        std::memcpy(static_cast<char*>(mapped_file) + offset, data_ptr, data_size);
         piece_status[i].store(true);
     });
-
-    // not needed anymore
-    // save piece to a separate file 
-    // thread_pool->enqueue([this, binary_data, i] {
-    //     std::filesystem::path piece_path = std::filesystem::path(pieces_folder) / ("piece_" + std::to_string(i));
-
-    //     // Write binary_data to an individual piece file
-    //     std::ofstream piece_file(piece_path, std::ios::binary | std::ios::trunc);
-    //     if (!piece_file) {
-    //         throw std::runtime_error("Cannot create piece file: " + piece_path.string());
-    //     }
-    //     piece_file.write(binary_data.data(), binary_data.size());
-    // });
 }
 
 
