@@ -42,6 +42,34 @@ void FloodClone::setup_net_info() {
     }
 }
 
+std::string FloodClone::find_immediate_neighbor(const std::string& target_node) {
+    // For target_node = src, we want to look at our own routes to src
+    auto routes_it = network_map.find(args.node_name); // Look up our routes
+    if (routes_it == network_map.end()) {
+        throw std::runtime_error("No routes found for " + args.node_name);
+    }
+
+    auto target_routes = routes_it->second.find(target_node);
+    if (target_routes == routes_it->second.end()) {
+        throw std::runtime_error("No route to " + target_node);
+    }
+
+    // Error if multiple routes exist
+    if (target_routes->second.size() > 1) {
+        throw std::runtime_error("Multiple routes to " + target_node + " not yet supported");
+    }
+
+    const auto& path = target_routes->second[0].path;
+    
+    // If path length is 1, request directly from target
+    if (path.size() <= 1) {
+        return target_node;
+    }
+
+    // Otherwise, return the first node in our path to target
+    return path[0];  // This will be d1 for d2->src path
+}
+
 std::string FloodClone::get_ip(const std::string& target_node) {
     // Find how target_node connects to us
     auto src_it = network_map.find(target_node);
@@ -141,10 +169,14 @@ void FloodClone::start() {
 
         std::cout << "Destination: Started listening thread.\n";
 
+        // First find the closest node we should request from
+        std::string request_node = find_immediate_neighbor(args.src_name);
+        std::string target_ip = get_ip(request_node);
+        
+        std::cout << "Destination: Requesting from " << request_node 
+                  << " (" << target_ip << ")\n";
 
-        std::string src_ip = get_ip(args.src_name);
-        std::cout << "Destination: src ip: " << src_ip<<"\n";
-        auto metadata = connection_manager->request_metadata(src_ip, LISTEN_PORT);
+        auto metadata = connection_manager->request_metadata(target_ip, LISTEN_PORT);
         
         file_manager = std::make_unique<FileManager>(
             args.file_path, 0, my_ip,
@@ -158,7 +190,7 @@ void FloodClone::start() {
 
         // Request all pieces in one range
         connection_manager->request_pieces(
-            src_ip, LISTEN_PORT,
+            target_ip, LISTEN_PORT,
             -1,  // no single piece
             {{0, metadata.numPieces - 1}},  // request full range
             {}   // no specific list
