@@ -216,7 +216,7 @@ void FloodClone::start() {
         while (completed_nodes_ < total_nodes_) {
             node_change.wait(lock);
         }
-        std::cout << "Finished completion\n"<< std::flush;
+        std::cout << "Finished completion "<< completed_nodes_ << " of " << total_nodes_ << std::flush;
 
         connection_manager->stop_listening();
         if (listen_thread.joinable()) {
