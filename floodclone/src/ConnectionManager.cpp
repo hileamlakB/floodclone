@@ -327,7 +327,11 @@ void ConnectionManager::process_piece_request(int clientSocket, const RequestHea
     // Process all requested pieces in order
     if (request.types & SINGLE_PIECE) {
         std::string_view pieceData = fileManager_->send(request.pieceIndex);
-        RequestHeader responseHeader = {PIECE_RES, static_cast<uint32_t>(pieceData.size())};
+        RequestHeader responseHeader = {
+            PIECE_RES, 
+            static_cast<uint32_t>(pieceData.size()),
+            request.pieceIndex  // Include piece index in response
+        };
         std::vector<char> serializedHeader = responseHeader.serialize();
         send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
         send_all(clientSocket, pieceData);
@@ -337,7 +341,11 @@ void ConnectionManager::process_piece_request(int clientSocket, const RequestHea
         for (const auto& range : request.ranges) {
             for (size_t idx = range.first; idx <= range.second; idx++) {
                 std::string_view pieceData = fileManager_->send(idx);
-                RequestHeader responseHeader = {PIECE_RES, static_cast<uint32_t>(pieceData.size())};
+                RequestHeader responseHeader = {
+                    PIECE_RES, 
+                    static_cast<uint32_t>(pieceData.size()),
+                    static_cast<uint32_t>(idx)  // Include piece index in response
+                };
                 std::vector<char> serializedHeader = responseHeader.serialize();
                 send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
                 send_all(clientSocket, pieceData);
@@ -348,7 +356,11 @@ void ConnectionManager::process_piece_request(int clientSocket, const RequestHea
     if (request.types & PIECE_LIST) {
         for (size_t idx : request.pieces) {
             std::string_view pieceData = fileManager_->send(idx);
-            RequestHeader responseHeader = {PIECE_RES, static_cast<uint32_t>(pieceData.size())};
+            RequestHeader responseHeader = {
+                PIECE_RES, 
+                static_cast<uint32_t>(pieceData.size()),
+                static_cast<uint32_t>(idx)  // Include piece index in response
+            };
             std::vector<char> serializedHeader = responseHeader.serialize();
             send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
             send_all(clientSocket, pieceData);
@@ -403,7 +415,7 @@ void ConnectionManager::request_pieces(const std::string& destAddress, int destP
     }
 
     std::vector<char> serializedRequest = request.serialize();
-    RequestHeader header = {PIECE_REQ, static_cast<uint32_t>(serializedRequest.size())};
+    RequestHeader header = {PIECE_REQ, static_cast<uint32_t>(serializedRequest.size()), 0};
     std::vector<char> serializedHeader = header.serialize();
     
     // Send the request
@@ -420,7 +432,7 @@ void ConnectionManager::request_pieces(const std::string& destAddress, int destP
     }
     if (request.types & PIECE_LIST) total_pieces += piece_list.size();
 
-    // Receive all pieces in order
+    // Receive all pieces
     for (size_t i = 0; i < total_pieces; i++) {
         RequestHeader responseHeader;
         receive_all(sock, reinterpret_cast<char*>(&responseHeader), sizeof(RequestHeader));
@@ -432,34 +444,13 @@ void ConnectionManager::request_pieces(const std::string& destAddress, int destP
         // Size check
         assert(responseHeader.payloadSize == fileManager_->piece_size);
 
-        // Determine which piece this is based on order
-        size_t current_piece;
-        if (request.types & SINGLE_PIECE && i == 0) {
-            current_piece = single_piece;
-        } else if (request.types & PIECE_RANGE) {
-            // Calculate piece from ranges
-            size_t range_offset = (request.types & SINGLE_PIECE) ? 1 : 0;
-            for (const auto& range : ranges) {
-                size_t range_size = range.second - range.first + 1;
-                if (i - range_offset < range_size) {
-                    current_piece = range.first + (i - range_offset);
-                    break;
-                }
-                range_offset += range_size;
-            }
-        } else {
-            // Must be from piece_list
-            size_t list_offset = (request.types & SINGLE_PIECE ? 1 : 0) + 
-                               (request.types & PIECE_RANGE ? ranges.size() : 0);
-            current_piece = piece_list[i - list_offset];
-        }
-
-        if (!fileManager_->has_piece(current_piece)) {
+        // Now we use the piece index from the response header
+        if (!fileManager_->has_piece(responseHeader.pieceIndex)) {
             size_t buffer_size;
-            char* write_buffer = fileManager_->get_piece_buffer(current_piece, buffer_size);
+            char* write_buffer = fileManager_->get_piece_buffer(responseHeader.pieceIndex, buffer_size);
             assert(write_buffer != nullptr);
             receive_all(sock, write_buffer, responseHeader.payloadSize);
-            fileManager_->piece_status[current_piece].store(true);
+            fileManager_->piece_status[responseHeader.pieceIndex].store(true);
         } else {
             // Skip the piece if we already have it
             std::vector<char> dummy_buffer(responseHeader.payloadSize);

@@ -163,9 +163,7 @@ void FloodClone::start() {
 
     else{
         try {
-        listen_thread = std::thread([this]() {
-            connection_manager->start_listening();
-        });
+        
 
         std::cout << "Destination: Started listening thread.\n";
 
@@ -187,6 +185,12 @@ void FloodClone::start() {
                     << metadata.numPieces << "\n";
 
         connection_manager->set_file_manager(*file_manager);
+
+        // set detsination to listening state only once it has metadata so 
+        // that it can also provide mteadata once other request
+        listen_thread = std::thread([this]() {
+            connection_manager->start_listening();
+        });
 
         // Request all pieces in one range
         connection_manager->request_pieces(
