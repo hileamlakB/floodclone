@@ -5,3 +5,6 @@ topologies/
 __pycache__/
 *.pyc
 *.pyo
+*_completion_time
+*.log
+analysis/

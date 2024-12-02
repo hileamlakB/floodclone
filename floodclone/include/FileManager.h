@@ -195,8 +195,8 @@ public:
     std::string  save_metadata();
     void reconstruct();  // reconutructs a file based on pieces
     void deconstruct(); 
-    void receive(const std::string& binary_data, size_t i);
-    std::string send(size_t i);
+    void receive(const std::string_view& binary_data, size_t i);
+    std::string_view send(size_t i);
     bool has_piece(size_t i);
 
 
@@ -217,7 +217,7 @@ private:
     
     bool is_source;
 
-    void* reconstructed_file = MAP_FAILED;
+    void* mapped_file = MAP_FAILED;
     int merged_fd; 
 
     std::deque<std::atomic<bool>> piece_status; // tells you about the current state of a piece weather it exists within this node or not
@@ -227,7 +227,8 @@ private:
     void split(size_t i);  // splits the i-th peice file into piece_i 
     void merge(size_t i); // Merges the i-th piece into the main file
     void initialize_source();
-    void initialize_receiver(const FileMetaData& metadata) ;
+    void initialize_receiver(const FileMetaData& metadata);
+    char* get_piece_buffer(size_t i, size_t& size);
 
     friend class ConnectionManager;
     
