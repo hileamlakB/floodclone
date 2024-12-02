@@ -33,7 +33,7 @@ private:
     
 
     std::mutex node_mtx;
-    size_t completed_nodes_;
+    size_t completed_nodes_ = 0;
     std::condition_variable node_change;
     size_t total_nodes_;
 

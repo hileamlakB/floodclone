@@ -48,16 +48,19 @@ void ConnectionManager::start_listening() {
     sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(localPort_);
-    serverAddress.sin_addr.s_addr = inet_addr(localAddress_.c_str());
+    // Instead of binding to specific IP:
+    // serverAddress.sin_addr.s_addr = inet_addr(localAddress_.c_str());
+    // Use INADDR_ANY to listen on all interfaces:
+    serverAddress.sin_addr.s_addr = INADDR_ANY;
 
-    // std::cout << "Binding to "<<localAddress_.c_str()<<":" << localPort_ <<"\n";
+    std::cout << "Binding to all interfaces on port " << localPort_ <<"\n";
 
     if (bind(listeningSocket_, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
         close(listeningSocket_);
         throw std::runtime_error(std::string(__FILE__) + ":" + std::to_string(__LINE__) + " Failed to bind");
     }
 
-    // std::cout << "Listening \n";
+    
 
 
     if (listen(listeningSocket_, SOMAXCONN) < 0) {
@@ -98,6 +101,8 @@ void ConnectionManager::start_listening() {
     struct epoll_event events[MAX_EVENTS];
 
     while (isListening_) {
+        std::cout << "Listening \n";
+
         int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
         if (nfds == -1) {
             if (errno == EINTR) continue;
@@ -118,7 +123,7 @@ void ConnectionManager::start_listening() {
                 // Handle new connection
                 int clientSocket = accept(listeningSocket_, nullptr, nullptr);
                 if (clientSocket >= 0) {
-                    std::cout << "New connection accepted: " << clientSocket << "\n";
+                    std::cout << "New connection accepted: " << clientSocket << "\n" << std::flush;
                     
                     // Add new socket to epoll with EPOLLONESHOT
                     struct epoll_event client_ev;
@@ -169,35 +174,45 @@ int ConnectionManager::connect_to(const std::string& destAddress, int destPort) 
         }
     }
 
-    int sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock < 0) {
-        throw std::runtime_error("Failed to create socket");
-    }
+    // Keep trying until successful - assuming all nodes must eventually come online
+    // Note: This assumes no permanent node failures, only delayed starts
+    int attempt = 1;
+    while (true) {
+        int sock = socket(AF_INET, SOCK_STREAM, 0);
+        if (sock < 0) {
+            throw std::runtime_error("Failed to create socket");
+        }
 
-    sockaddr_in serverAddress;
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_port = htons(destPort);
-    if (inet_pton(AF_INET, destAddress.c_str(), &serverAddress.sin_addr) <= 0) {
-        close(sock);
-        throw std::runtime_error("Invalid address format");
-    }
+        sockaddr_in serverAddress;
+        serverAddress.sin_family = AF_INET;
+        serverAddress.sin_port = htons(destPort);
+        if (inet_pton(AF_INET, destAddress.c_str(), &serverAddress.sin_addr) <= 0) {
+            close(sock);
+            throw std::runtime_error("Invalid address format");
+        }
 
-    if (connect(sock, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) < 0) {
-        close(sock);
-        throw std::runtime_error("Failed to connect to " + destAddress + ":" + 
-                               std::to_string(destPort) + " - " + std::string(strerror(errno)));
-    }
+        if (connect(sock, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) < 0) {
+            std::string error_msg = strerror(errno);  // Get human readable error
+            close(sock);
+            std::cout << "Connection attempt " << attempt << " failed to " 
+                    << destAddress << ":" << destPort 
+                    << " - Error: " << error_msg 
+                    << " (errno: " << errno << ")\n" << std::flush;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            attempt++;
+            continue;
+        }
 
-    {
-        std::lock_guard<std::mutex> lock(connectionMapMutex_);
-        connectionMap_[key] = sock;
+        {
+            std::lock_guard<std::mutex> lock(connectionMapMutex_);
+            connectionMap_[key] = sock;
+        }
+        
+        fd_lock(sock);
+        std::cout << "Connected to: " << destAddress << ":" << destPort 
+                  << " after " << attempt << " attempts\n";
+        return sock;
     }
-    
-    // Create a lock for the new socket
-    fd_lock(sock);
-    std::cout << "Connected to: " << destAddress << ":" << destPort << "\n";
-
-    return sock;
 }
 
 void ConnectionManager::close_connection(const std::string& destAddress, int destPort) {
