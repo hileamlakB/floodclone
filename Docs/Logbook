@@ -139,3 +139,9 @@ Nov 30: Implement Piece discovery
     Preserves the original network change functionality in the starter code
 
      
+Dec 1 - Speed testing on scenario 1
+    - speed test on scenario 1 revealed that the overhead of sending smalle pieces multiple times
+    was very large compared to the original 1 size and in the case of one to one transfer the server client
+    was beating my approach so I implemented a range base rquest mechanism where a destination could request for 
+    a range of intervals instead of a single intercal in whcih in the case of secnario  1 makes the scenario as fast
+    as the given baseline benchmark

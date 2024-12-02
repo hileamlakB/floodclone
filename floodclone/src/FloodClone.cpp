@@ -156,17 +156,17 @@ void FloodClone::start() {
 
         connection_manager->set_file_manager(*file_manager);
 
-        for (size_t i = 0; i < metadata.numPieces; i++) {
-            if (!file_manager->has_piece(i)) {
-                connection_manager->request_piece(
-                    src_ip, LISTEN_PORT, i
-                );
-                std::cout << "Received piece " << i << "/" 
-                            << metadata.numPieces - 1 << std::endl;
-            }
-        }
+        // Request all pieces in one range
+        connection_manager->request_pieces(
+            src_ip, LISTEN_PORT,
+            -1,  // no single piece
+            {{0, metadata.numPieces - 1}},  // request full range
+            {}   // no specific list
+        );
+       
 
         thread_pool.wait();
+        std::cout << "Client: Received all pieces\n";
 
         // Verify all pieces
         for (size_t i = 0; i < metadata.numPieces; i++) {

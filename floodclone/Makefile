@@ -14,7 +14,7 @@ SRC = $(SRC_DIR)/*.cpp
 TEST_SRC = $(TEST_DIR)/*.cpp
 
 TARGET = floodclone
-TEST_TARGET = run_tests
+TEST_TARGET = test_floodclone
 
 $(TARGET): floodclone.cpp $(SRC)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) floodclone.cpp $(SRC) $(LINKEDBINARIES) -O$(O) 
