@@ -34,9 +34,6 @@ void ConnectionManager::stop_listening() {
     write(wake_fd_, &value, sizeof(value));
 }
 
-
-
-
 void ConnectionManager::start_listening() {
     int epoll_fd = epoll_create1(0);
     if (epoll_fd == -1) {
@@ -53,14 +50,14 @@ void ConnectionManager::start_listening() {
     serverAddress.sin_port = htons(localPort_);
     serverAddress.sin_addr.s_addr = inet_addr(localAddress_.c_str());
 
-    std::cout << "Binding to "<<localAddress_.c_str()<<":" << localPort_ <<"\n";
+    // std::cout << "Binding to "<<localAddress_.c_str()<<":" << localPort_ <<"\n";
 
     if (bind(listeningSocket_, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
         close(listeningSocket_);
         throw std::runtime_error(std::string(__FILE__) + ":" + std::to_string(__LINE__) + " Failed to bind");
     }
 
-    std::cout << "Listening \n";
+    // std::cout << "Listening \n";
 
 
     if (listen(listeningSocket_, SOMAXCONN) < 0) {
@@ -136,7 +133,7 @@ void ConnectionManager::start_listening() {
                 if (events[n].events & EPOLLIN) {
                     // Data available to read
                     threadPool_.enqueue([this, fd, epoll_fd]() {
-                        std::cout << "Adding task from " << fd <<"\n";
+                        // std::cout << "Adding task from " << fd <<"\n";
                         process_request(fd);
                         
                         // Re-arm the socket after processing
@@ -160,8 +157,6 @@ void ConnectionManager::start_listening() {
     close(epoll_fd);
     close(listeningSocket_);
 }
-
-
 
 int ConnectionManager::connect_to(const std::string& destAddress, int destPort) {
     auto key = std::make_pair(destAddress, destPort);
@@ -189,7 +184,8 @@ int ConnectionManager::connect_to(const std::string& destAddress, int destPort) 
 
     if (connect(sock, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) < 0) {
         close(sock);
-        throw std::runtime_error("Failed to connect");
+        throw std::runtime_error("Failed to connect to " + destAddress + ":" + 
+                               std::to_string(destPort) + " - " + std::string(strerror(errno)));
     }
 
     {
@@ -199,10 +195,28 @@ int ConnectionManager::connect_to(const std::string& destAddress, int destPort) 
     
     // Create a lock for the new socket
     fd_lock(sock);
+    std::cout << "Connected to: " << destAddress << ":" << destPort << "\n";
 
     return sock;
 }
 
+void ConnectionManager::close_connection(const std::string& destAddress, int destPort) {
+    auto key = std::make_pair(destAddress, destPort);
+    int fd_to_close = -1;
+    {
+        std::lock_guard<std::mutex> lock(connectionMapMutex_);
+        auto it = connectionMap_.find(key);
+        if (it != connectionMap_.end()) {
+            fd_to_close = it->second;
+            connectionMap_.erase(it);
+        }
+    }
+    
+    if (fd_to_close != -1) {
+        dfd_lock(fd_to_close);
+        close(fd_to_close);
+    }
+}
 
 void ConnectionManager::send_all(int fd, const std::string_view& data)  {
     std::lock_guard<std::mutex> lock(fd_lock(fd));
@@ -217,7 +231,7 @@ void ConnectionManager::send_all(int fd, const std::string_view& data)  {
             throw std::runtime_error("Failed to send data to socket");
         }
         totalSent += sent;
-        std::cout << "Sent "<< totalSent << "/" << data.size() <<"\n";
+        // std::cout << "Sent "<< totalSent << "/" << data.size() <<"\n";
     }
 }
 
@@ -234,9 +248,8 @@ void ConnectionManager::receive_all(int fd, char* buffer, size_t size) {
         throw std::runtime_error("Incomplete data received despite MSG_WAITALL");
     }
     
-    std::cout << "Received " << received << " bytes\n";
+    // std::cout << "Received " << received << " bytes\n";
 }
-
 
 // Update process_request to handle piece requests
 void ConnectionManager::process_request(int clientSocket) {
@@ -258,19 +271,19 @@ void ConnectionManager::process_request(int clientSocket) {
 
 FileMetaData ConnectionManager::request_metadata(const std::string& destAddress, int destPort) {
     int sock = connect_to(destAddress, destPort);
-    std::cout << "Connected to: " << destAddress<<":"<< destPort<<"\n";
+    // std::cout << "Connected to: " << destAddress<<":"<< destPort<<"\n";
 
     RequestHeader header = {META_REQ, 0};
     std::vector<char> serializedHeader = header.serialize();
     send_all(sock, std::string_view(serializedHeader.data(), serializedHeader.size()));
 
-    std::cout << "Send Meta data request\n";
+    // std::cout << "Send Meta data request\n";
 
     // Receive the response header
     RequestHeader responseHeader;
     receive_all(sock, reinterpret_cast<char*>(&responseHeader), sizeof(RequestHeader));
 
-    std::cout << "Recieved meta data\n";
+    // std::cout << "Recieved meta data\n";
 
     // Ensure the response is of type META_RES
     if (responseHeader.type != META_RES) {
@@ -286,104 +299,47 @@ FileMetaData ConnectionManager::request_metadata(const std::string& destAddress,
     return FileMetaData::deserialize(payloadBuffer);
 }
 
-void ConnectionManager::close_connection(const std::string& destAddress, int destPort) {
-    auto key = std::make_pair(destAddress, destPort);
-    int fd_to_close = -1;
-    {
-        std::lock_guard<std::mutex> lock(connectionMapMutex_);
-        auto it = connectionMap_.find(key);
-        if (it != connectionMap_.end()) {
-            fd_to_close = it->second;
-            connectionMap_.erase(it);
-        }
-    }
-    
-    if (fd_to_close != -1) {
-        dfd_lock(fd_to_close);
-        close(fd_to_close);
-    }
-}
-
-
-
-void ConnectionManager::request_piece(const std::string& destAddress, int destPort, size_t pieceIndex) {
-    if (!fileManager_) {
-        throw std::runtime_error("No FileManager available for receiving pieces");
-    }
-
-    // Safety checks first
-    assert(pieceIndex < fileManager_->num_pieces);
-    
-    // Check if we already have the piece
-    if (fileManager_->has_piece(pieceIndex)) {
-        std::cout << "RECEIVING a piece that already exists" << std::endl;
-        return;
-    }
-
-    int sock = connect_to(destAddress, destPort);
-    std::cout << "Connected to: " << destAddress << ":" << destPort << "\n";
-
-   // Prepare piece request
-    PieceRequest request{pieceIndex};
-    std::vector<char> serializedRequest = request.serialize();
-    
-    // Send request header followed by piece index
-    RequestHeader header = {PIECE_REQ, static_cast<uint32_t>(serializedRequest.size())};
-    std::vector<char> serializedHeader = header.serialize();
-    
-    
-    send_all(sock, std::string_view(serializedHeader.data(), serializedHeader.size()));
-    send_all(sock, std::string_view(serializedRequest.data(), serializedRequest.size()));
-
-
-    // Receive response header
-    RequestHeader responseHeader;
-    receive_all(sock, reinterpret_cast<char*>(&responseHeader), sizeof(RequestHeader));
-    
-    if (responseHeader.type != PIECE_RES) {
-        throw std::runtime_error("Unexpected response type for piece request");
-    }
-
-    // Size check
-    assert(responseHeader.payloadSize == fileManager_->piece_size);
-
-    // Get direct write buffer from FileManager
-    size_t buffer_size;
-    char* write_buffer = fileManager_->get_piece_buffer(pieceIndex, buffer_size);
-    assert(write_buffer != nullptr);  // Should never be null since we checked has_piece
-
-    // Receive directly into mapped file
-    receive_all(sock, write_buffer, responseHeader.payloadSize);
-    
-    // Mark piece as complete
-    fileManager_->piece_status[pieceIndex].store(true);
-}
 
 void ConnectionManager::process_piece_request(int clientSocket, const RequestHeader& header) {
     if (!fileManager_) {
         throw std::runtime_error("Cannot serve piece request: no FileManager available");
     }
 
-    std::cout << "Processing Piece Request\n";
-
     std::vector<char> requestBuffer(header.payloadSize);
     receive_all(clientSocket, requestBuffer.data(), header.payloadSize);
     PieceRequest request = PieceRequest::deserialize(requestBuffer);
 
-    std::cout << "Received Piece request\n";
+    // Process all requested pieces in order
+    if (request.types & SINGLE_PIECE) {
+        std::string_view pieceData = fileManager_->send(request.pieceIndex);
+        RequestHeader responseHeader = {PIECE_RES, static_cast<uint32_t>(pieceData.size())};
+        std::vector<char> serializedHeader = responseHeader.serialize();
+        send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
+        send_all(clientSocket, pieceData);
+    }
 
-    std::string_view pieceData = fileManager_->send(request.pieceIndex);
-    
-    RequestHeader responseHeader = {PIECE_RES, static_cast<uint32_t>(pieceData.size())};
-    std::vector<char> serializedHeader = responseHeader.serialize();
-    
-    send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
-    std::cout << "Sent Piece response\n";
-    send_all(clientSocket, pieceData);
-    std::cout << "Sent Piece data\n";
+    if (request.types & PIECE_RANGE) {
+        for (const auto& range : request.ranges) {
+            for (size_t idx = range.first; idx <= range.second; idx++) {
+                std::string_view pieceData = fileManager_->send(idx);
+                RequestHeader responseHeader = {PIECE_RES, static_cast<uint32_t>(pieceData.size())};
+                std::vector<char> serializedHeader = responseHeader.serialize();
+                send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
+                send_all(clientSocket, pieceData);
+            }
+        }
+    }
+
+    if (request.types & PIECE_LIST) {
+        for (size_t idx : request.pieces) {
+            std::string_view pieceData = fileManager_->send(idx);
+            RequestHeader responseHeader = {PIECE_RES, static_cast<uint32_t>(pieceData.size())};
+            std::vector<char> serializedHeader = responseHeader.serialize();
+            send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
+            send_all(clientSocket, pieceData);
+        }
+    }
 }
-
-
 
 void ConnectionManager::process_meta_request(int clientSocket, const RequestHeader& header) {
     (void) header;  
@@ -392,13 +348,108 @@ void ConnectionManager::process_meta_request(int clientSocket, const RequestHead
         throw std::runtime_error("Cannot serve metadata request: no FileManager available");
     }
 
-    std::cout << "Got meta data request\n";
+    // std::cout << "Got meta data request\n";
 
     std::string serializedData = fileManager_->get_metadata().serialize();
     RequestHeader responseHeader = {META_RES, static_cast<uint32_t>(serializedData.size())};
     std::vector<char> serializedHeader = responseHeader.serialize();
 
     send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
-    std::cout << "SENT META header\n";
+    // std::cout << "SENT META header\n";
     send_all(clientSocket, std::string_view(serializedData)); 
 }
+
+
+void ConnectionManager::request_pieces(const std::string& destAddress, int destPort, 
+                                     size_t single_piece,
+                                     const std::vector<std::pair<size_t, size_t>>& ranges,
+                                     const std::vector<size_t>& piece_list) {
+    if (!fileManager_) {
+        throw std::runtime_error("No FileManager available for receiving pieces");
+    }
+
+    int sock = connect_to(destAddress, destPort);
+
+    // Prepare combined piece request
+    PieceRequest request;
+    request.types = 0;
+    
+    if (single_piece != (size_t)-1) {
+        request.types |= SINGLE_PIECE;
+        request.pieceIndex = single_piece;
+    }
+    if (!ranges.empty()) {
+        request.types |= PIECE_RANGE;
+        request.ranges = ranges;
+    }
+    if (!piece_list.empty()) {
+        request.types |= PIECE_LIST;
+        request.pieces = piece_list;
+    }
+
+    std::vector<char> serializedRequest = request.serialize();
+    RequestHeader header = {PIECE_REQ, static_cast<uint32_t>(serializedRequest.size())};
+    std::vector<char> serializedHeader = header.serialize();
+    
+    // Send the request
+    send_all(sock, std::string_view(serializedHeader.data(), serializedHeader.size()));
+    send_all(sock, std::string_view(serializedRequest.data(), serializedRequest.size()));
+
+    // Calculate total expected pieces
+    size_t total_pieces = 0;
+    if (request.types & SINGLE_PIECE) total_pieces++;
+    if (request.types & PIECE_RANGE) {
+        for (const auto& range : ranges) {
+            total_pieces += range.second - range.first + 1;
+        }
+    }
+    if (request.types & PIECE_LIST) total_pieces += piece_list.size();
+
+    // Receive all pieces in order
+    for (size_t i = 0; i < total_pieces; i++) {
+        RequestHeader responseHeader;
+        receive_all(sock, reinterpret_cast<char*>(&responseHeader), sizeof(RequestHeader));
+        
+        if (responseHeader.type != PIECE_RES) {
+            throw std::runtime_error("Unexpected response type for piece request");
+        }
+
+        // Size check
+        assert(responseHeader.payloadSize == fileManager_->piece_size);
+
+        // Determine which piece this is based on order
+        size_t current_piece;
+        if (request.types & SINGLE_PIECE && i == 0) {
+            current_piece = single_piece;
+        } else if (request.types & PIECE_RANGE) {
+            // Calculate piece from ranges
+            size_t range_offset = (request.types & SINGLE_PIECE) ? 1 : 0;
+            for (const auto& range : ranges) {
+                size_t range_size = range.second - range.first + 1;
+                if (i - range_offset < range_size) {
+                    current_piece = range.first + (i - range_offset);
+                    break;
+                }
+                range_offset += range_size;
+            }
+        } else {
+            // Must be from piece_list
+            size_t list_offset = (request.types & SINGLE_PIECE ? 1 : 0) + 
+                               (request.types & PIECE_RANGE ? ranges.size() : 0);
+            current_piece = piece_list[i - list_offset];
+        }
+
+        if (!fileManager_->has_piece(current_piece)) {
+            size_t buffer_size;
+            char* write_buffer = fileManager_->get_piece_buffer(current_piece, buffer_size);
+            assert(write_buffer != nullptr);
+            receive_all(sock, write_buffer, responseHeader.payloadSize);
+            fileManager_->piece_status[current_piece].store(true);
+        } else {
+            // Skip the piece if we already have it
+            std::vector<char> dummy_buffer(responseHeader.payloadSize);
+            receive_all(sock, dummy_buffer.data(), responseHeader.payloadSize);
+        }
+    }
+}
+

@@ -18,10 +18,12 @@
 using namespace std;
 namespace fs = std::filesystem;
 
+#define PIECE_SIZE 16384
+
 FileManager::FileManager(const std::string& file_path, size_t ipiece_size, const std::string& node_ip,
                          const std::string& pieces_folder, ThreadPool* thread_pool, bool is_source,
                          const FileMetaData* metadata)
-    : file_path(file_path), piece_size(ipiece_size == 0 ? 16384 : ipiece_size), node_ip(node_ip),
+    : file_path(file_path), piece_size(ipiece_size == 0 ? PIECE_SIZE : ipiece_size), node_ip(node_ip),
       num_pieces(0), pieces_folder(pieces_folder), thread_pool(thread_pool), is_source(is_source) 
 {
 
