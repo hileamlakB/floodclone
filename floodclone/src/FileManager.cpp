@@ -74,8 +74,6 @@ void FileManager::initialize_source() {
         throw runtime_error("Failed to mmap source file");
     }
 
-    
-
 
     // Initialize metadata with actual data for source
     file_metadata.fileId = "file_hash";  // Replace with actual hash function if I endup implementing relaibility
@@ -135,7 +133,7 @@ void FileManager::initialize_receiver(const FileMetaData& metadata) {
         throw std::runtime_error("Error setting file size for reconstructed file");
     }
 
-    mapped_file = mmap(nullptr, total_size, PROT_WRITE, MAP_SHARED, merged_fd, 0);
+    mapped_file = mmap(nullptr, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, merged_fd, 0);
     if (mapped_file == MAP_FAILED) {
         close(merged_fd);
         throw std::runtime_error("Error mapping reconstructed file into memory");
@@ -254,10 +252,6 @@ void FileManager::reconstruct() {
         throw std::runtime_error("Error resizing reconstructed file");
     }
 
-    // Unmap and close
-    munmap(mapped_file, num_pieces * piece_size);
-    close(merged_fd);
-    merged_fd = -1;
 }
 
 
@@ -270,6 +264,9 @@ std::string_view FileManager::send(size_t i) {
     
     size_t offset = i * piece_size;
     const char* piece_data = static_cast<const char*>(mapped_file) + offset;
+    std::cout << "Memory address of piece_data: " << static_cast<const void*>(piece_data) << std::endl;
+    std::cout << "Reading memory: " <<piece_data[0] << std::endl;
+
     
     if (i == num_pieces - 1) {
         // Last piece - might be smaller
@@ -288,23 +285,31 @@ std::string_view FileManager::send(size_t i) {
 }
 
 
-void FileManager::receive(const std::string_view& binary_data, size_t i) {
+
+void FileManager::update_piece_status(size_t i) {
+
+    std::cout << "Updating piece " << i << " status\n" << std::flush;
     assert(i < num_pieces);
-    assert(binary_data.size() <= piece_size);  // Safety check
-
-    if (piece_status[i].load()) {
-        std::cout << "RECEIVING a piece that already exists" << std::endl;
-        return;
+    piece_status[i].store(true);
+    std::cout << "Callbacks size: " << piece_callbacks_.size() << "\n" << std::flush;
+    
+    
+    // Copy callbacks before calling them to avoid holding lock
+    std::vector<PieceCallback> callbacks;
+    {
+        std::lock_guard<std::mutex> lock(callbacks_mutex_);
+        auto it = piece_callbacks_.find(i);
+        if (it != piece_callbacks_.end()) {
+            callbacks = std::move(it->second);
+            piece_callbacks_.erase(it);  // Remove callbacks once piece is available
+        }
     }
-
-    off_t offset = i * piece_size;
-
-    // Use memcpy directly and avoid string copy in lambda capture
-    thread_pool->enqueue([this, data_ptr = binary_data.data(), 
-                         data_size = binary_data.size(), offset, i] {
-        std::memcpy(static_cast<char*>(mapped_file) + offset, data_ptr, data_size);
-        piece_status[i].store(true);
-    });
+    
+    // Call all callbacks for this piece
+    for (const auto& callback : callbacks) {
+        callback(i);
+    }
+    
 }
 
 
@@ -324,3 +329,20 @@ char* FileManager::get_piece_buffer(size_t i, size_t& size) {
         return static_cast<char*>(mapped_file) + (i * piece_size);
 }
 
+void FileManager::register_piece_callback(size_t piece_idx, PieceCallback callback) {
+    std::lock_guard<std::mutex> lock(callbacks_mutex_);
+    piece_callbacks_[piece_idx].push_back(std::move(callback));
+    // handle lost wakeup cases
+    if (piece_status[piece_idx].load()) {
+        // Piece became available between initial check and registration
+        piece_callbacks_[piece_idx].pop_back(); // Remove our callback
+        callback(piece_idx);  // Execute callback
+    }
+}
+
+void FileManager::clean_up(){
+    // Unmap and close
+    munmap(mapped_file, num_pieces * piece_size);
+    close(merged_fd);
+    merged_fd = -1;
+}

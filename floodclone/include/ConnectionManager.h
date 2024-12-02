@@ -9,6 +9,7 @@
 #include <map>
 #include <optional>
 #include "FileManager.h"
+#include <set>
 
 typedef enum : uint16_t {
     META_REQ = 1,
@@ -180,6 +181,13 @@ private:
     std::map<std::pair<std::string, int>, int> connectionMap_;
     std::unordered_map<int, std::unique_ptr<std::mutex>> fdLocks_;  // fd -> lock
 
+    struct RequestContext {
+        std::set<size_t> availablePieces;
+        std::set<size_t> remainingPieces;  // Pieces we still need
+        std::condition_variable cv;
+        std::mutex mutex;
+    };
+
     // Helper to get or create lock for a fd
     std::mutex& fd_lock(int fd) {
         std::lock_guard<std::mutex> lock(fdLocksMapMutex_);
@@ -204,6 +212,8 @@ private:
     int connect_to(const std::string& destAddress, int destPort);
     void send_all(int fd, const std::string_view& data);
     void receive_all(int found, char* buffer, size_t size);
+    void send_piece(int clientSocket, size_t idx, const std::shared_ptr<RequestContext>& context);
+    void wait_for_queue(int clientSocket, const std::shared_ptr<RequestContext>& context);
 };
 
 #endif // CONNECTION_MANAGER_H

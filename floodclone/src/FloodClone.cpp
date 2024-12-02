@@ -222,6 +222,7 @@ void FloodClone::start() {
         }
         std::cout << "Finished completion "<< completed_nodes_ << " of " << total_nodes_ << std::flush;
 
+        file_manager->clean_up();
         connection_manager->stop_listening();
         if (listen_thread.joinable()) {
             listen_thread.join();
