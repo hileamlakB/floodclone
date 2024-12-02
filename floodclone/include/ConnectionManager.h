@@ -23,9 +23,10 @@ typedef enum : uint16_t {
 struct RequestHeader {
     RequestType type;
     uint32_t payloadSize;
+    uint32_t pieceIndex;     // New field for piece identification
 
     std::vector<char> serialize() const {
-        std::vector<char> data(sizeof(RequestHeader));  // Use full struct size
+        std::vector<char> data(sizeof(RequestHeader));
         assert(data.size() == sizeof(RequestHeader) && "Serialized size must match struct size");
         
         // Copy the entire struct including padding
