@@ -76,7 +76,7 @@ class Controller:
                 if node == other_node:
                     continue  # Skip self-pairs
 
-                interfaces = []
+                interfaces = set()
                 paths = []
 
                 # Loop over each IP of other_node
@@ -88,8 +88,7 @@ class Controller:
                     for line in route_info.splitlines():
                         if "dev" in line:
                             interface = line.split("dev")[1].split()[0]
-                            if interface not in interfaces:
-                                interfaces.append(interface)
+                            interfaces.add(interface)
                     self.logger.debug(f"Interfaces used from {node.name} to {other_node.name}: {interfaces}")
 
                     # Run mtr for each interface to determine hop count and path
@@ -101,15 +100,14 @@ class Controller:
                         path = [
                             node_infoInv.get(line.split()[1], line.split()[1])  # Use node name if available, else keep IP
                             for line in mtr_output.splitlines()[2:]
-                        ]
-
-                        paths.append((iface, hop_count, path))
-
+                        ]                   
+                        if (iface, hop_count, path) not in paths:
+                            paths.append((iface, hop_count, path))
                 # Store paths in only one direction
                 node_paths[node.name][other_node.name] = paths
                 self.logger.debug(f"Node Paths for {node.name} to {other_node.name}: {node_paths[node.name][other_node.name]}")
 
-        self.logger.info(f"Final Node Paths:\n{node_paths}")
+        self.logger.debug(f"Final Node Paths:\n{node_paths}")
         return node_paths, node_info
 
     def create_net(self):
@@ -176,9 +174,7 @@ class Controller:
             if event.event_type == "link":
                 node1 = self.net.get(event.event_data.node1)
                 node2 = self.net.get(event.event_data.node2)
-                print(f"Node1 type: {type(node1)}, Node2 type: {type(node2)}")
                 link = self.net.linksBetween(node1, node2)[event.event_data.link_number]
-                print("node:", node1, node2)
                 if isinstance(node1, Switch):
                     link.intf1.config(**event.event_data.different_link_params)
                 elif isinstance(node2, Switch):
