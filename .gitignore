@@ -8,3 +8,4 @@ __pycache__/
 *_completion_time
 *.log
 analysis/
+gmon.out

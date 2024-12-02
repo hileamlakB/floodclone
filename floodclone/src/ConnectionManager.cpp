@@ -235,11 +235,6 @@ void ConnectionManager::close_connection(const std::string& destAddress, int des
 }
 
 void ConnectionManager::send_all(int fd, const std::string_view& data)  {
-
-     if (data.empty() || data.data()[0] == '\0') {
-        std::cerr << "Error: Mapped file contains uninitialized or invalid data." << std::endl;
-        throw std::runtime_error("Invalid file content");
-    }
     
     std::lock_guard<std::mutex> lock(fd_lock(fd));
     size_t totalSent = 0;
@@ -273,7 +268,7 @@ void ConnectionManager::receive_all(int fd, char* buffer, size_t size) {
         throw std::runtime_error("Incomplete data received despite MSG_WAITALL");
     }
     
-    std::cout << "Received " << received << " bytes\n";
+    // std::cout << "Received " << received << " bytes\n";
 }
 
 // Update process_request to handle piece requests
@@ -326,15 +321,15 @@ FileMetaData ConnectionManager::request_metadata(const std::string& destAddress,
 
 void ConnectionManager::send_piece(int clientSocket, size_t idx, const std::shared_ptr<RequestContext>& context) {
 
-    std::cout << "Attempting to send piece " << idx << "\n" << std::flush;
-    std::cout << "Has piece: " << fileManager_->has_piece(idx) << "\n" << std::flush;
+    // std::cout << "Attempting to send piece " << idx << "\n" << std::flush;
+    // std::cout << "Has piece: " << fileManager_->has_piece(idx) << "\n" << std::flush;
     
     
     if (fileManager_->has_piece(idx)){
-        std::cout<<"HAVE PIECE so sending "<<idx<<"\n"<<std::flush; 
+        // std::cout<<"HAVE PIECE so sending "<<idx<<"\n"<<std::flush; 
         std::string_view pieceData = fileManager_->send(idx);
-        std::cout << "Piece size: " << pieceData.size() << "\n" << std::flush;
-        std::cout << "Piece data: " << pieceData.data()[0] << "\n" << std::flush;
+        // std::cout << "Piece size: " << pieceData.size() << "\n" << std::flush;
+        // std::cout << "Piece data: " << pieceData.data()[0] << "\n" << std::flush;
         RequestHeader responseHeader = {
             PIECE_RES, 
             static_cast<uint32_t>(pieceData.size()),
@@ -343,13 +338,13 @@ void ConnectionManager::send_piece(int clientSocket, size_t idx, const std::shar
         std::vector<char> serializedHeader = responseHeader.serialize();
         send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
         send_all(clientSocket, pieceData);
-        std::cout<<"Piece Sent\n"; 
+        // std::cout<<"Piece Sent\n"; 
     } else {
-        std::cout<<"PIECE Not found so queeing task " << idx <<std::flush; 
+        // std::cout<<"PIECE Not found so queeing task " << idx <<std::flush; 
         context->remainingPieces.insert(idx);
         fileManager_->register_piece_callback(idx, 
             [context, idx = idx](size_t) {
-                std::cout<<"Callback wakup found piece\n";
+                std::cout<<"Callback wakupe found piece\n";
                 // what happens if the node becomes availabel between the time I hccked
                 // and between the time I call registore that is definelty posisbly
                 // a lsot wakeup type of problem could be avoided by filemanager
