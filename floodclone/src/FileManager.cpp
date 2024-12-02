@@ -264,8 +264,8 @@ std::string_view FileManager::send(size_t i) {
     
     size_t offset = i * piece_size;
     const char* piece_data = static_cast<const char*>(mapped_file) + offset;
-    std::cout << "Memory address of piece_data: " << static_cast<const void*>(piece_data) << std::endl;
-    std::cout << "Reading memory: " <<piece_data[0] << std::endl;
+    // std::cout << "Memory address of piece_data: " << static_cast<const void*>(piece_data) << std::endl;
+    // std::cout << "Reading memory: " <<piece_data[0] << std::endl;
 
     
     if (i == num_pieces - 1) {
@@ -288,10 +288,10 @@ std::string_view FileManager::send(size_t i) {
 
 void FileManager::update_piece_status(size_t i) {
 
-    std::cout << "Updating piece " << i << " status\n" << std::flush;
+    // std::cout << "Updating piece " << i << " status\n" << std::flush;
     assert(i < num_pieces);
     piece_status[i].store(true);
-    std::cout << "Callbacks size: " << piece_callbacks_.size() << "\n" << std::flush;
+    // std::cout << "Callbacks size: " << piece_callbacks_.size() << "\n" << std::flush;
     
     
     // Copy callbacks before calling them to avoid holding lock
