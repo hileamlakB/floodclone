@@ -194,11 +194,15 @@ public:
     const FileMetaData& get_metadata() const;
     std::string  save_metadata();
     void reconstruct();  // reconutructs a file based on pieces
+    void clean_up();
     void deconstruct(); 
-    void receive(const std::string_view& binary_data, size_t i);
+    void update_piece_status(size_t i);
     std::string_view send(size_t i);
     bool has_piece(size_t i);
 
+    using PieceCallback = std::function<void(size_t)>;
+
+    void register_piece_callback(size_t piece_idx, PieceCallback callback);
 
     std::string calculate_checksum(const std::string& data); 
 
@@ -222,6 +226,9 @@ private:
 
     std::deque<std::atomic<bool>> piece_status; // tells you about the current state of a piece weather it exists within this node or not
     
+    std::mutex callbacks_mutex_;
+    // Map of piece_idx -> vector of callbacks
+    std::unordered_map<size_t, std::vector<PieceCallback>> piece_callbacks_;
 
     void verify_ip(const string& ip);
     void split(size_t i);  // splits the i-th peice file into piece_i 
@@ -229,6 +236,7 @@ private:
     void initialize_source();
     void initialize_receiver(const FileMetaData& metadata);
     char* get_piece_buffer(size_t i, size_t& size);
+    
 
     friend class ConnectionManager;
     
