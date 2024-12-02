@@ -30,6 +30,8 @@ private:
     std::chrono::system_clock::time_point start_time;  // New: Start time
     std::chrono::system_clock::time_point end_time;
 
+    
+
     std::mutex node_mtx;
     size_t completed_nodes_;
     std::condition_variable node_change;
@@ -63,6 +65,7 @@ private:
     void setup_completion();
     void listen_for_completion();
     void notify_completion();
+    std::string find_immediate_neighbor(const std::string& target_node);
 
 public:
     FloodClone(const Arguments& args);
