@@ -81,12 +81,12 @@ void run_client(ThreadPool& threadPool) {
         std::cout << "Client: File reconstruction complete.\n";
 
         // Verify the reconstruction
-        // if (compare_files("tests/test_file.txt", 
-        //                  "tests/received_test_file.txt")) {
-        //     std::cout << "Test passed: Reconstructed file matches original.\n";
-        // } else {
-        //     std::cerr << "Test failed: Reconstructed file does not match original.\n";
-        // }
+        if (compare_files("tests/test_file.txt", 
+                         "tests/received_test_file.txt")) {
+            std::cout << "Test passed: Reconstructed file matches original.\n";
+        } else {
+            std::cerr << "Test failed: Reconstructed file does not match original.\n";
+        }
 
     } catch (const std::exception& e) {
         std::cerr << "Client error: " << e.what() << std::endl;
