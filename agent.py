@@ -120,7 +120,7 @@ class FloodClone(Agent):
         with open(f"{self.node.name}_completion_time", 'r') as f:
             timestamp_str = f.read().strip()
         if timestamp_str:
-            print(f"Timestamps for {self.node.name}: {timestamp_str}")
+            # print(f"Timestamps for {self.node.name}: {timestamp_str}")
             start_micros, end_micros = map(float, timestamp_str.split())
             self.start_time = datetime.fromtimestamp(start_micros / 1_000_000)
             self.end_time = datetime.fromtimestamp(end_micros / 1_000_000)
