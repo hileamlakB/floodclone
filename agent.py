@@ -5,6 +5,9 @@ from mininet.node import Node
 from typing import Union
 from datetime import datetime, timedelta
 import json
+import time
+
+from utils import FILE_NAME
 
 class Agent(ABC):
 
@@ -51,47 +54,75 @@ class FloodClone(Agent):
     def __init__(self, uid: int, node: Node, src: Node, controller: "Controller", *args, **kwargs):
         super().__init__(uid, node, src, controller, *args, **kwargs)
         
-        self.cpp_bin_path = "./floodclone/floodclone"  
+        self.floodClone_bin = "./floodclone/floodclone"  
         self.piece_folder = f"{node.privateDirs[0]}/pieces" 
         
     def start_download(self, *args, **kwargs):
-        self.start_time = datetime.now()
-        network_info = self.controller.nodes  # This contains your full network topology with interfaces
+        # call my c++ interface and start time
+        network_info = self.controller.nodes
+        ip_map = self.controller.ip_map
         
-        self.node.cmd(f"mkdir -p {self.piece_folder}")
+        # clean up folder from previous runs
+        self.node.cmd(f"rm -rf {self.piece_folder} {self.node.name}_completion_time && mkdir -p {self.piece_folder}")
         
         if self.node == self.src:
-            self._start_source(network_info)
+            cmd = self._get_source_command(network_info, ip_map)
         else:
-            self._start_destination(network_info)
+            cmd = self._get_destination_command(network_info, ip_map)
 
-    def _start_source(self, network_info):
-        cmd = (f"{self.cpp_bin_path} "
+        # Run command in background, redirect output, and save PID
+        print(f"Executing command: {cmd}")
+        self.node.cmd(f"{cmd} > {self.node.name}_output.log 2>&1 &")
+        self.start_time = datetime.now()
+
+    def _get_source_command(self, network_info, ip_map):
+        return (f"{self.floodClone_bin} "
                 f"--mode source "
                 f"--node-name {self.node.name} "
-                f"--file {self.node.privateDirs[0]}/file "  # Source file location
+                f"--file {self.node.privateDirs[0]}/{FILE_NAME} "
                 f"--pieces-dir {self.piece_folder} "
                 f"--network-info '{json.dumps(network_info)}' "
-                f"--timestamp-file {self.piece_folder}/completion_time")
-        print(f"Executing command: {cmd}")
-        self.node.sendCmd(cmd)
+                f"--ip-map '{json.dumps(ip_map)}' "
+                f"--timestamp-file {self.node.name}_completion_time")
         
-    def _start_destination(self, network_info):
-        cmd = (f"{self.cpp_bin_path} "
+    def _get_destination_command(self, network_info, ip_map):
+        return (f"{self.floodClone_bin} "
                 f"--mode destination "
                 f"--node-name {self.node.name} "
+                f"--file {self.node.privateDirs[0]}/{FILE_NAME} "
                 f"--src-name {self.src.name} "
                 f"--pieces-dir {self.piece_folder} "
                 f"--network-info '{json.dumps(network_info)}' "
-                f"--timestamp-file {self.piece_folder}/completion_time")
-        print(f"Executing command: {cmd}")
-        self.node.sendCmd(cmd)
+                f"--ip-map '{json.dumps(ip_map)}' "
+                f"--timestamp-file {self.node.name}_completion_time")
        
     def wait_output_wrapper(self) -> None:
-        output = self.node.waitOutput(verbose=VERBOSE)
-        print(f"Command output: {output}")
+        """
+        This is a hacky way of knowing when all the C++ programs are complete. I have attempted 
+        multiple solutions but it turns out Mininet has a key limitation - it isn't possible to run 
+        two commands using node.cmd at the same time. Since the dynamic_network thread will be using 
+        node.cmd/sendCmd to make network changes, we can't use it to check process status. Instead, we look 
+        for a completion file that FloodClone writes when it finishes. We check for this file's 
+        existence directly from the host OS, avoiding node.cmd entirely until FloodClone is done. 
+        The timing isn't affected in any way as that is measured inside the C++ program and written 
+        to the completion file. Once we see the file exists, it's safe to use node.cmd to read the 
+        timing data since FloodClone has finished.
+        """
+   
+        # Wait for completion file to appear
+        import os
+        while True:
+            if os.path.exists(f"{self.node.name}_completion_time"):
+                break
+            time.sleep(0.1)
         
-        timestamp_str = self.node.cmd(f"cat {self.piece_folder}/completion_time").strip()
-        completion_timestamp = datetime.fromtimestamp(float(timestamp_str)/1000000.0)
-        self.end_time = completion_timestamp
-        
+        # Now safe to use node.cmd as FloodClone has finished
+        with open(f"{self.node.name}_completion_time", 'r') as f:
+            timestamp_str = f.read().strip()
+        if timestamp_str:
+            print(f"Timestamps for {self.node.name}: {timestamp_str}")
+            start_micros, end_micros = map(float, timestamp_str.split())
+            self.start_time = datetime.fromtimestamp(start_micros / 1_000_000)
+            self.end_time = datetime.fromtimestamp(end_micros / 1_000_000)
+        else:
+            print(f"Warning: No completion time found for {self.node.name}")

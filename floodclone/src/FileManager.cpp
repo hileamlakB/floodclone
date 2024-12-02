@@ -18,10 +18,12 @@
 using namespace std;
 namespace fs = std::filesystem;
 
+#define PIECE_SIZE 16384
+
 FileManager::FileManager(const std::string& file_path, size_t ipiece_size, const std::string& node_ip,
                          const std::string& pieces_folder, ThreadPool* thread_pool, bool is_source,
                          const FileMetaData* metadata)
-    : file_path(file_path), piece_size(ipiece_size == 0 ? 16384 : ipiece_size), node_ip(node_ip),
+    : file_path(file_path), piece_size(ipiece_size == 0 ? PIECE_SIZE : ipiece_size), node_ip(node_ip),
       num_pieces(0), pieces_folder(pieces_folder), thread_pool(thread_pool), is_source(is_source) 
 {
 
@@ -60,6 +62,20 @@ void FileManager::initialize_source() {
     // Calculate number of pieces
     num_pieces = (file_size + piece_size - 1) / piece_size;
 
+    int file_fd = open(file_path.c_str(), O_RDONLY);
+    if (file_fd == -1) {
+        throw runtime_error("Cannot open file: " + file_path);
+    }
+
+    // Map the padded file
+    mapped_file = mmap(nullptr, file_size, PROT_READ, MAP_SHARED, file_fd, 0);
+    if (mapped_file == MAP_FAILED) {
+        close(file_fd);
+        throw runtime_error("Failed to mmap source file");
+    }
+
+    
+
 
     // Initialize metadata with actual data for source
     file_metadata.fileId = "file_hash";  // Replace with actual hash function if I endup implementing relaibility
@@ -68,7 +84,20 @@ void FileManager::initialize_source() {
     file_metadata.numPieces = num_pieces;
     file_metadata.pieces.resize(num_pieces);
 
-    deconstruct();
+    // Initialize piece status and metadata
+    for (size_t i = 0; i < num_pieces; ++i) {
+        piece_status.emplace_back(true);  // All pieces are immediately available
+        
+        // Set up piece metadata
+        PieceMetaData pieceMeta;
+        pieceMeta.srcs.push_back(array<char, IP4_LENGTH>());
+        strncpy(pieceMeta.srcs.back().data(), node_ip.c_str(), IP4_LENGTH - 1);
+        // No checksum needed since using TCP
+        
+        // Store metadata
+        file_metadata.pieces[i] = pieceMeta;
+    }
+    // deconstruct();
 }
 
  void  FileManager::deconstruct(){
@@ -93,10 +122,11 @@ void FileManager::initialize_receiver(const FileMetaData& metadata) {
     file_metadata = metadata;
     num_pieces = metadata.numPieces;
 
-    std::filesystem::path reconstructed_file_path = std::filesystem::path(pieces_folder) / ("reconstructed_" + file_metadata.filename);
-    merged_fd = open(reconstructed_file_path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0666);
+    // std::filesystem::path mmaped_fil_path = std::filesystem::path(pieces_folder) / ("reconstructed_" + file_metadata.filename);
+    // std::filesystem::path mmaped_fil_path = std::filesystem::path(pieces_folder) / (file_metadata.filename);
+    merged_fd = open(file_path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0666);
     if (merged_fd < 0) {
-        throw std::runtime_error("Cannot create or open reconstructed file: " + reconstructed_file_path.string());
+        throw std::runtime_error("Cannot create or open reconstructed file: " + file_path);
     }
 
     off_t total_size = num_pieces * piece_size;
@@ -105,8 +135,8 @@ void FileManager::initialize_receiver(const FileMetaData& metadata) {
         throw std::runtime_error("Error setting file size for reconstructed file");
     }
 
-    reconstructed_file = mmap(nullptr, total_size, PROT_WRITE, MAP_SHARED, merged_fd, 0);
-    if (reconstructed_file == MAP_FAILED) {
+    mapped_file = mmap(nullptr, total_size, PROT_WRITE, MAP_SHARED, merged_fd, 0);
+    if (mapped_file == MAP_FAILED) {
         close(merged_fd);
         throw std::runtime_error("Error mapping reconstructed file into memory");
     }
@@ -136,7 +166,7 @@ void FileManager::split(size_t i) {
     PieceMetaData pieceMeta;
     pieceMeta.srcs.push_back(array<char, IP4_LENGTH>());
     strncpy(pieceMeta.srcs.back().data(), node_ip.c_str(), IP4_LENGTH - 1);
-    pieceMeta.checksum = calculate_checksum(piece_data);
+    // pieceMeta.checksum = calculate_checksum(piece_data); // not required since we ae using tcp and no loss happens
 
     // Define the output file path for this piece
     std::filesystem::path piece_path = std::filesystem::path(pieces_folder) / ("piece_" + std::to_string(i));
@@ -212,20 +242,20 @@ const FileMetaData& FileManager::get_metadata() const {
 void FileManager::reconstruct() {
     
     // Sync memory to file and resize to original size
-    if (msync(reconstructed_file, num_pieces * piece_size, MS_SYNC) == -1) {
-        munmap(reconstructed_file, num_pieces * piece_size);
+    if (msync(mapped_file, num_pieces * piece_size, MS_SYNC) == -1) {
+        munmap(mapped_file, num_pieces * piece_size);
         close(merged_fd);
         throw std::runtime_error("Error syncing mapped memory to file");
     }
 
     if (ftruncate(merged_fd, file_metadata.fileSize) == -1) {
-        munmap(reconstructed_file, num_pieces * piece_size);
+        munmap(mapped_file, num_pieces * piece_size);
         close(merged_fd);
         throw std::runtime_error("Error resizing reconstructed file");
     }
 
     // Unmap and close
-    munmap(reconstructed_file, num_pieces * piece_size);
+    munmap(mapped_file, num_pieces * piece_size);
     close(merged_fd);
     merged_fd = -1;
 }
@@ -233,66 +263,47 @@ void FileManager::reconstruct() {
 
 
 
-std::string FileManager::send(size_t i) {
 
-    // this could potentially be improved using  sendfile
-    // if the receiving location is also passed in as an argument
-
-    // check if the piece is avialable first
+std::string_view FileManager::send(size_t i) {
     assert(i < num_pieces);
     assert(piece_status[i].load());
     
-    std::filesystem::path piece_path = std::filesystem::path(pieces_folder) / ("piece_" + std::to_string(i));
-
+    size_t offset = i * piece_size;
+    const char* piece_data = static_cast<const char*>(mapped_file) + offset;
     
-
-    // Open the piece file in binary read mode
-    std::ifstream piece_file(piece_path, std::ios::binary);
-    if (!piece_file) {
-        throw std::runtime_error("Cannot open piece file: " + piece_path.string());
+    if (i == num_pieces - 1) {
+        // Last piece - might be smaller
+        size_t last_piece_size = file_metadata.fileSize - offset;
+        if (last_piece_size < piece_size) {
+            // Need to pad the last piece
+            static std::string padded_piece;  // Static to avoid reallocation
+            padded_piece.resize(piece_size);
+            std::memcpy(padded_piece.data(), piece_data, last_piece_size);
+            std::memset(padded_piece.data() + last_piece_size, 0, piece_size - last_piece_size);
+            return std::string_view(padded_piece);
+        }
     }
-
-    // Move to the end once to get the file size
-    size_t piece_size = std::filesystem::file_size(piece_path);
-
-    // Allocate a string of the right size and read the file contents into it
-    std::string binary_data(piece_size, '\0');
-
-    // Return to the beginning of the file and read the contents
-    piece_file.seekg(0, std::ios::beg); // Optional, since most compilers reset automatically
-    piece_file.read(&binary_data[0], piece_size);
-
-    // Close the file and return the binary data
-    piece_file.close();
-    return binary_data;
+    
+    return std::string_view(piece_data, piece_size);
 }
 
 
-void FileManager::receive(const std::string& binary_data, size_t i) {
+void FileManager::receive(const std::string_view& binary_data, size_t i) {
+    assert(i < num_pieces);
+    assert(binary_data.size() <= piece_size);  // Safety check
 
-    if (piece_status[i].load()){
-        std::cout << "RECIEVING a piec that already exists" << std::endl;
+    if (piece_status[i].load()) {
+        std::cout << "RECEIVING a piece that already exists" << std::endl;
         return;
     }
 
     off_t offset = i * piece_size;
 
-    // copy piece to mmaped file
-    thread_pool->enqueue([this, binary_data, offset, i] {
-        std::copy(binary_data.begin(), binary_data.end(), static_cast<char*>(reconstructed_file) + offset);
+    // Use memcpy directly and avoid string copy in lambda capture
+    thread_pool->enqueue([this, data_ptr = binary_data.data(), 
+                         data_size = binary_data.size(), offset, i] {
+        std::memcpy(static_cast<char*>(mapped_file) + offset, data_ptr, data_size);
         piece_status[i].store(true);
-    });
-
-    // save piece to a separate file 
-    thread_pool->enqueue([this, binary_data, i] {
-        std::filesystem::path piece_path = std::filesystem::path(pieces_folder) / ("piece_" + std::to_string(i));
-
-        // Write binary_data to an individual piece file
-        std::ofstream piece_file(piece_path, std::ios::binary | std::ios::trunc);
-        if (!piece_file) {
-            throw std::runtime_error("Cannot create piece file: " + piece_path.string());
-        }
-        piece_file.write(binary_data.data(), binary_data.size());
     });
 }
 
@@ -304,6 +315,12 @@ bool FileManager::has_piece(size_t i)
 }
 
 
-// will it be important to check the checksum, if lets stay I start using udp protocol, but if I am using tcp that won't be required rifht
-// how do we know which nodes are connected to this node 
+char* FileManager::get_piece_buffer(size_t i, size_t& size) {
+        assert(i < num_pieces);
+        if (piece_status[i].load()) {
+            return nullptr;  // Already have this piece
+        }
+        size = piece_size;
+        return static_cast<char*>(mapped_file) + (i * piece_size);
+}
 
