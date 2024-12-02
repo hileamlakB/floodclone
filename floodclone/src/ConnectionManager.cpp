@@ -48,9 +48,12 @@ void ConnectionManager::start_listening() {
     sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(localPort_);
-    serverAddress.sin_addr.s_addr = inet_addr(localAddress_.c_str());
+    // Instead of binding to specific IP:
+    // serverAddress.sin_addr.s_addr = inet_addr(localAddress_.c_str());
+    // Use INADDR_ANY to listen on all interfaces:
+    serverAddress.sin_addr.s_addr = INADDR_ANY;
 
-    std::cout << "Binding to "<<localAddress_.c_str()<<":" << localPort_ <<"\n";
+    std::cout << "Binding to all interfaces on port " << localPort_ <<"\n";
 
     if (bind(listeningSocket_, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
         close(listeningSocket_);
