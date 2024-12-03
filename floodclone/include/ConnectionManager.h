@@ -147,6 +147,7 @@ struct PieceRequest {
 
 struct FileMetaData;
 class ThreadPool;
+class InterfaceGuard;
 
 class ConnectionManager {
 public:
@@ -238,6 +239,16 @@ private:
     void receive_all(int found, char* buffer, size_t size);
     void send_piece(int clientSocket, size_t idx, const std::shared_ptr<RequestContext>& context);
     void wait_for_queue(int clientSocket, const std::shared_ptr<RequestContext>& context);
+
+    friend class InterfaceGuard;
+};
+
+class InterfaceGuard {
+    ConnectionManager& cm_;
+    int socket_;
+public:
+    InterfaceGuard(ConnectionManager& cm, int socket) : cm_(cm), socket_(socket) {}
+    ~InterfaceGuard() { cm_.release_inter(socket_); }
 };
 
 #endif // CONNECTION_MANAGER_H

@@ -123,9 +123,25 @@ void ConnectionManager::start_listening() {
             }
             else if (fd == listeningSocket_) {
                 // Handle new connection
-                int clientSocket = accept(listeningSocket_, nullptr, nullptr);
+                struct sockaddr_in peer_addr;
+                socklen_t peer_addr_len = sizeof(peer_addr);
+                struct sockaddr_in local_addr;
+                socklen_t local_addr_len = sizeof(local_addr);
+    
+                int clientSocket = accept(listeningSocket_, 
+                            (struct sockaddr*)&peer_addr, 
+                            &peer_addr_len);
+
                 if (clientSocket >= 0) {
                     std::cout << "New connection accepted: " << clientSocket << "\n" << std::flush;
+
+                    if (getsockname(clientSocket, (struct sockaddr*)&local_addr, &local_addr_len) == 0) {
+                        std::string local_ip = inet_ntoa(local_addr.sin_addr);
+                        // Use the IP directly as our interface identifier
+                        // to store which interfaces are being used for outward 
+                        update_inter(clientSocket, local_ip);
+                    }
+
                     
                     // Add new socket to epoll with EPOLLONESHOT
                     struct epoll_event client_ev;
@@ -368,6 +384,19 @@ void ConnectionManager::process_piece_request(int clientSocket, const RequestHea
     receive_all(clientSocket, requestBuffer.data(), header.payloadSize);
     PieceRequest request = PieceRequest::deserialize(requestBuffer);
 
+    // First check if we can use the interface
+    if (!acquire_inter(clientSocket)) {
+        // Interface is busy, send BUSY_RES
+        RequestHeader busyHeader = {BUSY_RES, 0, 0};
+        std::vector<char> serializedHeader = busyHeader.serialize();
+        send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
+        return;
+    }
+
+    // if interface acquisition succeds setup automatica unlcoker
+    InterfaceGuard guard(*this, clientSocket);
+
+
     // Create context for this request
     auto context = std::make_shared<RequestContext>();
 
@@ -491,7 +520,11 @@ void ConnectionManager::request_pieces(const std::string& destAddress, int destP
     for (size_t i = 0; i < total_pieces; i++) {
         RequestHeader responseHeader;
         receive_all(sock, reinterpret_cast<char*>(&responseHeader), sizeof(RequestHeader));
-       
+
+        // Check if interface is busy
+        if (responseHeader.type == BUSY_RES) {
+            throw std::runtime_error("BUSY");  // Special error message for busy case
+        }      
         
         if (responseHeader.type != PIECE_RES) {
             throw std::runtime_error("Unexpected response type for piece request");
