@@ -10,16 +10,26 @@
 #include <optional>
 #include "FileManager.h"
 #include <set>
+#include <shared_mutex>
 
 typedef enum : uint16_t {
     META_REQ = 1,
     META_RES = 2,
     PIECE_REQ = 3,
     PIECE_RES = 4,
+    BUSY_RES = 5,
     SINGLE_PIECE = 1 << 0,  // 0001
     PIECE_RANGE  = 1 << 1,  // 0010
     PIECE_LIST   = 1 << 2   // 0100
 } RequestType;
+
+struct InterfaceState {
+    std::string interface_name;
+    std::atomic<bool> is_busy{false};
+    std::atomic<int> busy_socket{-1};   // FD of socket currently using the interface
+    std::set<int> associated_sockets;    // All sockets that can use this interface
+    std::mutex state_mutex;  // For socket set modifications
+};
 
 struct RequestHeader {
     RequestType type;
@@ -188,6 +198,15 @@ private:
         std::mutex mutex;
     };
 
+    std::unordered_map<std::string, std::unique_ptr<InterfaceState>> interface_states_;
+    std::shared_mutex interface_map_mutex_;
+
+    // Map socket fd -> interface name for quick lookups
+    // redudnet information as the sockets associated to interfaces could be found
+    // inside the interface_state map but makes for an easy look if I need to for now
+    std::unordered_map<int, std::string> socket_to_interface_;
+    std::shared_mutex socket_map_mutex_;
+
     // Helper to get or create lock for a fd
     std::mutex& fd_lock(int fd) {
         std::lock_guard<std::mutex> lock(fdLocksMapMutex_);
@@ -204,6 +223,11 @@ private:
         std::lock_guard<std::mutex> lock(fdLocksMapMutex_);
         fdLocks_.erase(fd);
     }
+
+    // atomic lcok interface and return the status of interface
+    bool acquire_inter(int socket_fd);  // Returns false if interface is busy
+    void release_inter(int socket_fd);  // Release interface after transfer complete 
+    void update_inter(int socket_fd, const std::string& peer_ip);  // Associate socket with interface based on peer IP
 
     // Helper methods
     void process_request(int fd);

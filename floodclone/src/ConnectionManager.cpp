@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <sys/eventfd.h> 
 #include <set>
+#include <shared_mutex>
 
 
 
@@ -519,3 +520,79 @@ void ConnectionManager::request_pieces(const std::string& destAddress, int destP
     }
 }
 
+
+bool ConnectionManager::acquire_inter(int socket_fd) {
+    // Find the interface for this socket
+    std::string interface_name;
+    {
+        std::shared_lock<std::shared_mutex> socket_lock(socket_map_mutex_);
+        auto socket_it = socket_to_interface_.find(socket_fd);
+        assert(socket_it != socket_to_interface_.end() && "Socket must be associated with an interface");
+        interface_name = socket_it->second;
+    }
+    
+    // Now look up the interface state
+    std::shared_lock<std::shared_mutex> interface_lock(interface_map_mutex_);
+    auto interface_it = interface_states_.find(interface_name);
+    assert(interface_it != interface_states_.end() && "Interface must exist in interface states");
+
+    auto& interface_state = interface_it->second;
+    
+    // Try to mark interface as busy
+    bool expected = false;
+    if (!interface_state->is_busy.compare_exchange_strong(expected, true)) {
+        return false; // Interface is already busy
+    }
+    
+    interface_state->busy_socket.store(socket_fd);
+    return true;
+}
+
+void ConnectionManager::release_inter(int socket_fd) {
+    // Get interface name for this socket
+    std::string interface_name;
+    {
+        std::shared_lock<std::shared_mutex> socket_lock(socket_map_mutex_);
+        auto socket_it = socket_to_interface_.find(socket_fd);
+        assert(socket_it != socket_to_interface_.end() && "Socket must be associated with an interface");
+        interface_name = socket_it->second;
+    }
+    
+    // Access interface state
+    std::shared_lock<std::shared_mutex> interface_lock(interface_map_mutex_);
+    auto interface_it = interface_states_.find(interface_name);
+    assert(interface_it != interface_states_.end() && "Interface must exist in interface states");
+
+    auto& interface_state = interface_it->second;
+    
+    // Only allow the socket that acquired the interface to release it
+    assert (interface_state->busy_socket.load() == socket_fd);
+    
+    interface_state->busy_socket.store(-1);
+    interface_state->is_busy.store(false);
+}
+
+
+void ConnectionManager::update_inter(int socket_fd, const std::string& inter) {
+   
+   assert(!inter.empty() && "Must find valid interface for peer IP");
+   
+   // Update socket to interface mapping
+   {
+       std::unique_lock<std::shared_mutex> socket_lock(socket_map_mutex_);
+       socket_to_interface_[socket_fd] = inter;
+   }
+   
+   // Update interface state
+   {
+       std::unique_lock<std::shared_mutex> interface_lock(interface_map_mutex_);
+       auto& interface_state = interface_states_[inter];
+       if (!interface_state) {
+           interface_state = std::make_unique<InterfaceState>();
+           interface_state->interface_name = inter;
+       }
+       
+       std::lock_guard<std::mutex> state_lock(interface_state->state_mutex);
+       interface_state->associated_sockets.insert(socket_fd);
+   }
+}
