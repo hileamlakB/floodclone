@@ -47,7 +47,7 @@ private:
     
     // Map structure: node -> interface -> IP
     std::unordered_map<std::string, 
-        std::unordered_map<std::string, std::string>> ip_map;
+    std::unordered_map<std::string, std::string>> ip_map;
     
     // Map structure: source -> destination -> [(interface, hop_count, path)]
     struct RouteInfo {
