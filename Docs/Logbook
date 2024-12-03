@@ -145,3 +145,9 @@ Dec 1 - Speed testing on scenario 1
     was beating my approach so I implemented a range base rquest mechanism where a destination could request for 
     a range of intervals instead of a single intercal in whcih in the case of secnario  1 makes the scenario as fast
     as the given baseline benchmark
+
+Dec 2 - speed up secenario 2
+    - I impelmented a way to speed up scenario 2 by creating a pieplien delivery mechanism and I have left my thought
+    i the github branch and issues. 
+    - I have also discover a way to speed up scneario 3 by making some modifiation to the pipeline find detials here: https://github.mit.edu/hileamla/FloodClone/issues/23
+    - Hope to study for the final and once I do that I will get on implmenting this new cool idea
