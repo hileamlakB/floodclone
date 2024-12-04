@@ -1,5 +1,6 @@
 import logging
 from argparse import Namespace
+from ipaddress import ip_address
 
 from agent import Agent
 from datetime import datetime
@@ -72,39 +73,38 @@ class Controller:
         node_infoInv = {ip: name for name, intf_ips in node_info.items() for _, ip in intf_ips}
 
         for node in self.net.hosts:
+            # print(f"Route table of {node.name}:  {node_info[node.name]}")
+            # print(node.cmd("route -n"))
             for other_node in self.net.hosts:
+                # for eah node pair
                 if node == other_node:
                     continue  # Skip self-pairs
 
                 interfaces = set()
-                paths = []
+                paths = set()
 
-                # Loop over each IP of other_node
+                #find the ips that is reachable from this node to other node
                 for _, other_ip in node_info[other_node.name]:
-                    # Determine interfaces used from node to each IP of other_node
                     route_info = node.cmd(f"ip route get {other_ip}")
-                    self.logger.debug(f"Route Info for {node.name} to {other_node.name} at {other_ip}: {route_info}")
-
-                    for line in route_info.splitlines():
-                        if "dev" in line:
-                            interface = line.split("dev")[1].split()[0]
-                            interfaces.add(interface)
-                    self.logger.debug(f"Interfaces used from {node.name} to {other_node.name}: {interfaces}")
-
-                    # Run mtr for each interface to determine hop count and path
-                    for iface in interfaces:
-                        mtr_output = node.cmd(f"mtr -n -c 1 -r -I {iface} {other_ip}")
-                        self.logger.debug(f"MTR Output for {node.name} to {other_node.name} via {iface}:\n{mtr_output}")
-
-                        hop_count = len(mtr_output.splitlines()) - 2
-                        path = [
-                            node_infoInv.get(line.split()[1], line.split()[1])  # Use node name if available, else keep IP
-                            for line in mtr_output.splitlines()[2:]
-                        ]                   
-                        if (iface, hop_count, path) not in paths:
-                            paths.append((iface, hop_count, path))
+                    
+                    # breakpoint()
+                    
+                    if 'dev' in route_info:
+                        interface = route_info.split('dev')[1].split()[0]
+                        # print(f"Route from {node.name} to {other_node.name} ({other_ip}) found on interface {interface}")
+                        mtr_output = node.cmd(f"mtr -n -c 1 -r -I {interface} {other_ip}")
+                        # print(f"DEBUG: mtr_output:\n{mtr_output}")
+                        
+                        # Process MTR output right away
+                        lines = mtr_output.splitlines()[2:]  # Skip header lines
+                        if lines:
+                            hop_count = len(lines)
+                            if hop_count == 1:  # Direct connection
+                                paths.add((interface, hop_count, ()))
+                            else:
+                                print("others", lines)
                 # Store paths in only one direction
-                node_paths[node.name][other_node.name] = paths
+                node_paths[node.name][other_node.name] = list(paths)
                 self.logger.debug(f"Node Paths for {node.name} to {other_node.name}: {node_paths[node.name][other_node.name]}")
 
         self.logger.debug(f"Final Node Paths:\n{node_paths}")
@@ -118,6 +118,23 @@ class Controller:
         net = self.create_net()
         net.start()
         dumpNodeConnections(net.hosts)
+        
+        existing_ips = [ip_address(intf.IP()) for host in net.hosts 
+                            for intf in host.intfList() 
+                            if intf.name != 'lo' and intf.IP()]
+        
+        next_ip = max(existing_ips) + 1 if existing_ips else ip_address('10.0.0.1')
+        
+        # Assign IPs to interfaces without one
+        for host in net.hosts:
+            for intf in host.intfList():
+                if intf.name != 'lo' and not intf.IP():
+                    port = int(intf.name.split('eth')[1])
+                    cmd = f"ip addr add {next_ip} dev {BackboneTopo.get_interface_name(host.name, port)}"
+                    host.cmd(cmd)
+                    intf.updateIP()
+                    next_ip += 1
+        
         net.topo.resolve_pending_routing_updates(net)
         src = net.get("src")
         return net, src, [d for d in net.hosts if d != src], net.topo.g.convertTo(nx.MultiGraph)
