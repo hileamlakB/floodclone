@@ -56,6 +56,8 @@ class BackboneTopo( Topo ):
                         break
                 if port1 is None or port2 is None:
                     raise ValueError("Topology file has path across non-existent link.")
+                
+                # print(f"{node1}:{port1} - {node2}:{port2}")
                 if len(hops) == 1:
                     self.pending_routing_updates.extend(self.set_non_trivial_path(node1, node2, port1, port2))
                 else:
@@ -126,23 +128,30 @@ class BackboneTopo( Topo ):
         self.addLink(s1, d1, bw=100, delay="5ms", max_queue_size=100, cls1=BasicIntf, cls2=BasicIntf, loss=0)
 
     def resolve_pending_routing_updates(self, net):
-        next_ip = max([ip_address(h.IP()) for h in net.hosts]) + 1
-        pending_ips = {}
+        
+        existing_ips = [ip_address(intf.IP()) for host in net.hosts 
+                            for intf in host.intfList() 
+                            if intf.name != 'lo' and intf.IP()]
+        next_ip = max(existing_ips) + 1 if existing_ips else ip_address('10.0.0.1')
+        
         for update in self.pending_routing_updates:
             node = net.get(update[1])
+            intf1 = node.intf(BackboneTopo.get_interface_name(node.name, update[3]))
             if update[0] == Updates.flush:
-                cmd = f"ip addr flush dev {BackboneTopo.get_interface_name(node.name, update[2])}"
+                cmd = f"ip addr flush dev {intf1}"
             elif update[0] == Updates.add_addr:
-                cmd = f"ip addr add {next_ip} dev {BackboneTopo.get_interface_name(node, update[2])}"
-                pending_ips[node.name] = next_ip
+                cmd = f"ip addr add {next_ip} dev {intf1}"
                 next_ip += 1
             elif update[0] == Updates.add_routes:
                 node2 = net.get(update[2])
-                ip1 = pending_ips[node.name] if node.name in pending_ips else node.IP()
-                ip2 = pending_ips[node2.name] if node2.name in pending_ips else node2.IP()
-                cmd = f"ip route add {ip2} dev {BackboneTopo.get_interface_name(node.name, update[3])}"
-                cmd2 = f"ip route add {ip1} dev {BackboneTopo.get_interface_name(node2.name, update[4])}"
+                # Get IPs from specific interfaces using the node and port info
+                intf2 = node2.intf(BackboneTopo.get_interface_name(node2.name, update[4]))
+                ip1 = intf1.IP()
+                ip2 = intf2.IP()
+                cmd = f"ip route add {ip2} dev {intf1}"
+                cmd2 = f"ip route add {ip1} dev {intf2}"
                 node2.cmd(cmd2, verbose=VERBOSE)
+                intf2.updateIP()
             elif update[0] == Updates.ip_forward:
                 cmd = f"sysctl net.ipv4.ip_forward=1"
             elif update[0] == Updates.add_via_routes:
@@ -152,3 +161,4 @@ class BackboneTopo( Topo ):
             else:
                 raise AttributeError(f"Unknown update type {update[0]}")
             node.cmd(cmd, verbose=VERBOSE)
+            intf1.updateIP()
