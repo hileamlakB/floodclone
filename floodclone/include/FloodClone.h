@@ -21,6 +21,11 @@ struct Arguments {
 
 Arguments parse_args(int argc, char* argv[]);
 
+struct ConnectionOption {
+    std::string target_ip;        
+    std::string local_interface;  
+};
+
 class FloodClone {
 private:
     ThreadPool thread_pool;
@@ -60,12 +65,12 @@ private:
 
     void setup_node();
     void setup_net_info();
-    std::string get_ip(const std::string& node_name);
+    std::vector<ConnectionOption> get_ip(const std::string& node_name);
     void record_time();
     void setup_completion();
     void listen_for_completion();
     void notify_completion();
-    std::string find_immediate_neighbor(const std::string& target_node);
+    std::vector<std::string> find_immediate_neighbors();
 
 public:
     FloodClone(const Arguments& args);

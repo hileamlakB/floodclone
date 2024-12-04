@@ -116,6 +116,7 @@ class FloodClone(Agent):
                 break
             time.sleep(0.1)
         
+        time.sleep(0.2)
         # Now safe to use node.cmd as FloodClone has finished
         with open(f"{self.node.name}_completion_time", 'r') as f:
             timestamp_str = f.read().strip()
