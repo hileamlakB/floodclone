@@ -42,62 +42,78 @@ void FloodClone::setup_net_info() {
     }
 }
 
-std::string FloodClone::find_immediate_neighbor(const std::string& target_node) {
-    // For target_node = src, we want to look at our own routes to src
-    auto routes_it = network_map.find(args.node_name); // Look up our routes
+std::vector<std::string> FloodClone::find_immediate_neighbors() {
+    std::vector<std::string> neighbors;
+    
+    auto routes_it = network_map.find(args.node_name);
     if (routes_it == network_map.end()) {
         throw std::runtime_error("No routes found for " + args.node_name);
     }
 
-    auto target_routes = routes_it->second.find(target_node);
-    if (target_routes == routes_it->second.end()) {
-        throw std::runtime_error("No route to " + target_node);
+    // Look at all destinations from our node
+    for (const auto& [dest_node, routes] : routes_it->second) {
+        // Check for duplicate interfaces
+        std::set<std::string> interfaces;
+        for (const auto& route : routes) {
+            if (!interfaces.insert(route.interface).second) {
+                std::cout << "Multiple routes using same interface to " + dest_node + " not yet supported\n";
+            }
+        }
+        
+        // If any route to this dest is one hop, add it
+        for (const auto& route : routes) {
+            if (route.hop_count == 1) {
+                neighbors.push_back(dest_node);
+                break;  // Found one one-hop path to this dest, no need to check others
+            }
+        }
     }
 
-    // Error if multiple routes exist
-    if (target_routes->second.size() > 1) {
-        throw std::runtime_error("Multiple routes to " + target_node + " not yet supported");
+    if (neighbors.empty()) {
+        throw std::runtime_error("No one-hop neighbors found");
     }
 
-    const auto& path = target_routes->second[0].path;
-    
-    // If path length is 1, request directly from target
-    if (path.size() <= 1) {
-        return target_node;
-    }
-
-    // Otherwise, return the first node in our path to target
-    return path[0];  // This will be d1 for d2->src path
+    return neighbors;
 }
 
-std::string FloodClone::get_ip(const std::string& target_node) {
-    // Find how target_node connects to us
-    auto src_it = network_map.find(target_node);
-    if (src_it == network_map.end()) {
-        throw std::runtime_error("No route from " + target_node + " to " + args.node_name);
+std::vector<ConnectionOption> FloodClone::get_ip(const std::string& target_node) {
+    
+    std::vector<ConnectionOption> connection_options;
+
+    // Look up routes from us to the target node
+    auto routes_it = network_map.find(args.node_name);
+    if (routes_it == network_map.end()) {
+        throw std::runtime_error("No routes found from " + args.node_name);
     }
 
-    auto dest_it = src_it->second.find(args.node_name);
-    if (dest_it == src_it->second.end()) {  // Fixed: compare with src_it instead of dest_it
-        throw std::runtime_error("No route from " + target_node + " to " + args.node_name);
+    auto target_routes = routes_it->second.find(target_node);
+    if (target_routes == routes_it->second.end()) {
+        throw std::runtime_error("No routes found to " + target_node);
     }
 
-    // Get the interface target uses to reach us
-    assert(dest_it->second.size() == 1 && "Multiple routes not yet supported");
-    std::string target_interface = dest_it->second[0].interface;
+    // For each route we have to reach the target
+    for (const auto& route : target_routes->second) {
+        
+        // Look up the target's IP that corresponds to this route
+        auto node_it = ip_map.find(target_node);
+        if (node_it == ip_map.end()) {
+            continue;  
+        }
 
-    // Lookup the IP for this interface
-    auto node_it = ip_map.find(target_node);
-    if (node_it == ip_map.end()) {
-        throw std::runtime_error("No IP found for node: " + target_node);
+        // Find the target's IP for the interface on their end
+        for (const auto& [target_iface, target_ip] : node_it->second) {        
+            connection_options.push_back({
+                .target_ip = target_ip,
+                .local_interface = route.interface
+            });
+        }
     }
 
-    auto iface_it = node_it->second.find(target_interface);
-    if (iface_it == node_it->second.end()) {
-        throw std::runtime_error("No IP found for interface: " + target_interface);
+    if (connection_options.empty()) {
+        throw std::runtime_error("No valid connection options found to " + target_node);
     }
 
-    return iface_it->second;
+    return connection_options;
 }
 void FloodClone::setup_node() {
     total_nodes_ = network_map.size();
@@ -168,13 +184,20 @@ void FloodClone::start() {
         std::cout << "Destination: Started listening thread.\n";
 
         // First find the closest node we should request from
-        std::string request_node = find_immediate_neighbor(args.src_name);
-        std::string target_ip = get_ip(request_node);
+        auto neighbors = find_immediate_neighbors();
         
-        std::cout << "Destination: Requesting from " << request_node 
-                  << " (" << target_ip << ")\n";
 
-        auto metadata = connection_manager->request_metadata(target_ip, LISTEN_PORT);
+        std::vector<ConnectionOption> ips = get_ip(neighbors[0]);
+        for (auto &ip: ips){
+            std::cout<< "Found IP " << ip.target_ip << "on interface " << ip.local_interface << "\n" << std::flush;
+        }
+        
+        std::cout << "Destination: Requesting from " << neighbors[0] 
+                  << " (" << ips[0].target_ip << ")\n";
+
+        // I will need to update request_metadata, connect_to and others to be able to 
+        // reconinze when there are mulitple interfaces
+        auto metadata = connection_manager->request_metadata(ips[0].target_ip, LISTEN_PORT);
         
         file_manager = std::make_unique<FileManager>(
             args.file_path, 0, my_ip,
@@ -192,13 +215,44 @@ void FloodClone::start() {
             connection_manager->start_listening();
         });
 
-        // Request all pieces in one range
-        connection_manager->request_pieces(
-            target_ip, LISTEN_PORT,
-            -1,  // no single piece
-            {{0, metadata.numPieces - 1}},  // request full range
-            {}   // no specific list
-        );
+        
+        while (true) {
+            for (const auto& neighbor : neighbors) {
+                try {
+                    std::vector<ConnectionOption> neighbor_ips = get_ip(neighbor);
+                    std::cout << "Attempting transfer from neighbor: " << neighbor 
+                            << " (" << neighbor_ips[0].target_ip << ")\n";
+
+                    connection_manager->request_pieces(
+                        neighbor_ips[0].target_ip, LISTEN_PORT,
+                        -1,  // no single piece
+                        {{0, metadata.numPieces - 1}},  // request full range
+                        {}   // no specific list
+                    );
+                    
+                    // If we get here, transfer was successful
+                    std::cout << "Transfer completed successfully from " << neighbor << "\n";
+                    goto transfer_complete;  // Break out of both loops
+
+                } catch (const std::runtime_error& e) {
+                    std::string error = e.what();
+                    if (error == "BUSY") {
+                        std::cout << "Neighbor " << neighbor << " is busy, trying next neighbor\n";
+                        continue;
+                    }
+                    // For non-BUSY errors, rethrow
+                    throw;
+                }
+            }
+            // If we get here, all neighbors were busy - sleep before retrying
+            std::cout << "All neighbors busy, waiting before retry...\n";
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+
+        transfer_complete:
+            thread_pool.wait();
+            std::cout << "Client: Received all pieces\n";
+
        
 
         thread_pool.wait();
@@ -293,8 +347,9 @@ void FloodClone::setup_completion() {
 
     sockaddr_in addr;
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr(my_ip.c_str());
+    addr.sin_addr.s_addr = INADDR_ANY; // listen on any port
     addr.sin_port = htons(COMPLETION_PORT);
+    
 
     if (bind(completion_socket_, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
         throw std::runtime_error("Failed to bind completion socket");
@@ -337,15 +392,15 @@ void FloodClone::notify_completion() {
 
         std::cout << "Sending Notification to: " <<  node << "\n" << std::flush;
 
-        std::string peer_ip = get_ip(node);
+        std::vector<ConnectionOption>  peer_ips = get_ip(node);
         int sock = socket(AF_INET, SOCK_STREAM, 0);
         if (sock < 0) continue;
 
         sockaddr_in peer_addr;
         peer_addr.sin_family = AF_INET;
-        peer_addr.sin_addr.s_addr = inet_addr(peer_ip.c_str());
+        peer_addr.sin_addr.s_addr = inet_addr(peer_ips[0].target_ip.c_str());
         peer_addr.sin_port = htons(COMPLETION_PORT);
-        std::cout << "Sending Notification: " <<  peer_ip << ":" << COMPLETION_PORT << "\n" << std::flush;
+        std::cout << "Sending Notification: " <<  peer_ips[0].target_ip << ":" << COMPLETION_PORT << "\n" << std::flush;
 
 
         if (connect(sock, (struct sockaddr*)&peer_addr, sizeof(peer_addr)) >= 0) {
