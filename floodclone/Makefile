@@ -1,11 +1,11 @@
 CXX = g++
-O ?= 0
+O ?= 3
 SAN_FLAGS = 
 ifeq ($(SAN),1)
     SAN_FLAGS = -fsanitize=thread
 endif
 
-CXXFLAGS = -std=c++17 -Iinclude -Wall -Wextra -pthread -g $(SAN_FLAGS) -pg
+CXXFLAGS = -std=c++17 -Iinclude -Wall -Wextra -pthread -g $(SAN_FLAGS) 
 LINKEDBINARIES = -lssl -lcrypto
 
 SRC_DIR = src
@@ -20,7 +20,7 @@ $(TARGET): floodclone.cpp $(SRC)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) floodclone.cpp $(SRC) $(LINKEDBINARIES) -O$(O) 
 
 test: $(TEST_SRC) $(SRC)
-	$(CXX) $(CXXFLAGS) -DTESTING -o $(TEST_TARGET) $(TEST_SRC) $(SRC) $(LINKEDBINARIES) -O$(O)
+	$(CXX) -pg $(CXXFLAGS) -DTESTING -o $(TEST_TARGET) $(TEST_SRC) $(SRC) $(LINKEDBINARIES) -O$(O)
 
 .PHONY: clean all
 clean:

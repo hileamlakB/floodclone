@@ -7,6 +7,10 @@
 #include "ThreadPool.h"
 #include "FileManager.h"
 #include "ConnectionManager.h"
+#include "Communication.h"
+
+
+#define LISTEN_PORT 9089
 
 struct Arguments {
     std::string mode;
@@ -32,10 +36,11 @@ private:
     std::unique_ptr<FileManager> file_manager;
     std::unique_ptr<ConnectionManager> connection_manager;
     Arguments args;
+    int listen_port_;  
     std::chrono::system_clock::time_point start_time;  // New: Start time
     std::chrono::system_clock::time_point end_time;
 
-    
+   
 
     std::mutex node_mtx;
     size_t completed_nodes_ = 0;
@@ -51,17 +56,10 @@ private:
 
     
     // Map structure: node -> interface -> IP
-    std::unordered_map<std::string, 
-    std::unordered_map<std::string, std::string>> ip_map;
+    IpMap ip_map;
     
     // Map structure: source -> destination -> [(interface, hop_count, path)]
-    struct RouteInfo {
-        std::string interface;
-        int hop_count;
-        std::vector<std::string> path;
-    };
-    std::unordered_map<std::string, 
-    std::unordered_map<std::string, std::vector<RouteInfo>>> network_map;
+    NetworkMap network_map;
 
     void setup_node();
     void setup_net_info();
@@ -73,7 +71,8 @@ private:
     std::vector<std::string> find_immediate_neighbors();
 
 public:
-    FloodClone(const Arguments& args);
+
+    FloodClone(const Arguments& args, int listen_port = LISTEN_PORT);
     void start();
 };
 

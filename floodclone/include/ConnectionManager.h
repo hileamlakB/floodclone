@@ -18,6 +18,7 @@ typedef enum : uint16_t {
     PIECE_REQ = 3,
     PIECE_RES = 4,
     BUSY_RES = 5,
+    
     SINGLE_PIECE = 1 << 0,  // 0001
     PIECE_RANGE  = 1 << 1,  // 0010
     PIECE_LIST   = 1 << 2   // 0100
@@ -145,6 +146,35 @@ struct PieceRequest {
     }
 };
 
+
+// BundledConnection.h
+struct BundledConnection {
+   std::vector<int> socket_fds;  
+   std::map<int, std::string> socket_to_interface;
+   size_t current_idx{0}; // For initial round-robin
+
+   void add(int socket_fd, const std::string& interface) {
+       socket_fds.push_back(socket_fd);
+       socket_to_interface[socket_fd] = interface;
+   }
+
+   void remove(int socket_fd) {
+       socket_fds.erase(std::remove(socket_fds.begin(), socket_fds.end(), socket_fd), 
+                       socket_fds.end());
+       socket_to_interface.erase(socket_fd);
+   }
+
+   int next_socket() {
+        if (socket_fds.empty()) return -1;
+        return socket_fds[0];  // Just return first socket for now
+    }
+
+   bool empty() const {
+       return socket_fds.empty();
+   }
+};
+
+
 struct FileMetaData;
 class ThreadPool;
 class InterfaceGuard;
@@ -152,13 +182,23 @@ class InterfaceGuard;
 class ConnectionManager {
 public:
     // Constructor for client mode (no FileManager needed)
-    ConnectionManager(const std::string& localAddress, int localPort, ThreadPool& threadPool)
-        : localAddress_(localAddress), localPort_(localPort), threadPool_(threadPool), fileManager_(nullptr) {}
-    
-    // Constructor for server mode (requires FileManager)
-    ConnectionManager(const std::string& localAddress, int localPort, ThreadPool& threadPool, FileManager& fileManager)
-        : localAddress_(localAddress), localPort_(localPort), threadPool_(threadPool), fileManager_(&fileManager) {}
-    
+   // Client mode constructor
+    ConnectionManager(const std::string& localAddress, int localPort, 
+                    ThreadPool& threadPool,
+                    const NetworkMap& network_map,
+                    const IpMap& ip_map)
+        : localAddress_(localAddress), localPort_(localPort), 
+        threadPool_(threadPool), fileManager_(nullptr),
+        network_map_(network_map), ip_map_(ip_map) {}
+
+    // Server mode constructor
+    ConnectionManager(const std::string& localAddress, int localPort, 
+                    ThreadPool& threadPool, FileManager& fileManager,
+                    const NetworkMap& network_map,
+                    const IpMap& ip_map)
+        : localAddress_(localAddress), localPort_(localPort), 
+        threadPool_(threadPool), fileManager_(&fileManager),
+        network_map_(network_map), ip_map_(ip_map) {}
     ~ConnectionManager();
 
     // Server operations
@@ -166,8 +206,8 @@ public:
     void stop_listening();
 
     // Client operations
-    FileMetaData request_metadata(const std::string& destAddress, int destPort);
-    void request_pieces(const std::string& destAddress, int destPort, 
+    FileMetaData request_metadata(const std::string& node_name, int destPort);
+    void request_pieces(const std::string& node_name, int destPort, 
                                      size_t single_piece,
                                      const std::vector<std::pair<size_t, size_t>>& ranges,
                                      const std::vector<size_t>& piece_list);
@@ -177,12 +217,16 @@ public:
         fileManager_ = &manager;
     }
 
+    BundledConnection& bundle_to(const std::string& node_name, int destPort);
+
 private:
     std::string localAddress_;
     int localPort_;
     int wake_fd_ = -1;  
     ThreadPool& threadPool_;
     FileManager* fileManager_;  // Optional pointer to FileManager
+    NetworkMap network_map_;
+    IpMap ip_map_;
 
     int listeningSocket_;
     std::atomic<bool> isListening_;
@@ -207,6 +251,9 @@ private:
     // inside the interface_state map but makes for an easy look if I need to for now
     std::unordered_map<int, std::string> socket_to_interface_;
     std::shared_mutex socket_map_mutex_;
+
+    std::map<std::string, BundledConnection> bundles_;
+    std::mutex bundles_mutex_;
 
     // Helper to get or create lock for a fd
     std::mutex& fd_lock(int fd) {

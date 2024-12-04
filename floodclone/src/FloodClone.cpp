@@ -6,10 +6,9 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
-constexpr int LISTEN_PORT = 9089;
 
-FloodClone::FloodClone(const Arguments& args)
-    : thread_pool(4), args(args), 
+FloodClone::FloodClone(const Arguments& args, int listen_port)
+    : thread_pool(4), args(args), listen_port_(listen_port),
       start_time(std::chrono::system_clock::now())
 {
     setup_net_info();
@@ -135,13 +134,15 @@ void FloodClone::setup_node() {
         std::cout << "Source: FileManager created and file split into pieces.\n";
 
         connection_manager = std::make_unique<ConnectionManager>(
-            my_ip, LISTEN_PORT, thread_pool, *file_manager
+            my_ip, LISTEN_PORT, thread_pool, *file_manager, 
+            network_map, ip_map
         );
     } else {
 
-        total_nodes_ -= 2; // destination doesnt' expect notifiation from src and itself
+        total_nodes_ -= 2; // destination doesnt' expect notification from src and itself
         connection_manager = std::make_unique<ConnectionManager>(
-            my_ip, LISTEN_PORT, thread_pool
+            my_ip, LISTEN_PORT, thread_pool,
+            network_map, ip_map
         );
     }
 }
@@ -181,24 +182,13 @@ void FloodClone::start() {
         try {
         
 
-        std::cout << "Destination: Started listening thread.\n";
+       
 
         // First find the closest node we should request from
         auto neighbors = find_immediate_neighbors();
-        
+        auto metadata = connection_manager->request_metadata(neighbors[0], listen_port_);
 
-        std::vector<ConnectionOption> ips = get_ip(neighbors[0]);
-        for (auto &ip: ips){
-            std::cout<< "Found IP " << ip.target_ip << "on interface " << ip.local_interface << "\n" << std::flush;
-        }
-        
-        std::cout << "Destination: Requesting from " << neighbors[0] 
-                  << " (" << ips[0].target_ip << ")\n";
 
-        // I will need to update request_metadata, connect_to and others to be able to 
-        // reconinze when there are mulitple interfaces
-        auto metadata = connection_manager->request_metadata(ips[0].target_ip, LISTEN_PORT);
-        
         file_manager = std::make_unique<FileManager>(
             args.file_path, 0, my_ip,
             args.pieces_dir, &thread_pool, false, &metadata
@@ -208,6 +198,8 @@ void FloodClone::start() {
                     << metadata.numPieces << "\n";
 
         connection_manager->set_file_manager(*file_manager);
+
+         std::cout << "Destination: Started listening thread.\n";
 
         // set detsination to listening state only once it has metadata so 
         // that it can also provide mteadata once other request
@@ -219,12 +211,9 @@ void FloodClone::start() {
         while (true) {
             for (const auto& neighbor : neighbors) {
                 try {
-                    std::vector<ConnectionOption> neighbor_ips = get_ip(neighbor);
-                    std::cout << "Attempting transfer from neighbor: " << neighbor 
-                            << " (" << neighbor_ips[0].target_ip << ")\n";
 
                     connection_manager->request_pieces(
-                        neighbor_ips[0].target_ip, LISTEN_PORT,
+                        neighbor, listen_port_,
                         -1,  // no single piece
                         {{0, metadata.numPieces - 1}},  // request full range
                         {}   // no specific list

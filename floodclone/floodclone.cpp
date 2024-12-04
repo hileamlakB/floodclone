@@ -2,10 +2,6 @@
 #include "FloodClone.h"
 #include <iostream>
 
-
-
-
-
 int main(int argc, char* argv[]) {
     auto args = parse_args(argc, argv);
 

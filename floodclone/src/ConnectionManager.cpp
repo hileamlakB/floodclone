@@ -33,7 +33,8 @@ void ConnectionManager::stop_listening() {
     
     // Wake up epoll_wait
     uint64_t value = 1;
-    write(wake_fd_, &value, sizeof(value));
+    int r = write(wake_fd_, &value, sizeof(value));
+    assert(r > 0);
 }
 
 void ConnectionManager::start_listening() {
@@ -117,7 +118,8 @@ void ConnectionManager::start_listening() {
             if (fd == wake_fd_) {
                 // Just drain the eventfd
                 uint64_t value;
-                read(wake_fd_, &value, sizeof(value));
+                int r = read(wake_fd_, &value, sizeof(value));
+                assert(r > 0);
                 std::cout << "Stopping \n";
                 continue;
             }
@@ -306,8 +308,9 @@ void ConnectionManager::process_request(int clientSocket) {
     }
 }
 
-FileMetaData ConnectionManager::request_metadata(const std::string& destAddress, int destPort) {
-    int sock = connect_to(destAddress, destPort);
+FileMetaData ConnectionManager::request_metadata(const std::string& node_name, int destPort) {
+    auto& bundle = bundle_to(node_name, destPort);  // Creates bundle if doesn't exist
+    int sock = bundle.next_socket();
     // std::cout << "Connected to: " << destAddress<<":"<< destPort<<"\n";
 
     RequestHeader header = {META_REQ, 0, 0};
@@ -471,15 +474,18 @@ void ConnectionManager::process_meta_request(int clientSocket, const RequestHead
 }
 
 
-void ConnectionManager::request_pieces(const std::string& destAddress, int destPort, 
-                                     size_t single_piece,
-                                     const std::vector<std::pair<size_t, size_t>>& ranges,
-                                     const std::vector<size_t>& piece_list) {
+
+
+void ConnectionManager::request_pieces(const std::string& node_name, int destPort,
+                                    size_t single_piece,
+                                    const std::vector<std::pair<size_t, size_t>>& ranges,
+                                    const std::vector<size_t>& piece_list) {
     if (!fileManager_) {
         throw std::runtime_error("No FileManager available for receiving pieces");
     }
 
-    int sock = connect_to(destAddress, destPort);
+    auto& bundle = bundle_to(node_name, destPort);
+    int sock = bundle.next_socket();
 
     // Prepare combined piece request
     PieceRequest request;
@@ -628,4 +634,55 @@ void ConnectionManager::update_inter(int socket_fd, const std::string& inter) {
        std::lock_guard<std::mutex> state_lock(interface_state->state_mutex);
        interface_state->associated_sockets.insert(socket_fd);
    }
+}
+
+BundledConnection& ConnectionManager::bundle_to(const std::string& node_name, int destPort) {
+    // Check existing bundle
+    {
+        std::lock_guard<std::mutex> lock(bundles_mutex_);
+        auto it = bundles_.find(node_name);
+        if (it != bundles_.end()) {
+            return it->second;
+        }
+    }
+
+    BundledConnection bundle;
+
+    // Look up routes to target node
+    auto routes_it = network_map_.find(node_name);
+    if (routes_it == network_map_.end()) {
+        throw std::runtime_error("No routes found to " + node_name);
+    }
+
+    // Look up target's IP mappings
+    auto ip_it = ip_map_.find(node_name);
+    if (ip_it == ip_map_.end()) {
+        throw std::runtime_error("No IP mappings found for " + node_name);
+    }
+
+    // For each route, try to establish connection
+    for (const auto& [iface, ip] : ip_it->second) {
+        try {
+            std::cout << "Attempting connection to " << node_name 
+                     << " via interface " << iface 
+                     << " (IP: " << ip << ")\n";
+            
+            int sock = connect_to(ip, destPort);
+            bundle.add(sock, iface);
+            
+            std::cout << "Successfully established connection on " << iface << "\n";
+        } catch (const std::runtime_error& e) {
+            std::cout << "Failed to connect on interface " << iface 
+                     << ": " << e.what() << "\n";
+            continue;
+        }
+    }
+
+    if (bundle.empty()) {
+        throw std::runtime_error("Could not establish any connections to " + node_name);
+    }
+
+    // Store and return bundle
+    std::lock_guard<std::mutex> lock(bundles_mutex_);
+    return bundles_[node_name] = std::move(bundle);
 }

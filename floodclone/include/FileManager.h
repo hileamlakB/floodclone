@@ -10,6 +10,7 @@
 #include <sys/mman.h>  
 #include <unistd.h>  
 #include <cassert>
+#include "Communication.h"
 
 using namespace std;
 

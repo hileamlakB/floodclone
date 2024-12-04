@@ -1,6 +1,7 @@
 #include "ThreadPool.h"
 #include "FileManager.h"
 #include "ConnectionManager.h"
+#include "FloodClone.h"
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -31,63 +32,57 @@ bool compare_files(const std::string& file_path1, const std::string& file_path2)
 static std::shared_ptr<ConnectionManager> server_manager;
 static std::shared_ptr<ConnectionManager> client_manager;
 
-void run_server(ThreadPool& threadPool) {
-    // Create the sender FileManager
-    FileManager senderFileManager("tests/test_file.txt", 0, "127.0.0.1", 
-                                "tests/sender_pieces", &threadPool, true, nullptr);
-    std::cout << "Server: FileManager created and file split into pieces.\n";
 
-    // Create and store server
-    server_manager = std::make_shared<ConnectionManager>("127.0.0.1", 9085, 
-                                                       threadPool, senderFileManager);
-    server_manager->start_listening();
+// Create test setup function
+Arguments create_test_args(bool is_server) {
+    Arguments args;
+    
+    // Basic args
+    args.mode = is_server ? "source" : "destination";
+    args.node_name = is_server ? "server" : "client";
+    args.src_name = "server";  // server is always source
+    args.file_path = is_server ? "tests/test_file.txt" : "tests/received_test_file.txt";
+    args.pieces_dir = is_server ? "tests/sender_pieces" : "tests/receiver_pieces";
+    args.timestamp_file = is_server ? "server_completion_time" : "client_completion_time";
+
+    // Network topology for test setup
+    args.network_info = nlohmann::json::parse(
+        R"({
+            "server": {"client": [["server-eth0", 1, []]]},
+            "client": {"server": [["client-eth0", 1, []]]}
+        })"
+    );
+
+    // IP mappings
+    args.ip_map = nlohmann::json::parse(
+        R"({
+            "server": [["server-eth0", "127.0.0.1"]],
+            "client": [["client-eth0", "127.0.0.1"]]
+        })"
+    );
+
+    return args;
 }
 
-void run_client(ThreadPool& threadPool) {
+void run_server() {
+    auto args = create_test_args(true);
+    FloodClone flood_clone(args, 9085);  // Server on 9085
+    flood_clone.start();
+}
+
+void run_client() {
     try {
-        // Create and store client
-        client_manager = std::make_shared<ConnectionManager>("127.0.0.1", 8080, threadPool);
-        
-        // Get metadata from server
-        FileMetaData metadata = client_manager->request_metadata("127.0.0.1", 9085);
-        
-        // Create receiver FileManager with received metadata
-        FileManager receiverFileManager("tests/received_test_file.txt", 0, "127.0.0.1", "tests/receiver_pieces", 
-                                     &threadPool, false, &metadata);
-        std::cout << "Client: FileManager created from metadata. Num pieces: " 
-                  << metadata.numPieces << "\n";
+        auto args = create_test_args(false);
+        FloodClone flood_clone(args, 8080);  // Client on 8080
+        flood_clone.start();
 
-        client_manager->set_file_manager(receiverFileManager);
-
-        // Request all pieces in one range
-        client_manager->request_pieces(
-            "127.0.0.1", 
-            9085,
-            -1,  // no single piece
-            {{0, metadata.numPieces - 1}},  // request full range
-            {}   // no specific list
-        );
-        std::cout << "Client: Received all pieces\n";
-
-        // Verify all pieces received
-        for (size_t i = 0; i < metadata.numPieces; ++i) {
-            if (!receiverFileManager.has_piece(i)) {
-                std::cerr << "Error: Piece " << i << " missing after completion\n";
-            }
-        }
-
-        // Reconstruct the file
-        receiverFileManager.reconstruct();
-        std::cout << "Client: File reconstruction complete.\n";
-
-        // Verify the reconstruction
+        // Just verify the result
         if (compare_files("tests/test_file.txt", 
                          "tests/received_test_file.txt")) {
-            std::cout << "Test passed: Reconstructed file matches original.\n";
+            std::cout << "Test passed: Files match.\n";
         } else {
-            std::cerr << "Test failed: Reconstructed file does not match original.\n";
+            std::cerr << "Test failed: Files don't match.\n";
         }
-
     } catch (const std::exception& e) {
         std::cerr << "Client error: " << e.what() << std::endl;
         throw;
@@ -97,12 +92,12 @@ void run_client(ThreadPool& threadPool) {
 
 #ifdef TESTING
 int main() {
-    ThreadPool threadPool(4);
+    
 
     // Start server in separate thread
-    std::thread server_thread([&threadPool]() {
+    std::thread server_thread([]() {
         try {
-            run_server(threadPool);
+            run_server();
         } catch (const std::exception& e) {
             std::cerr << "Server error: " << e.what() << std::endl;
         }
@@ -114,7 +109,7 @@ int main() {
     
     // Run client in main thread
     try {
-        run_client(threadPool);
+        run_client();
     } catch (const std::exception& e) {
         std::cerr << "Client error: " << e.what() << std::endl;
     }
