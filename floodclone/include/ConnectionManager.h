@@ -18,6 +18,7 @@ typedef enum : uint16_t {
     PIECE_REQ = 3,
     PIECE_RES = 4,
     BUSY_RES = 5,
+    NOT_AVAIL_RES = 6,
     SINGLE_PIECE = 1 << 0,  // 0001
     PIECE_RANGE  = 1 << 1,  // 0010
     PIECE_LIST   = 1 << 2   // 0100
