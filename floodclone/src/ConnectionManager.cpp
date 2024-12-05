@@ -435,13 +435,13 @@ void ConnectionManager::process_piece_request(int clientSocket, const RequestHea
 }
 
 void ConnectionManager::wait_for_queue(int clientSocket, const std::shared_ptr<RequestContext>& context) {
-    std::cout << "Waiting for " << context->remainingPieces.size() << " pieces\n" << std::flush;
+    // std::cout << "Waiting for " << context->remainingPieces.size() << " pieces\n" << std::flush;
     std::unique_lock<std::mutex> lock(context->mutex);
     while (!context->remainingPieces.empty()) {
         if (context->availablePieces.empty()) {
-            std::cout << "No pieces available, waiting...\n" << std::flush;
+            // std::cout << "No pieces available, waiting...\n" << std::flush;
             context->cv.wait(lock);
-            std::cout << "Woke up, available pieces: " << context->availablePieces.size() << "\n" << std::flush;
+            // std::cout << "Woke up, available pieces: " << context->availablePieces.size() << "\n" << std::flush;
         }
 
         auto available = std::move(context->availablePieces);
