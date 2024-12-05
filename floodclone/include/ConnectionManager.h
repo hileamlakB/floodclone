@@ -18,7 +18,7 @@ typedef enum : uint16_t {
     PIECE_REQ = 3,
     PIECE_RES = 4,
     BUSY_RES = 5,
-    
+
     SINGLE_PIECE = 1 << 0,  // 0001
     PIECE_RANGE  = 1 << 1,  // 0010
     PIECE_LIST   = 1 << 2   // 0100
@@ -234,6 +234,7 @@ private:
     std::mutex listeningMutex_;
     std::mutex  fdLocksMapMutex_;
     std::map<std::pair<std::string, int>, int> connectionMap_;
+    std::map<int, std::pair<std::string, int>> reverseConnectionMap_;
     std::unordered_map<int, std::unique_ptr<std::mutex>> fdLocks_;  // fd -> lock
 
     struct RequestContext {
@@ -286,6 +287,8 @@ private:
     void receive_all(int found, char* buffer, size_t size);
     void send_piece(int clientSocket, size_t idx, const std::shared_ptr<RequestContext>& context);
     void wait_for_queue(int clientSocket, const std::shared_ptr<RequestContext>& context);
+    void disconnect(int socket_fd); 
+    void close_bundle(const std::string& node_name);
 
     friend class InterfaceGuard;
 };

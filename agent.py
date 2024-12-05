@@ -86,6 +86,17 @@ class FloodClone(Agent):
                 f"--timestamp-file {self.node.name}_completion_time")
         
     def _get_destination_command(self, network_info, ip_map):
+        
+        if (self.node.name == "d2"):
+            return (f"(sleep 1 && {self.floodClone_bin} "
+                f"--mode destination "
+                f"--node-name {self.node.name} "
+                f"--file {self.node.privateDirs[0]}/{FILE_NAME} "
+                f"--src-name {self.src.name} "
+                f"--pieces-dir {self.piece_folder} "
+                f"--network-info '{json.dumps(network_info)}' "
+                f"--ip-map '{json.dumps(ip_map)}' "
+                f"--timestamp-file {self.node.name}_completion_time)")
         return (f"{self.floodClone_bin} "
                 f"--mode destination "
                 f"--node-name {self.node.name} "

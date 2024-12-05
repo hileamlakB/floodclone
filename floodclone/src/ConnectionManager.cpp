@@ -12,6 +12,8 @@
 #include <sys/eventfd.h> 
 #include <set>
 #include <shared_mutex>
+#include <linux/tcp.h> 
+#include <random>     
 
 
 
@@ -157,15 +159,19 @@ void ConnectionManager::start_listening() {
             } else {
                 if (events[n].events & EPOLLIN) {
                     // Data available to read
-                    threadPool_.enqueue([this, fd, epoll_fd]() {
-                        // std::cout << "Adding task from " << fd <<"\n";
-                        process_request(fd);
-                        
-                        // Re-arm the socket after processing
-                        struct epoll_event client_ev;
-                        client_ev.events = EPOLLIN | EPOLLONESHOT;
-                        client_ev.data.fd = fd;
-                        epoll_ctl(epoll_fd, EPOLL_CTL_MOD, fd, &client_ev);
+                   threadPool_.enqueue([this, fd, epoll_fd]() {
+                        try {
+                            process_request(fd);
+                            
+                            // Only re-arm if request processed successfully
+                            struct epoll_event client_ev;
+                            client_ev.events = EPOLLIN | EPOLLONESHOT;
+                            client_ev.data.fd = fd;
+                            epoll_ctl(epoll_fd, EPOLL_CTL_MOD, fd, &client_ev);
+                        } catch (const std::runtime_error& e) {
+                            std::cout << "Socket " << fd << " closed, not re-arming\n" << std::flush;
+
+                        }
                     });
                 }
                 
@@ -226,6 +232,7 @@ int ConnectionManager::connect_to(const std::string& destAddress, int destPort) 
         {
             std::lock_guard<std::mutex> lock(connectionMapMutex_);
             connectionMap_[key] = sock;
+            reverseConnectionMap_[sock] = key;
         }
         
         fd_lock(sock);
@@ -233,6 +240,16 @@ int ConnectionManager::connect_to(const std::string& destAddress, int destPort) 
                   << " after " << attempt << " attempts\n";
         return sock;
     }
+}
+
+void ConnectionManager::disconnect(int socket_fd) {
+    std::lock_guard<std::mutex> lock(connectionMapMutex_);
+    auto it = reverseConnectionMap_.find(socket_fd);
+    if (it != reverseConnectionMap_.end()) {
+        connectionMap_.erase(it->second);
+        reverseConnectionMap_.erase(it);
+    }
+    close(socket_fd);
 }
 
 void ConnectionManager::close_connection(const std::string& destAddress, int destPort) {
@@ -265,6 +282,7 @@ void ConnectionManager::send_all(int fd, const std::string_view& data)  {
                 std::cerr << "Error: SIGPIPE - Peer closed the connection." << std::endl;
                 throw std::runtime_error("Socket closed by peer");
             }
+
             std::cerr << "Error: Failed to send data to socket.\n"
                     << "Error Code: " << errno << " (" << strerror(errno) << totalSent<< " of  "<< data.size() <<")" << std::endl;
             throw std::runtime_error("Failed to send data to socket");
@@ -277,8 +295,40 @@ void ConnectionManager::send_all(int fd, const std::string_view& data)  {
 void ConnectionManager::receive_all(int fd, char* buffer, size_t size) {
     std::lock_guard<std::mutex> lock(fd_lock(fd));
     
+    // TCP's Rtt measurment
+   struct tcp_info info;
+   socklen_t len = sizeof(info);
+   int rtt_ms;
+   
+   if (getsockopt(fd, IPPROTO_TCP, TCP_INFO, &info, &len) < 0) {
+       std::cerr << "Warning: Could not get TCP info, using default RTT\n";
+       rtt_ms = 1000;  // Conservative default
+   } else {
+       rtt_ms = info.tcpi_rtt / 1000;  // Convert microseconds to milliseconds
+       std::cout << "Current RTT: " << rtt_ms << "ms\n";
+   }
+
+   // set timeout to multiple of RTT plus some randomness
+   // the randmoness is to prevent pattern dependent delays
+
+   static std::random_device rd;
+   static std::mt19937 gen(rd());
+   static std::uniform_int_distribution<> dis(100, 500);
+   int timeout_ms = rtt_ms * 3 + dis(gen);  
+   
+   struct timeval tv;
+   tv.tv_sec = timeout_ms / 1000;
+   tv.tv_usec = (timeout_ms % 1000) * 1000;
+
+   if (setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0) {
+       throw std::runtime_error("Failed to set socket timeout");
+   }
+    
     ssize_t received = recv(fd, buffer, size, MSG_WAITALL);
     if (received < 0) {
+        if (errno == EAGAIN || errno == EWOULDBLOCK) {
+            throw std::runtime_error("TIMEOUT");  // Special error like BUSY
+        }
         throw std::runtime_error("Failed to receive data from socket");
     } else if (received == 0) {
         throw std::runtime_error("Connection closed unexpectedly while receiving");
@@ -292,6 +342,7 @@ void ConnectionManager::receive_all(int fd, char* buffer, size_t size) {
 
 // Update process_request to handle piece requests
 void ConnectionManager::process_request(int clientSocket) {
+    std::cout << "Processing request on socket " << clientSocket << "\n" << std::flush;
     RequestHeader header;
     receive_all(clientSocket, reinterpret_cast<char*>(&header), sizeof(RequestHeader));
 
@@ -305,7 +356,7 @@ void ConnectionManager::process_request(int clientSocket) {
         default:
             std::cout << "Unkown request: " << header.type;
             throw std::runtime_error("Unknown request type");
-    }
+        }
 }
 
 FileMetaData ConnectionManager::request_metadata(const std::string& node_name, int destPort) {
@@ -356,8 +407,19 @@ void ConnectionManager::send_piece(int clientSocket, size_t idx, const std::shar
             static_cast<uint32_t>(idx)
         };
         std::vector<char> serializedHeader = responseHeader.serialize();
-        send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
-        send_all(clientSocket, pieceData);
+        try {
+            send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
+            send_all(clientSocket, pieceData);
+            std::cout <<"Sent piece " << idx << "\n"<< std::flush;
+        }catch (const std::runtime_error& e) {
+            // Clean up queued work on send failure
+            std::lock_guard<std::mutex> lock(context->mutex);
+            context->remainingPieces.clear();
+            context->availablePieces.clear();
+            context->cv.notify_all();  // Wake up any waiting threads
+            throw;
+        }
+        
         // std::cout<<"Piece Sent\n"; 
     } else {
         // std::cout<<"PIECE Not found so queeing task " << idx <<std::flush; 
@@ -525,8 +587,16 @@ void ConnectionManager::request_pieces(const std::string& node_name, int destPor
     // Receive all pieces
     for (size_t i = 0; i < total_pieces; i++) {
         RequestHeader responseHeader;
-        receive_all(sock, reinterpret_cast<char*>(&responseHeader), sizeof(RequestHeader));
-
+        
+        try {
+            receive_all(sock, reinterpret_cast<char*>(&responseHeader), sizeof(RequestHeader));
+        } catch (const std::runtime_error& e) {
+            if (e.what() == std::string("TIMEOUT")) {
+                std::cout<<"TIMED OUT CLOSING\n"<<std::flush;
+                close_bundle(node_name);  // Clean up the whole bundle
+            }
+            throw;  // Propagate up to FloodClone
+        }
         // Check if interface is busy
         if (responseHeader.type == BUSY_RES) {
             throw std::runtime_error("BUSY");  // Special error message for busy case
@@ -544,12 +614,18 @@ void ConnectionManager::request_pieces(const std::string& node_name, int destPor
             size_t buffer_size;
             char* write_buffer = fileManager_->get_piece_buffer(responseHeader.pieceIndex, buffer_size);
             assert(write_buffer != nullptr);
-            receive_all(sock, write_buffer, responseHeader.payloadSize);
-            fileManager_->update_piece_status(responseHeader.pieceIndex);
-            if (responseHeader.pieceIndex == 0){
-                std::cout<<"BANG BANG address "<< static_cast<const void*>(write_buffer) <<"\n"<<std::flush;
+            
+            try {
+                receive_all(sock, write_buffer, responseHeader.payloadSize);
+            } catch (const std::runtime_error& e) {
+                if (e.what() == std::string("TIMEOUT")) {
+                    close_bundle(node_name);  // Clean up the whole bundle
+                }
+                throw;  // Propagate up to FloodClone
             }
-            std::cout<<"HERE "<< write_buffer[0]<< " THE BUFFER\n"<<std::flush;
+
+            fileManager_->update_piece_status(responseHeader.pieceIndex);
+            
         } else {
             // Skip the piece if we already have it
             std::vector<char> dummy_buffer(responseHeader.payloadSize);
@@ -685,4 +761,16 @@ BundledConnection& ConnectionManager::bundle_to(const std::string& node_name, in
     // Store and return bundle
     std::lock_guard<std::mutex> lock(bundles_mutex_);
     return bundles_[node_name] = std::move(bundle);
+}
+
+void ConnectionManager::close_bundle(const std::string& node_name) {
+    std::lock_guard<std::mutex> lock(bundles_mutex_);
+    auto it = bundles_.find(node_name);
+    if (it != bundles_.end()) {
+        // For each socket in bundle
+        for (int sock : it->second.socket_fds) {
+            disconnect(sock);  // This handles both maps and close
+        }
+        bundles_.erase(it);
+    }
 }
