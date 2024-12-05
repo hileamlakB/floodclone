@@ -102,7 +102,21 @@ class Controller:
                             if hop_count == 1:  # Direct connection
                                 paths.add((interface, hop_count, ()))
                             else:
-                                print("others", lines)
+                                intermediaries = []
+                                for line in lines[:-1]: # ignore lat line as that is the ip of the deaination
+                                    # Based on mtr ouput whihwill look like
+                                    # line =  1.|-- 10.0.0.1  0.0%     1   21.8  21.8  21.8  21.8   0.0'
+                                    # etract the IP address
+                                    split_line = line.split()
+                                    assert(len(split_line) >= 2)
+                                    
+                                    ip_address = split_line[1]  # IP address is the second item
+                                    assert(ip_address in node_infoInv)
+
+                                    node_name = node_infoInv[ip_address]
+                                    intermediaries.append(node_name)
+                                
+                                paths.add((interface, hop_count,tuple(intermediaries)))
                 # Store paths in only one direction
                 node_paths[node.name][other_node.name] = list(paths)
                 self.logger.debug(f"Node Paths for {node.name} to {other_node.name}: {node_paths[node.name][other_node.name]}")
