@@ -96,6 +96,7 @@ void FileManager::initialize_source() {
         file_metadata.pieces[i] = pieceMeta;
     }
     // deconstruct();
+    available_pieces_.store(num_pieces); 
 }
 
  void  FileManager::deconstruct(){
@@ -290,7 +291,12 @@ void FileManager::update_piece_status(size_t i) {
 
     // std::cout << "Updating piece " << i << " status\n" << std::flush;
     assert(i < num_pieces);
-    piece_status[i].store(true);
+
+    if (!piece_status[i].load()) {  // Only increment if piece wasn't available before
+            piece_status[i].store(true);
+            available_pieces_++;
+    }
+   
     // std::cout << "Callbacks size: " << piece_callbacks_.size() << "\n" << std::flush;
     
     

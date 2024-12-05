@@ -206,6 +206,11 @@ public:
 
     std::string calculate_checksum(const std::string& data); 
 
+    size_t available_pieces() const { 
+        return available_pieces_.load(); 
+    }
+    
+
 private:
    
     string file_path;                       // path to original path
@@ -218,6 +223,9 @@ private:
     string pieces_folder;
 
     ThreadPool *thread_pool;
+
+    std::atomic<size_t> available_pieces_{0};  // Track count of available pieces
+
     
     bool is_source;
 
