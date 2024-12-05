@@ -71,7 +71,7 @@ class FloodClone(Agent):
             cmd = self._get_destination_command(network_info, ip_map)
 
         # Run command in background, redirect output, and save PID
-        print(f"Executing command: {cmd}")
+        # print(f"Executing command: {cmd}")
         self.node.cmd(f"{cmd} > {self.node.name}_output.log 2>&1 &")
         self.start_time = datetime.now()
 
