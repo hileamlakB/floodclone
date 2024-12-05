@@ -236,8 +236,12 @@ void FloodClone::start() {
 
                 } catch (const std::runtime_error& e) {
                     std::string error = e.what();
-                    if (error == "BUSY") {
+                    if (error == "TIMEOUT" || error == "BUSY") {
                         std::cout << "Neighbor " << neighbor << " is busy, trying next neighbor\n";
+                        continue;
+                    }
+                    else if (error == "NOT_AVAIL"){
+                        std::cout << "Neighbor " << neighbor << " doesn't have any NOT_AVAIL, trying next neighbor\n";
                         continue;
                     }
                     // For non-BUSY errors, rethrow

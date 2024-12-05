@@ -396,6 +396,15 @@ void ConnectionManager::process_piece_request(int clientSocket, const RequestHea
     // if interface acquisition succeds setup automatica unlcoker
     InterfaceGuard guard(*this, clientSocket);
 
+    if (fileManager_->available_pieces() == 0) {
+        // Interface is busy, send BUSY_RES
+        RequestHeader busyHeader = {NOT_AVAIL_RES, 0, 0};
+        std::vector<char> serializedHeader = busyHeader.serialize();
+        send_all(clientSocket, std::string_view(serializedHeader.data(), serializedHeader.size()));
+        return;
+    }
+
+
 
     // Create context for this request
     auto context = std::make_shared<RequestContext>();
@@ -524,6 +533,10 @@ void ConnectionManager::request_pieces(const std::string& destAddress, int destP
         // Check if interface is busy
         if (responseHeader.type == BUSY_RES) {
             throw std::runtime_error("BUSY");  // Special error message for busy case
+        }  
+
+        if (responseHeader.type == NOT_AVAIL_RES) {
+            throw std::runtime_error("NOT_AVAIL");  // Special error message for busy case
         }      
         
         if (responseHeader.type != PIECE_RES) {
@@ -540,16 +553,16 @@ void ConnectionManager::request_pieces(const std::string& destAddress, int destP
             assert(write_buffer != nullptr);
             receive_all(sock, write_buffer, responseHeader.payloadSize);
             fileManager_->update_piece_status(responseHeader.pieceIndex);
-            if (responseHeader.pieceIndex == 0){
-                std::cout<<"BANG BANG address "<< static_cast<const void*>(write_buffer) <<"\n"<<std::flush;
-            }
-            std::cout<<"HERE "<< write_buffer[0]<< " THE BUFFER\n"<<std::flush;
+            // if (responseHeader.pieceIndex == 0){
+            //     std::cout<<"BANG BANG address "<< static_cast<const void*>(write_buffer) <<"\n"<<std::flush;
+            // }
+            // std::cout<<"HERE "<< write_buffer[0]<< " THE BUFFER\n"<<std::flush;
         } else {
             // Skip the piece if we already have it
             std::vector<char> dummy_buffer(responseHeader.payloadSize);
             receive_all(sock, dummy_buffer.data(), responseHeader.payloadSize);
         }
-        std::cout <<"Recieved "<< i<< " of " << total_pieces <<  "\n"<<std::flush;
+        // std::cout <<"Recieved "<< i<< " of " << total_pieces <<  "\n"<<std::flush;
     }
 }
 
