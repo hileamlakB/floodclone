@@ -195,7 +195,8 @@ int ConnectionManager::connect_to(const std::string& destAddress, int destPort) 
     // Keep trying until successful - assuming all nodes must eventually come online
     // Note: This assumes no permanent node failures, only delayed starts
     int attempt = 1;
-    while (true) {
+    int max_attempts = 5;
+    while (attempt < max_attempts) {
         int sock = socket(AF_INET, SOCK_STREAM, 0);
         if (sock < 0) {
             throw std::runtime_error("Failed to create socket");
@@ -231,6 +232,7 @@ int ConnectionManager::connect_to(const std::string& destAddress, int destPort) 
                   << " after " << attempt << " attempts\n";
         return sock;
     }
+    return -1;
 }
 
 void ConnectionManager::close_connection(const std::string& destAddress, int destPort) {
@@ -308,6 +310,7 @@ void ConnectionManager::process_request(int clientSocket) {
 
 FileMetaData ConnectionManager::request_metadata(const std::string& destAddress, int destPort) {
     int sock = connect_to(destAddress, destPort);
+    assert(sock >= 0);
     // std::cout << "Connected to: " << destAddress<<":"<< destPort<<"\n";
 
     RequestHeader header = {META_REQ, 0, 0};
@@ -361,7 +364,7 @@ void ConnectionManager::send_piece(int clientSocket, size_t idx, const std::shar
         context->remainingPieces.insert(idx);
         fileManager_->register_piece_callback(idx, 
             [context, idx = idx](size_t) {
-                std::cout<<"Callback wakupe found piece\n";
+                // std::cout<<"Callback wake up! found piece\n";
                 // what happens if the node becomes availabel between the time I hccked
                 // and between the time I call registore that is definelty posisbly
                 // a lsot wakeup type of problem could be avoided by filemanager
@@ -449,7 +452,7 @@ void ConnectionManager::wait_for_queue(int clientSocket, const std::shared_ptr<R
 
         for (auto idx : available) {
             send_piece(clientSocket, idx, context);
-            std::cout << "Sent queued piece " << idx << "\n" << std::flush;
+            // std::cout << "Sent queued piece " << idx << "\n" << std::flush;
             
             lock.lock();
             context->remainingPieces.erase(idx);
@@ -489,6 +492,9 @@ void ConnectionManager::request_pieces(const std::string& destAddress, int destP
     }
 
     int sock = connect_to(destAddress, destPort);
+    if (sock < 0){
+        throw std::runtime_error("NOT_AVAIL");
+    }
 
     // Prepare combined piece request
     PieceRequest request;
@@ -536,7 +542,7 @@ void ConnectionManager::request_pieces(const std::string& destAddress, int destP
         }  
 
         if (responseHeader.type == NOT_AVAIL_RES) {
-            throw std::runtime_error("NOT_AVAIL");  // Special error message for busy case
+            throw std::runtime_error("NOT_AVAIL");  // Special error message for not available case
         }      
         
         if (responseHeader.type != PIECE_RES) {
