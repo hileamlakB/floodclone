@@ -260,7 +260,7 @@ void FloodClone::start() {
             }
             // If we get here, all neighbors were busy - sleep before retrying
             std::cout << "All neighbors busy, waiting before retry...\n";
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
 
         transfer_complete:
