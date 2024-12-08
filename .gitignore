@@ -1,7 +1,6 @@
 .venv/
 .idea/
 venv/
-topologies/
 __pycache__/
 *.pyc
 *.pyo
@@ -9,3 +8,5 @@ __pycache__/
 *.log
 analysis/
 gmon.out
+experment_topologies
+run_all
