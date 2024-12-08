@@ -8,7 +8,7 @@ from mininet.link import Intf, TCIntf
 
 VERBOSE = True
 PORT = 8000
-FILE_SIZE = "1024M"
+FILE_SIZE = "10M"
 FILE_NAME = "file"
 
 server_pid_re_psAux = re.compile("root +(?P<server_pid>[0-9]+).+ python -m http.server --directory /var/mn/src/ --bind [0-9. ]+")
