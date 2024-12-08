@@ -70,10 +70,10 @@ class FloodClone(Agent):
         else:
             cmd = self._get_destination_command(network_info, ip_map)
 
-        # Run command in background, redirect output, and save PID
-        # print(f"Executing command: {cmd}")
-        self.node.cmd(f"{cmd} > {self.node.name}_output.log 2>&1 &")
+        print(cmd)
+        # Run command in background
         self.start_time = datetime.now()
+        self.node.cmd(f"{cmd} > {self.node.name}_output.log 2>&1 &")
 
     def _get_source_command(self, network_info, ip_map):
         return (f"{self.floodClone_bin} "
@@ -113,17 +113,18 @@ class FloodClone(Agent):
         import os
         while True:
             if os.path.exists(f"{self.node.name}_completion_time"):
+                self.end_time = datetime.now()
                 break
             time.sleep(0.1)
         
-        time.sleep(0.2)
-        # Now safe to use node.cmd as FloodClone has finished
-        with open(f"{self.node.name}_completion_time", 'r') as f:
-            timestamp_str = f.read().strip()
-        if timestamp_str:
-            # print(f"Timestamps for {self.node.name}: {timestamp_str}")
-            start_micros, end_micros = map(float, timestamp_str.split())
-            self.start_time = datetime.fromtimestamp(start_micros / 1_000_000)
-            self.end_time = datetime.fromtimestamp(end_micros / 1_000_000)
-        else:
-            print(f"Warning: No completion time found for {self.node.name}")
+        # time.sleep(0.2)
+        # # Now safe to use node.cmd as FloodClone has finished
+        # with open(f"{self.node.name}_completion_time", 'r') as f:
+        #     timestamp_str = f.read().strip()
+        # if timestamp_str:
+        #     # print(f"Timestamps for {self.node.name}: {timestamp_str}")
+        #     start_micros, end_micros = map(float, timestamp_str.split())
+        #     self.start_time = datetime.fromtimestamp(start_micros / 1_000_000)
+        #     self.end_time = datetime.fromtimestamp(end_micros / 1_000_000)
+        # else:
+        #     print(f"Warning: No completion time found for {self.node.name}")
