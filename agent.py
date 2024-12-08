@@ -70,7 +70,6 @@ class FloodClone(Agent):
         else:
             cmd = self._get_destination_command(network_info, ip_map)
 
-        print(cmd)
         # Run command in background
         self.start_time = datetime.now()
         self.node.cmd(f"{cmd} > {self.node.name}_output.log 2>&1 &")
