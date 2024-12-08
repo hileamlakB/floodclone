@@ -9,7 +9,7 @@
 constexpr int LISTEN_PORT = 9089;
 
 FloodClone::FloodClone(const Arguments& args)
-    : thread_pool(4), args(args), 
+    : thread_pool(6), args(args), 
       start_time(std::chrono::system_clock::now())
 {
     setup_net_info();
@@ -77,9 +77,8 @@ std::vector<std::string> FloodClone::find_immediate_neighbors() {
 }
 
 std::vector<ConnectionOption> FloodClone::get_ip(const std::string& target_node) {
-    
     std::vector<ConnectionOption> connection_options;
-
+    
     // Look up routes from us to the target node
     auto routes_it = network_map.find(args.node_name);
     if (routes_it == network_map.end()) {
@@ -91,21 +90,32 @@ std::vector<ConnectionOption> FloodClone::get_ip(const std::string& target_node)
         throw std::runtime_error("No routes found to " + target_node);
     }
 
-    // For each route we have to reach the target
+    // For each route, get the target's IP for their corresponding interface
     for (const auto& route : target_routes->second) {
+        // Find the reverse route to get target's interface
+        auto target_routes_it = network_map.find(target_node);
+        if (target_routes_it == network_map.end()) continue;
         
-        // Look up the target's IP that corresponds to this route
-        auto node_it = ip_map.find(target_node);
-        if (node_it == ip_map.end()) {
-            continue;  
-        }
-
-        // Find the target's IP for the interface on their end
-        for (const auto& [target_iface, target_ip] : node_it->second) {        
-            connection_options.push_back({
-                .target_ip = target_ip,
-                .local_interface = route.interface
-            });
+        auto reverse_routes = target_routes_it->second.find(args.node_name);
+        if (reverse_routes == target_routes_it->second.end()) continue;
+        
+        // Get target's interface from reverse route
+        for (const auto& reverse_route : reverse_routes->second) {
+            std::string target_interface = reverse_route.interface;  // Using struct member
+            
+            // Look up IP for this interface
+            auto node_it = ip_map.find(target_node);
+            if (node_it != ip_map.end() && node_it->second.find(target_interface) != node_it->second.end()) {
+                connection_options.push_back({
+                    .target_ip = node_it->second[target_interface],
+                    .local_interface = route.interface
+                });
+                
+                std::cout << "Found route to " << target_node 
+                         << " via their interface " << target_interface 
+                         << " (IP: " << node_it->second[target_interface] 
+                         << ") using our interface " << route.interface << "\n";
+            }
         }
     }
 
