@@ -195,7 +195,7 @@ int ConnectionManager::connect_to(const std::string& destAddress, int destPort) 
     // Keep trying until successful - assuming all nodes must eventually come online
     // Note: This assumes no permanent node failures, only delayed starts
     int attempt = 1;
-    int max_attempts = 5;
+    int max_attempts = 10;
     while (attempt < max_attempts) {
         int sock = socket(AF_INET, SOCK_STREAM, 0);
         if (sock < 0) {
@@ -217,7 +217,7 @@ int ConnectionManager::connect_to(const std::string& destAddress, int destPort) 
                     << destAddress << ":" << destPort 
                     << " - Error: " << error_msg 
                     << " (errno: " << errno << ")\n" << std::flush;
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
             attempt++;
             continue;
         }
