@@ -235,7 +235,7 @@ private:
     void process_request(int fd);
     void process_meta_request(int fd, const RequestHeader& header);
     void process_piece_request(int fd, const RequestHeader& header);
-    int connect_to(const std::string& destAddress, int destPort);
+    int connect_to(const std::string& destAddress, int destPort, int max_attempts);
     void send_all(int fd, const std::string_view& data);
     void receive_all(int found, char* buffer, size_t size);
     void send_piece(int clientSocket, size_t idx, const std::shared_ptr<RequestContext>& context);
