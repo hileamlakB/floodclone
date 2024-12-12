@@ -1,5 +1,5 @@
 CXX = g++
-O ?= 3
+O ?= 0
 SAN_FLAGS = 
 ifeq ($(SAN),1)
     SAN_FLAGS = -fsanitize=thread

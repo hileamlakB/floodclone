@@ -181,7 +181,7 @@ void ConnectionManager::start_listening() {
     close(listeningSocket_);
 }
 
-int ConnectionManager::connect_to(const std::string& destAddress, int destPort) {
+int ConnectionManager::connect_to(const std::string& destAddress, int destPort, int max_attempts) {
     auto key = std::make_pair(destAddress, destPort);
     
     {
@@ -195,7 +195,6 @@ int ConnectionManager::connect_to(const std::string& destAddress, int destPort) 
     // Keep trying until successful - assuming all nodes must eventually come online
     // Note: This assumes no permanent node failures, only delayed starts
     int attempt = 1;
-    int max_attempts = 10;
     while (attempt < max_attempts) {
         int sock = socket(AF_INET, SOCK_STREAM, 0);
         if (sock < 0) {
@@ -309,7 +308,7 @@ void ConnectionManager::process_request(int clientSocket) {
 }
 
 FileMetaData ConnectionManager::request_metadata(const std::string& destAddress, int destPort) {
-    int sock = connect_to(destAddress, destPort);
+    int sock = connect_to(destAddress, destPort, 100000);
     assert(sock >= 0);
     // std::cout << "Connected to: " << destAddress<<":"<< destPort<<"\n";
 
@@ -491,7 +490,7 @@ void ConnectionManager::request_pieces(const std::string& destAddress, int destP
         throw std::runtime_error("No FileManager available for receiving pieces");
     }
 
-    int sock = connect_to(destAddress, destPort);
+    int sock = connect_to(destAddress, destPort, 10);
     if (sock < 0){
         throw std::runtime_error("NOT_AVAIL");
     }
